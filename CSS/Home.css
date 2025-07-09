@@ -1,0 +1,431 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    background: #FFF8E5;
+    font-family: 'Noto Serif JP', 'Inter', Arial, sans-serif;
+    min-height: 100vh;
+}
+.navbar {
+    width: 100%;
+    background: #CA3202;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5em 2em;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+.nav-logo {
+    height: 40px;
+    margin-right: 1em;
+}
+.navbar nav {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    gap: 2em;
+}
+.navbar nav a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1.1em;
+    padding: 0.2em 0.5em;
+    border-radius: 6px;
+    transition: background 0.2s;
+}
+.navbar nav a:hover {
+    background: #fff3;
+}
+.nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 1em;
+}
+.nav-contact {
+    background: #fff;
+    color: #CA3202;
+    border: none;
+    border-radius: 10px;
+    padding: 0.5em 1.2em;
+    font-weight: bold;
+    font-size: 1em;
+    cursor: pointer;
+    box-shadow: 0 2px 8px #0001;
+    transition: background 0.2s;
+}
+.nav-contact:hover {
+    background: #ffe0d0;
+}
+.hero-section {
+    position: relative;
+    width: 100%;
+    min-height: 340px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    overflow: hidden;
+}
+#smoke-canvas {
+    position: absolute;
+    left: 0; top: 0; width: 100%; height: 100%;
+    z-index: 1;
+    pointer-events: none;
+}
+.hero-content {
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    margin-top: 2vw;
+}
+.hero-logo {
+    width: 220px;
+    max-width: 40vw;
+    margin: 0 2vw;
+    z-index: 2;
+}
+.hero-jp {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 2.2em;
+    font-family: 'Noto Serif JP', serif;
+    font-weight: bold;
+    color: #222;
+    letter-spacing: 0.1em;
+    line-height: 1.1;
+    user-select: none;
+}
+.hero-jp-left { margin-right: 2vw; }
+.hero-jp-right { margin-left: 2vw; }
+.menu-icons {
+    margin: 2em auto 0 auto;
+    text-align: center;
+}
+.menu-icons h2 {
+    font-size: 1.3em;
+    font-weight: bold;
+    margin-bottom: 1em;
+    letter-spacing: 0.1em;
+}
+.menu-icon-list {
+    display: flex;
+    justify-content: center;
+    gap: 2em;
+    flex-wrap: wrap;
+}
+.menu-icon-list div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 1em;
+    color: #222;
+}
+.menu-icon-list img {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 0.3em;
+}
+.sales-hits {
+    margin: 2.5em auto 0 auto;
+    text-align: center;
+}
+.sales-hits h2 {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 1.5em;
+    font-weight: bold;
+    letter-spacing: 0.1em;
+    margin-bottom: 1.2em;
+}
+.sales-cards {
+    display: flex;
+    justify-content: center;
+    gap: 2em;
+    flex-wrap: wrap;
+}
+.sales-card {
+    background: #8AB98F;
+    border-radius: 18px;
+    box-shadow: 0 4px 16px #0001;
+    width: 220px;
+    max-width: 90vw;
+    padding: 1em 1em 1.2em 1em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 1em;
+    transition: transform 0.15s;
+}
+.sales-card:hover {
+    transform: translateY(-6px) scale(1.03);
+    box-shadow: 0 8px 24px #0002;
+}
+.sales-card img {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 12px;
+    margin-bottom: 0.7em;
+}
+.card-title {
+    font-size: 1.1em;
+    font-weight: bold;
+    margin-bottom: 0.3em;
+    color: #222;
+}
+.card-rating {
+    color: #f39c12;
+    font-size: 1em;
+    margin-bottom: 0.7em;
+}
+.add-cart {
+    background: #CA3202;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 0.5em 1.2em;
+    font-weight: bold;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.add-cart:hover {
+    background: #a82600;
+}
+.carousel-indicator {
+    margin-top: 1.2em;
+    text-align: center;
+}
+.dot {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    margin: 0 4px;
+    background: #CA3202;
+    border-radius: 50%;
+    opacity: 0.3;
+    transition: opacity 0.2s;
+}
+.dot.active {
+    opacity: 1;
+}
+.newmenu-card-placeholder {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    pointer-events: none;
+    visibility: hidden;
+    min-height: 0;
+    min-width: 0;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+/* Sashimi介绍区块 */
+.sashimi-section {
+    margin: 4em auto 0 auto;
+    max-width: 1000px;
+    background: #fffbe9;
+    border-radius: 32px;
+    box-shadow: 0 8px 32px #0001;
+    padding: 3em 2em 2.5em 2em;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+.sashimi-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    gap: 3em;
+}
+.sashimi-img {
+    flex: 1.1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.sashimi-img img {
+    width: 320px;
+    height: 320px;
+    object-fit: cover;
+    border-radius: 32px;
+    box-shadow: 0 8px 32px #0002;
+    background: #fff;
+}
+.sashimi-content {
+    flex: 1.5;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    min-width: 280px;
+}
+.sashimi-title {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 2.2em;
+    font-weight: bold;
+    color: #222;
+    letter-spacing: 0.08em;
+    margin-bottom: 1.2em;
+    text-shadow: 0 2px 8px #fff8, 0 0 1px #CA3202;
+}
+.sashimi-desc-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.3em;
+}
+.sashimi-desc-item {
+    font-size: 1.08em;
+    color: #222;
+    line-height: 1.5;
+    display: flex;
+    align-items: flex-start;
+    gap: 1em;
+}
+.sashimi-desc-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #CA3202;
+    color: #fff;
+    border-radius: 50%;
+    width: 2.2em;
+    height: 2.2em;
+    font-weight: bold;
+    font-size: 1.1em;
+    margin-right: 0.7em;
+    flex-shrink: 0;
+}
+.sashimi-desc-text {
+    color: #555;
+    font-size: 0.98em;
+    font-weight: normal;
+}
+@media (max-width: 900px) {
+    .sashimi-section { flex-direction: column; padding: 2em 0.5em; }
+    .sashimi-row { flex-direction: column; gap: 2em; }
+    .sashimi-img img { width: 90vw; height: auto; max-width: 320px; }
+    .sashimi-content { align-items: center; min-width: unset; }
+    .sashimi-title { text-align: center; }
+}
+/* WHY ARE WE NUMBER ONE 区块 */
+.why-section {
+    margin: 4em auto 0 auto;
+    max-width: 1000px;
+    background: #fffbe9;
+    border-radius: 32px;
+    box-shadow: 0 8px 32px #0001;
+    padding: 3em 2em 2.5em 2em;
+}
+.why-title-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.2em;
+    margin-bottom: 2.5em;
+}
+.why-title {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 2.2em;
+    font-weight: bold;
+    color: #222;
+    letter-spacing: 0.08em;
+    text-align: center;
+    text-shadow: 0 2px 8px #fff8, 0 0 1px #CA3202;
+}
+.why-icon {
+    width: 38px;
+    height: 38px;
+}
+.why-features {
+    display: flex;
+    justify-content: center;
+    gap: 3em;
+    margin-bottom: 2em;
+}
+.why-feature {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 180px;
+}
+.why-feature-img {
+    width: 110px;
+    height: 110px;
+    background: #fff;
+    border-radius: 50%;
+    box-shadow: 0 4px 16px #CA3202aa, 0 2px 12px #0001;
+    border: 4px solid #CA3202;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1em;
+    overflow: hidden;
+}
+.why-feature-img img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+.why-feature-title {
+    font-weight: bold;
+    font-size: 1.1em;
+    margin-bottom: 0.3em;
+    color: #222;
+    text-align: center;
+}
+.why-feature-desc {
+    color: #555;
+    font-size: 0.98em;
+    text-align: center;
+}
+@media (max-width: 900px) {
+    .why-section { padding: 2em 0.5em; }
+    .why-features { flex-direction: column; gap: 1.5em; }
+    .why-feature { width: 100%; }
+}
+@media (max-width: 900px) {
+    .sales-cards { gap: 1em; }
+    .hero-logo { width: 120px; }
+}
+@media (max-width: 600px) {
+    .navbar { flex-direction: column; padding: 0.5em 0.5em; }
+    .nav-logo { height: 32px; }
+    .hero-content { flex-direction: column; }
+    .hero-logo { margin: 1em 0; }
+    .sales-card { width: 95vw; }
+    .menu-icon-list { gap: 1em; }
+}
+@media (max-width: 700px) {
+    .centered-section { max-width: 98vw; }
+    .why-features { flex-direction: column; gap: 1em; }
+    .newmenu-cards-3col {
+        grid-template-columns: 1fr;
+        gap: 1.5em 0;
+        padding: 0 0.5em;
+    }
+    .newmenu-card {
+        margin: 0 auto;
+        max-width: 95vw;
+        min-width: 0;
+        box-shadow: 0 4px 16px #0002, 0 1.5px 0 #fff;
+        border-radius: 18px;
+        border: 6px solid #fff;
+        background: #8AB98F;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .card-title, .card-rating, .add-cart {
+        text-align: center;
+    }
+}

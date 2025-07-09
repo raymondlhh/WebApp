@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sushi Home</title>
+    <link rel="stylesheet" href="../CSS/Home.css">
+</head>
+<body>
+    <header class="navbar">
+        <img src="../_Assets/images/icons/welcome_screen/Logo.png" class="nav-logo" alt="logo">
+        <nav>
+            <a href="#">Home</a>
+            <a href="#menu">Menu</a>
+            <a href="#delivery">Delivery</a>
+            <a href="#about">About Us</a>
+        </nav>
+        <div class="nav-actions">
+            <span class="icon-cart">🛒</span>
+            <button class="nav-contact">Contacts</button>
+        </div>
+    </header>
+    <main>
+        <div class="hero-section">
+            <canvas id="smoke-canvas"></canvas>
+            <div class="hero-content">
+                <div class="hero-jp hero-jp-left">
+                    <span>伝</span><span>統</span><span>的</span><span>な</span>
+                </div>
+                <img src="../_Assets/images/icons/welcome_screen/Logo.png" class="hero-logo" alt="sushi logo">
+                <div class="hero-jp hero-jp-right">
+                    <span>寿</span><span>司</span>
+                </div>
+            </div>
+        </div>
+        <section class="menu-icons">
+            <h2>OUR MENU</h2>
+            <div class="menu-icon-list">
+                <div><img src="../_Assets/images/icons/menu_sidebar/party_set.png"><span>Party Set</span></div>
+                <div><img src="../_Assets/images/icons/menu_sidebar/appetizers.png"><span>Appetizers</span></div>
+                <div><img src="../_Assets/images/icons/menu_sidebar/maki_roll.png"><span>Maki Roll</span></div>
+                <div><img src="../_Assets/images/icons/menu_sidebar/nigiri.png"><span>Nigiri</span></div>
+                <div><img src="../_Assets/images/icons/menu_sidebar/gunkan.png"><span>Gunkan</span></div>
+                <div><img src="../_Assets/images/icons/menu_sidebar/curry_set.png"><span>Curry Set</span></div>
+                <div><img src="../_Assets/images/icons/menu_sidebar/condiments.png"><span>Condiments</span></div>
+                <div><img src="../_Assets/images/icons/menu_sidebar/drinks.png"><span>Drinks</span></div>
+            </div>
+        </section>
+        <section class="sales-hits">
+            <h2><img src="../_Assets/images/icons/menu_sidebar/sushi_icon.png" style="height:1.2em;vertical-align:middle;"> SALES HITS <img src="../_Assets/images/icons/menu_sidebar/sushi_icon.png" style="height:1.2em;vertical-align:middle;"></h2>
+            <div class="sales-cards">
+                <div class="sales-card">
+                    <img src="../_Assets/images/menu/sushi_avocado.jpg" alt="Sushi Avocado">
+                    <div class="card-title">Sushi Avocado</div>
+                    <div class="card-rating">★★★★★ 4.9</div>
+                    <button class="add-cart">Add To Cart</button>
+                </div>
+                <div class="sales-card">
+                    <img src="../_Assets/images/menu/sushi_rainbow.jpg" alt="Sushi Rainbow">
+                    <div class="card-title">Sushi Rainbow</div>
+                    <div class="card-rating">★★★★★ 4.9</div>
+                    <button class="add-cart">Add To Cart</button>
+                </div>
+                <div class="sales-card">
+                    <img src="../_Assets/images/menu/sushi_4fish.jpg" alt="Sushi 4 Fish">
+                    <div class="card-title">Sushi 4 Fish</div>
+                    <div class="card-rating">★★★★★ 4.9</div>
+                    <button class="add-cart">Add To Cart</button>
+                </div>
+            </div>
+            <div class="carousel-indicator">
+                <span class="dot active"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+            </div>
+        </section>
+        <!-- Sashimi介绍区块 -->
+        <section class="sashimi-section centered-section">
+            <div class="sashimi-row">
+                <div class="sashimi-img">
+                    <img src="../_Assets/images/menu/salmon_sashimi.jpg" alt="Salmon Sashimi">
+                </div>
+                <div class="sashimi-content">
+                    <div class="sashimi-title">SALMON SASHIMI</div>
+                    <div class="sashimi-desc-list">
+                        <div class="sashimi-desc-item"><span class="sashimi-desc-num">01</span> <b>Premium Ingredients</b><br><span class="sashimi-desc-text">Salmon of the best quality, caught by fishermen in the morning before the restaurant opens.</span></div>
+                        <div class="sashimi-desc-item"><span class="sashimi-desc-num">02</span> <b>Traditional Cooking</b><br><span class="sashimi-desc-text">Raw fish is scalded with boiling oil. As a result, sashimi retains mainly the texture and taste of raw salmon, while adding to its asset the smell and light taste of fried fish. Nobu Matsuhisa’s recipe — and these are his hands in the photos.</span></div>
+                        <div class="sashimi-desc-item"><span class="sashimi-desc-num">03</span> <b>Simple Feed</b><br><span class="sashimi-desc-text">A sheet of shiso is laid out on a plate, the sliced fish is harmoniously placed next to them. On this dish, it is important to serve the ingredients separately.</span></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- WHY ARE WE NUMBER ONE 区块 -->
+        <section class="why-section">
+            <div class="centered-section">
+                <div class="why-title-row">
+                    <img src="../_Assets/images/icons/menu_sidebar/sushi_icon.png" class="why-icon" alt="sushi icon">
+                    <span class="why-title">WHY ARE WE NUMBER ONE</span>
+                    <img src="../_Assets/images/icons/menu_sidebar/sushi_icon.png" class="why-icon" alt="sushi icon">
+                </div>
+                <div class="why-features">
+                    <div class="why-feature">
+                        <div class="why-feature-img"><img src="../_Assets/images/why/unique_dishes.png" alt="Unique Dishes"></div>
+                        <div class="why-feature-title">Unique Dishes</div>
+                        <div class="why-feature-desc">traditional Japanese cuisine that we observe in the old traditions.</div>
+                    </div>
+                    <div class="why-feature">
+                        <div class="why-feature-img"><img src="../_Assets/images/why/round_pickup.png" alt="Round-The-Clock Pickup"></div>
+                        <div class="why-feature-title">Round-The-Clock Pickup</div>
+                        <div class="why-feature-desc">the kitchen is open around the clock and you can pick up your order at any time</div>
+                    </div>
+                    <div class="why-feature">
+                        <div class="why-feature-img"><img src="../_Assets/images/why/fast_delivery.png" alt="Fast Delivery"></div>
+                        <div class="why-feature-title">Fast Delivery</div>
+                        <div class="why-feature-desc">our courier will deliver your order directly to your door from 20-30 minutes</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <script src="../JavaScript/Smoke.js"></script>
+</body>
+</html>
