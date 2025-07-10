@@ -68,7 +68,7 @@ body, html {
     justify-content: center;
     background: none;
     overflow: hidden;
-    background-image: url('../_Assets/images/Background/5.png');
+    background-image: url('../assets/images/Background/5.png');
     background-size: 38% auto;
     background-position: left bottom;
     background-repeat: no-repeat;
@@ -80,7 +80,7 @@ body, html {
     transform: translateX(-50%);
     width: 1400px;
     height: 320px;
-    background: url('../_Assets/images/icons/detail_home_screen/beijing.png') no-repeat center top;
+    background: url('../assets/images/icons/detail_home_screen/beijing.png') no-repeat center top;
     background-size: contain;
     opacity: 0.18;
     z-index: 0;
@@ -586,11 +586,11 @@ body, html {
 }
 .bg-left {
   left: 0;
-  background-image: url('../_Assets/images/Background/1.png');
+  background-image: url('../assets/images/Background/1.png');
 }
 .bg-right {
   right: 0;
-  background-image: url('../_Assets/images/Background/2.png');
+  background-image: url('../assets/images/Background/2.png');
 }
 .login-video-overlay {
   position: fixed;
