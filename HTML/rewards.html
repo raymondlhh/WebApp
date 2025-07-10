@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rewards</title>
+    <link rel="stylesheet" href="../CSS/Home.css">
+    <link rel="stylesheet" href="../CSS/rewards.css">
+</head>
+<body>
+    <div id="header"></div>
+    <main class="rewards-main">
+        <section class="rewards-header">
+            <h1>My Rewards</h1>
+            <div class="user-points">Points: <span id="userPoints">5000</span></div>
+        </section>
+        <div class="rewards-toggle">
+            <button id="showAvailable" class="toggle-btn active">Available Rewards</button>
+            <button id="showRedeemed" class="toggle-btn">Redeemed Rewards</button>
+        </div>
+        <section id="rewardsGrid" class="rewards-grid"></section>
+    </main>
+    <script src="../JavaScript/rewards.js"></script>
+    <script>
+      fetch('header.html')
+        .then(response => response.text())
+        .then(data => {
+          document.getElementById('header').innerHTML = data;
+        });
+    </script>
+</body>
+</html> 

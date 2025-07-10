@@ -1,0 +1,217 @@
+body, html {
+    background: #FFF8E5;
+}
+.rewards-main, .reward-detail-main, .faq-main {
+    max-width: 900px;
+    margin: 2em auto;
+    padding: 1em;
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 4px 24px #0001;
+}
+.rewards-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5em;
+}
+.user-points {
+    background: #8AB98F;
+    color: #fff;
+    padding: 0.5em 1.2em;
+    border-radius: 12px;
+    font-weight: bold;
+    font-size: 1.1em;
+}
+.rewards-toggle {
+    display: flex;
+    justify-content: center;
+    gap: 1em;
+    margin-bottom: 2em;
+}
+.toggle-btn {
+    background: #fff;
+    color: #8AB98F;
+    border: 2px solid #8AB98F;
+    border-radius: 20px;
+    padding: 0.5em 2em;
+    font-weight: bold;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+}
+.toggle-btn.active, .toggle-btn:hover {
+    background: #8AB98F;
+    color: #fff;
+}
+.rewards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 2em;
+}
+.reward-card {
+    background: #F8F3E7;
+    border-radius: 16px;
+    box-shadow: 0 2px 12px #0001;
+    padding: 1em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: transform 0.15s;
+}
+.reward-card:hover {
+    transform: translateY(-6px) scale(1.03);
+    box-shadow: 0 8px 24px #0002;
+}
+.reward-card img {
+    width: 100px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 0.7em;
+    background: #fff;
+}
+.reward-card .reward-title {
+    font-size: 1.1em;
+    font-weight: bold;
+    margin-bottom: 0.3em;
+    color: #222;
+    text-align: center;
+}
+.reward-card .reward-desc {
+    font-size: 0.95em;
+    color: #555;
+    margin-bottom: 0.5em;
+    text-align: center;
+}
+.reward-card .reward-points {
+    color: #D24545;
+    font-weight: bold;
+    margin-bottom: 0.3em;
+}
+.reward-card .reward-validity {
+    font-size: 0.9em;
+    color: #888;
+    margin-bottom: 0.5em;
+}
+.reward-card .reward-redeem-btn {
+    background: #D24545;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 0.5em 1.2em;
+    font-weight: bold;
+    font-size: 1em;
+    cursor: pointer;
+    margin-top: 0.5em;
+    transition: background 0.2s;
+}
+.reward-card .reward-redeem-btn:disabled {
+    background: #ccc;
+    color: #fff;
+    cursor: not-allowed;
+}
+.reward-detail-card {
+    background: #F8F3E7;
+    border-radius: 16px;
+    box-shadow: 0 2px 12px #0001;
+    padding: 2em 2em 1em 2em;
+    max-width: 500px;
+    margin: 2em auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.reward-detail-card img {
+    width: 120px;
+    height: 90px;
+    object-fit: cover;
+    border-radius: 12px;
+    margin-bottom: 1em;
+    background: #fff;
+}
+.reward-detail-card h2 {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-bottom: 0.5em;
+    color: #222;
+    text-align: center;
+}
+.reward-detail-card p {
+    font-size: 1em;
+    color: #555;
+    margin-bottom: 1em;
+    text-align: center;
+}
+.reward-detail-card .reward-info {
+    width: 100%;
+    margin-bottom: 1em;
+    font-size: 1em;
+    color: #333;
+}
+.reward-detail-card .reward-info div {
+    margin-bottom: 0.3em;
+}
+.redeem-btn {
+    background: #D24545;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 0.7em 2em;
+    font-weight: bold;
+    font-size: 1.1em;
+    cursor: pointer;
+    margin-bottom: 1em;
+    transition: background 0.2s;
+}
+.redeem-btn:disabled {
+    background: #ccc;
+    color: #fff;
+    cursor: not-allowed;
+}
+.terms {
+    width: 100%;
+    background: #fff;
+    border-radius: 10px;
+    padding: 1em;
+    margin-top: 1em;
+    font-size: 0.98em;
+    color: #444;
+}
+.terms h3 {
+    margin-top: 0;
+    font-size: 1.1em;
+    color: #D24545;
+}
+.faq-main {
+    max-width: 700px;
+    margin: 2em auto;
+    padding: 2em;
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 4px 24px #0001;
+}
+.faq-list {
+    margin-top: 2em;
+}
+.faq-item {
+    margin-bottom: 2em;
+}
+.faq-item h2 {
+    font-size: 1.2em;
+    color: #8AB98F;
+    margin-bottom: 0.3em;
+}
+.faq-item p {
+    font-size: 1em;
+    color: #444;
+}
+@media (max-width: 700px) {
+    .rewards-main, .reward-detail-main, .faq-main {
+        padding: 0.5em;
+        border-radius: 8px;
+    }
+    .reward-detail-card {
+        padding: 1em;
+    }
+} 

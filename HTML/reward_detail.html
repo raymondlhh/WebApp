@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reward Detail</title>
+    <link rel="stylesheet" href="../CSS/Home.css">
+    <link rel="stylesheet" href="../CSS/rewards.css">
+</head>
+<body>
+    <div id="header"></div>
+    <script>
+      fetch('header.html')
+        .then(response => response.text())
+        .then(data => {
+          document.getElementById('header').innerHTML = data;
+        });
+    </script>
+    <main class="reward-detail-main">
+        <section class="reward-detail-card">
+            <img id="rewardImage" src="../_Assets/images/foods/appetizers/chuka_wakame.png" alt="Reward Image">
+            <h2 id="rewardName">Chuka Wakame</h2>
+            <p id="rewardDesc">Seaweed salad with a subtly sweet and savory flavor.</p>
+            <div class="reward-info">
+                <div>Points Required: <span id="rewardPoints">1500</span></div>
+                <div>Your Points: <span id="userPoints">5000</span></div>
+                <div>Validity: <span id="rewardValidity">8</span> months</div>
+                <div>Redemptions: <span id="userRedemptions">0</span>/<span id="maxRedemptions">3</span></div>
+            </div>
+            <button id="redeemBtn" class="redeem-btn">Redeem</button>
+            <div class="terms">
+                <h3>Terms & Conditions</h3>
+                <ul>
+                    <li>Reward is valid for dine-in only.</li>
+                    <li>Cannot be combined with other offers.</li>
+                    <li>Redemption is subject to availability.</li>
+                    <li>Points will be deducted upon redemption.</li>
+                </ul>
+            </div>
+        </section>
+    </main>
+    <script src="../JavaScript/rewards.js"></script>
+</body>
+</html> 
