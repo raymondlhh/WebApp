@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notification Functions</title>
+    <style>
+        /* Notification Modal Styles */
+        .notification-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .notification-modal-content {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .notification-title {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+            font-size: 1.5em;
+        }
+
+        .notification-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .notification-item {
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 15px;
+            background-color: #f9f9f9;
+        }
+
+        .notification-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+
+        .notification-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .notification-main {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .notification-desc {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .notification-date {
+            color: #999;
+            font-size: 0.8em;
+        }
+
+        .notification-time {
+            color: #999;
+            font-size: 0.8em;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .close-modal:hover {
+            color: #333;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- This file contains notification functions that can be called from other pages -->
+    <script>
+        // Notification modal HTML structure
+        const notificationModalHTML = `
+            <div id="notification-modal" class="notification-modal hidden">
+                <div class="notification-modal-content">
+                    <button class="close-modal" id="closeNotificationModal">&times;</button>
+                    <h2 class="notification-title">NOTIFICATIONS</h2>
+                    <div class="notification-list">
+                        <div class="notification-item">
+                            <div class="notification-row">
+                                <span class="notification-main">Points Earned</span>
+                                <span class="notification-date">27 Jun 2025</span>
+                            </div>
+                            <div class="notification-row">
+                                <span class="notification-desc">You earned 998 points for this order</span>
+                                <span class="notification-time">7:35</span>
+                            </div>
+                        </div>
+                        <div class="notification-item">
+                            <div class="notification-row">
+                                <span class="notification-main">Payment Successful</span>
+                                <span class="notification-date">27 Jun 2025</span>
+                            </div>
+                            <div class="notification-row">
+                                <span class="notification-desc">RM 99.80 has been successfully paid</span>
+                                <span class="notification-time">7:35</span>
+                            </div>
+                        </div>
+                        <div class="notification-item">
+                            <div class="notification-row">
+                                <span class="notification-main">Top-Up Successful</span>
+                                <span class="notification-date">27 Jun 2025</span>
+                            </div>
+                            <div class="notification-row">
+                                <span class="notification-desc">RM 100.00 has been successfully topped-up</span>
+                                <span class="notification-time">7:35</span>
+                            </div>
+                        </div>
+                        <div class="notification-item">
+                            <div class="notification-row">
+                                <span class="notification-main">Top-Up Successful</span>
+                                <span class="notification-date">27 Jun 2025</span>
+                            </div>
+                            <div class="notification-row">
+                                <span class="notification-desc">RM 50.00 has been successfully topped-up</span>
+                                <span class="notification-time">7:35</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        // Function to create and show notification modal
+        function createNotificationModal() {
+            // Check if modal already exists
+            if (document.getElementById('notification-modal')) {
+                return;
+            }
+
+            // Add the modal HTML to the body
+            document.body.insertAdjacentHTML('beforeend', notificationModalHTML);
+
+            // Add the CSS styles
+            const style = document.createElement('style');
+            style.textContent = `
+                .notification-modal {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background-color: rgba(0, 0, 0, 0.5);
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    z-index: 1000;
+                }
+
+                .notification-modal-content {
+                    background: white;
+                    border-radius: 10px;
+                    padding: 20px;
+                    max-width: 500px;
+                    width: 90%;
+                    max-height: 80vh;
+                    overflow-y: auto;
+                    position: relative;
+                }
+
+                .notification-title {
+                    text-align: center;
+                    margin-bottom: 20px;
+                    color: #333;
+                    font-size: 1.5em;
+                }
+
+                .notification-list {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 15px;
+                }
+
+                .notification-item {
+                    border: 1px solid #e0e0e0;
+                    border-radius: 8px;
+                    padding: 15px;
+                    background-color: #f9f9f9;
+                }
+
+                .notification-row {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-bottom: 5px;
+                }
+
+                .notification-row:last-child {
+                    margin-bottom: 0;
+                }
+
+                .notification-main {
+                    font-weight: bold;
+                    color: #333;
+                }
+
+                .notification-desc {
+                    color: #666;
+                    font-size: 0.9em;
+                }
+
+                .notification-date {
+                    color: #999;
+                    font-size: 0.8em;
+                }
+
+                .notification-time {
+                    color: #999;
+                    font-size: 0.8em;
+                }
+
+                .close-modal {
+                    position: absolute;
+                    top: 10px;
+                    right: 15px;
+                    background: none;
+                    border: none;
+                    font-size: 24px;
+                    cursor: pointer;
+                    color: #666;
+                }
+
+                .close-modal:hover {
+                    color: #333;
+                }
+
+                .hidden {
+                    display: none !important;
+                }
+            `;
+            document.head.appendChild(style);
+
+            // Set up event listeners
+            setupNotificationEvents();
+        }
+
+        // Function to setup notification event listeners
+        function setupNotificationEvents() {
+            const notificationModal = document.getElementById('notification-modal');
+            const closeNotificationModal = document.getElementById('closeNotificationModal');
+
+            if (!notificationModal || !closeNotificationModal) return;
+
+            // Close modal when close button is clicked
+            closeNotificationModal.onclick = () => {
+                hideNotificationModal();
+            };
+
+            // Close modal when clicking outside content
+            notificationModal.onclick = (e) => {
+                if (e.target === notificationModal) {
+                    hideNotificationModal();
+                }
+            };
+        }
+
+        // Function to show notification modal
+        function showNotificationModal() {
+            createNotificationModal();
+            const notificationModal = document.getElementById('notification-modal');
+            if (notificationModal) {
+                notificationModal.classList.remove('hidden');
+            }
+        }
+
+        // Function to hide notification modal
+        function hideNotificationModal() {
+            const notificationModal = document.getElementById('notification-modal');
+            if (notificationModal) {
+                notificationModal.classList.add('hidden');
+            }
+        }
+
+        // Make functions globally available
+        window.createNotificationModal = createNotificationModal;
+        window.showNotificationModal = showNotificationModal;
+        window.hideNotificationModal = hideNotificationModal;
+        window.setupNotificationEvents = setupNotificationEvents;
+    </script>
+</body>
+</html> 
