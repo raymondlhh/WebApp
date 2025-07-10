@@ -17,39 +17,3 @@
 </div>
 
 <div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
-
-<script>
-// Hamburger Menu Functionality
-function initHamburgerMenu() {
-    const openSidebar = document.getElementById('openSidebar');
-    const mobileMenu = document.getElementById('mobileMenu');
-    const closeMobileMenu = document.getElementById('closeMobileMenu');
-    const mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
-
-    function toggleMenu() {
-        const isOpen = mobileMenu.classList.contains('open');
-        if (isOpen) {
-            mobileMenu.classList.remove('open');
-            mobileMenuOverlay.style.display = 'none';
-            document.body.style.overflow = '';
-        } else {
-            mobileMenu.classList.add('open');
-            mobileMenuOverlay.style.display = 'block';
-            document.body.style.overflow = 'hidden';
-        }
-    }
-
-    // Add event listeners
-    if (openSidebar) openSidebar.onclick = toggleMenu;
-    if (closeMobileMenu) closeMobileMenu.onclick = toggleMenu;
-    if (mobileMenuOverlay) mobileMenuOverlay.onclick = toggleMenu;
-}
-
-// Initialize the hamburger menu when the DOM is loaded
-document.addEventListener('DOMContentLoaded', function() {
-    initHamburgerMenu();
-});
-
-// Export the function for external use
-window.initHamburgerMenu = initHamburgerMenu;
-</script>

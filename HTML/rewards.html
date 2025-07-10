@@ -25,10 +25,13 @@
             .then(response => response.text())
             .then(html => {
                 document.getElementById('navbar-container').innerHTML = html;
-                // Initialize the hamburger menu after loading
-                if (window.initHamburgerMenu) {
-                    window.initHamburgerMenu();
-                }
+                // Dynamically load the JS file
+                const script = document.createElement('script');
+                script.src = '../JavaScript/navbar.js';
+                script.onload = function() {
+                    if (window.initHamburgerMenu) window.initHamburgerMenu();
+                };
+                document.body.appendChild(script);
             })
             .catch(error => {
                 console.error('Error loading navbar:', error);
