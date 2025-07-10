@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reward Detail</title>
     <link rel="stylesheet" href="../CSS/Home.css">
+    <link rel="stylesheet" href="../CSS/Profile.css">
+    <link rel="stylesheet" href="../CSS/Navbar.css">
     <link rel="stylesheet" href="../CSS/rewards.css">
     <!-- Firebase CDN scripts -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
@@ -16,13 +18,27 @@
     <script src="../JavaScript/rewards.js"></script>
 </head>
 <body>
-    <div id="header"></div>
+    <div class="body-bg">
+      <div class="bg-side bg-left"></div>
+      <div class="bg-side bg-right"></div>
+    </div>
+    <!-- Include the navbar -->
+    <div id="navbar-container"></div>
     <script>
-      fetch('header.html')
-        .then(response => response.text())
-        .then(data => {
-          document.getElementById('header').innerHTML = data;
-        });
+        fetch('Navbar.html')
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('navbar-container').innerHTML = html;
+                const script = document.createElement('script');
+                script.src = '../JavaScript/navbar.js';
+                script.onload = function() {
+                    if (window.initHamburgerMenu) window.initHamburgerMenu();
+                };
+                document.body.appendChild(script);
+            })
+            .catch(error => {
+                console.error('Error loading navbar:', error);
+            });
     </script>
     <main class="reward-detail-main">
         <section class="reward-detail-card">

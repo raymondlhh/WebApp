@@ -35,11 +35,24 @@
     <section id="profile-section" class="spa-section">
       <!-- Profile content (view/edit) -->
       <div class="profile-header">
-        <img src="../assets/images/others/Profile.png" alt="Profile Picture" class="profile-pic">
+        <div class="profile-pic-container">
+          <img src="../assets/images/others/Profile.png" alt="Profile Picture" class="profile-pic">
+        </div>
         <div class="profile-info">
           <h2 id="profile-name">Tone</h2>
           <p id="profile-email">Tone@gmail.com</p>
           <button class="edit-btn" id="editProfileBtn">Edit Profile</button>
+        </div>
+        <div class="profile-actions">
+          <button class="profile-action-btn" id="favouriteBtn">
+            <img src="../assets/images/buttons/FavouriteButton.png" alt="Favourite">
+          </button>
+          <button class="profile-action-btn" id="balanceBtn">
+            <img src="../assets/images/buttons/BalanceButton.png" alt="Balance">
+          </button>
+          <button class="profile-action-btn" id="settingBtn">
+            <img src="../assets/images/buttons/SettingButton.png" alt="Setting">
+          </button>
         </div>
       </div>
       <form id="edit-profile-form" class="hidden">
