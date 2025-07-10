@@ -6,6 +6,7 @@
     <title>Rewards</title>
     <link rel="stylesheet" href="../CSS/Home.css">
     <link rel="stylesheet" href="../CSS/rewards.css">
+    <link rel="stylesheet" href="../CSS/Navbar.css">
     <!-- Firebase CDN scripts -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
@@ -16,7 +17,26 @@
     <script src="../JavaScript/rewards.js"></script>
 </head>
 <body>
-    <div id="header"></div>
+    <!-- Include the reusable navbar component -->
+    <div id="navbar-container"></div>
+    <script>
+        // Load the navbar component
+        fetch('Navbar.html')
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('navbar-container').innerHTML = html;
+                // Dynamically load the JS file
+                const script = document.createElement('script');
+                script.src = '../JavaScript/navbar.js';
+                script.onload = function() {
+                    if (window.initHamburgerMenu) window.initHamburgerMenu();
+                };
+                document.body.appendChild(script);
+            })
+            .catch(error => {
+                console.error('Error loading navbar:', error);
+            });
+    </script>
     <main class="rewards-main">
         <section class="rewards-header">
             <h1>My Rewards</h1>
@@ -28,12 +48,5 @@
         </div>
         <section id="rewardsGrid" class="rewards-grid"></section>
     </main>
-    <script>
-      fetch('header.html')
-        .then(response => response.text())
-        .then(data => {
-          document.getElementById('header').innerHTML = data;
-        });
-    </script>
 </body>
 </html> 

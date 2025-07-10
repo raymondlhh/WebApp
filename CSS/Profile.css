@@ -5,7 +5,8 @@ body, html {
   font-family: 'Noto Serif JP', 'Inter', Arial, sans-serif;
   min-height: 100vh;
 }
-.navbar {
+/* Remove or comment out conflicting Profile-specific navbar styles */
+/* .navbar {
   width: 100%;
   background: #CA3202;
   color: #fff;
@@ -15,21 +16,130 @@ body, html {
   position: sticky;
   top: 0;
   z-index: 10;
-}
-.hamburger {
+} */
+/* .hamburger {
   background: none;
   border: none;
   color: #fff;
   font-size: 2em;
   cursor: pointer;
   margin-right: 1em;
+} */
+
+/* Add Home.css navbar styles for consistency */
+.navbar {
+    width: 100%;
+    background: #CA3202;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5em 0.5em 0.5em 1em;
+    position: sticky;
+    top: 0;
+    z-index: 10;
 }
-.navbar-title {
-  font-family: 'Noto Serif JP', serif;
-  font-size: 1.3em;
+.hamburger {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 2em;
+    cursor: pointer;
+    margin-left: auto;
+    margin-right: 0.5em;
+    padding: 0.25em 0.75em;
+    border-radius: 6px;
+    transition: background 0.2s;
+}
+.hamburger:active, .hamburger:focus {
+    background: rgba(0,0,0,0.08);
+    outline: none;
+}
+
+/* Mobile menu styles from Home.css for consistency */
+.mobile-menu {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: auto;
+  width: 80vw;
+  max-width: 320px;
+  background: #fff;
+  box-shadow: -2px 0 12px #CA3202AA;
+  z-index: 2001;
+  transform: translateX(100%);
+  transition: transform 0.3s;
+  padding: 2em 2em 2em 2em;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-height: unset;
+  height: auto;
+}
+.mobile-menu.open {
+  transform: translateX(0);
+  display: flex !important;
+}
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 2em;
+  color: #CA3202;
+  position: absolute;
+  top: 1.2em;
+  left: 8em;
+  right: auto;
+  cursor: pointer;
+  transition: color 0.2s;
+  margin: 0;
+}
+.close-btn:hover {
+  color: #f39c12;
+}
+.mobile-nav-links {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2em;
+  padding: 2em 2em 2em 2em;
+}
+.mobile-nav-links a {
+  display: flex;
+  align-items: center;
+  gap: 1em;
+  font-size: 1.2em;
+  color: #CA3202;
+  text-decoration: none;
   font-weight: bold;
-  letter-spacing: 0.05em;
+  padding: 0.7em 0;
+  border-radius: 8px;
+  transition: background 0.2s, color 0.2s;
 }
+.mobile-nav-links a:hover {
+  background: #FFF8E5;
+  color: #f39c12;
+}
+.mobile-nav-links img {
+  width: 28px;
+  height: 28px;
+  display: block;
+}
+.mobile-menu-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.3);
+  z-index: 2000;
+  display: none;
+}
+.mobile-menu.open ~ .mobile-menu-overlay {
+  display: block;
+}
+.sidebar-link-text {
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+/* --- Remove legacy sidebar styles to avoid conflicts with reusable navbar --- */
+/*
 .sidebar {
   position: fixed;
   top: 0; left: -260px;
@@ -74,6 +184,7 @@ body, html {
   background: #8AB98F;
   color: #222;
 }
+*/
 .overlay {
   display: none;
   position: fixed;
@@ -380,11 +491,11 @@ body, html {
     gap: 0.7em;
     align-items: flex-start;
   }
-  .sidebar {
+  /* .sidebar {
     width: 80vw;
     min-width: 180px;
     max-width: 320px;
-  }
+  } */
 }
 .hidden {
   display: none !important;
@@ -428,4 +539,25 @@ body, html {
     padding: 1em 0.2em 1.5em 0.2em;
     max-width: 99vw;
   }
+}
+
+/* Add a wrapper class to scope profile styles */
+.profile-content img {
+  /* If you have any global img styles, move them here */
+}
+.profile-content a {
+  /* If you have any global a styles, move them here */
+}
+
+/* Remove or comment out any global img or a selectors if present */
+
+/* If you want to be extra safe, add this to reset navbar icons in the sidebar: */
+.mobile-menu .mobile-nav-links img {
+  filter: none !important;
+  border-radius: 0 !important;
+  background: none !important;
+}
+.mobile-menu .mobile-nav-links a {
+  color: #b93a1c !important;
+  font-weight: 600 !important;
 }

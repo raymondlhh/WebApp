@@ -5,24 +5,31 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>My Profile</title>
   <link rel="stylesheet" href="../CSS/Profile.css">
+  <link rel="stylesheet" href="../CSS/Navbar.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Noto+Serif+JP:wght@700&display=swap" rel="stylesheet">
   <script type="module" src="../JavaScript/firebase-init.js"></script>
 </head>
 <body>
-  <div class="navbar">
-    <button class="hamburger" id="openSidebar">&#9776;</button>
-    <span class="navbar-title">MY PROFILE</span>
-  </div>
-  <div class="sidebar" id="sidebar">
-    <button class="close-btn" id="closeSidebar">&times;</button>
-    <ul>
-      <li data-section="profile">Profile</li>
-      <li data-section="favourites">Favourites</li>
-      <li data-section="balance">Balance</li>
-    </ul>
-  </div>
+  <!-- Reusable Navbar -->
+  <div id="navbar-container"></div>
+  <script>
+    fetch('Navbar.html')
+      .then(response => response.text())
+      .then(html => {
+        document.getElementById('navbar-container').innerHTML = html;
+        const script = document.createElement('script');
+        script.src = '../JavaScript/navbar.js';
+        script.onload = function() {
+          if (window.initHamburgerMenu) window.initHamburgerMenu();
+        };
+        document.body.appendChild(script);
+      })
+      .catch(error => {
+        console.error('Error loading navbar:', error);
+      });
+  </script>
   <div class="overlay" id="overlay"></div>
   <main>
     <section id="profile-section" class="spa-section">

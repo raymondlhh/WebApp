@@ -6,6 +6,7 @@
     <title>Sushi Home</title>
     <link rel="stylesheet" href="../CSS/Home.css">
     <link rel="stylesheet" href="../CSS/Profile.css">
+    <link rel="stylesheet" href="../CSS/Navbar.css">
     <script type="module" src="../JavaScript/firebase-init.js"></script>
 </head>
 <body>
@@ -23,44 +24,25 @@
       const rightExt = rightNum === 5 ? 'jpg' : 'png';
       document.querySelector('.bg-right').style.backgroundImage = `url('../assets/images/Background/${rightNum}.${rightExt}')`;
     </script>
-    <header class="navbar">
-        <div style="display: flex; align-items: center; width: 100%; justify-content: flex-end;">
-            <button class="hamburger" id="openSidebar">&#9776;</button>
-        </div>
-    </header>
-    <!-- Mobile Sidebar Menu (right side) -->
-    <div class="mobile-menu" id="mobileMenu">
-        <button class="close-btn" id="closeMobileMenu">&times;</button>
-        <nav class="mobile-nav-links">
-            <a href="Home.html"><img src="../_Assets/images/icons/Home.png" alt="Home"><span class="sidebar-link-text">Home</span></a>
-            <a href="Menu.html"><img src="../_Assets/images/icons/Menu.png" alt="Menu"><span class="sidebar-link-text">Menu</span></a>
-            <a href="rewards.html"><img src="../_Assets/images/icons/Reward.png" alt="Rewards"><span class="sidebar-link-text">Rewards</span></a>
-            <a href="profile.html"><img src="../_Assets/images/icons/Profile.png" alt="Profile"><span class="sidebar-link-text">Profile</span></a>
-        </nav>
-    </div>
-    <div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
+    <!-- Include the reusable navbar component -->
+    <div id="navbar-container"></div>
     <script>
-      const openSidebar = document.getElementById('openSidebar');
-      const mobileMenu = document.getElementById('mobileMenu');
-      const closeMobileMenu = document.getElementById('closeMobileMenu');
-      const mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
-
-      function toggleMenu() {
-        const isOpen = mobileMenu.classList.contains('open');
-        if (isOpen) {
-          mobileMenu.classList.remove('open');
-          mobileMenuOverlay.style.display = 'none';
-          document.body.style.overflow = '';
-        } else {
-          mobileMenu.classList.add('open');
-          mobileMenuOverlay.style.display = 'block';
-          document.body.style.overflow = 'hidden';
-        }
-      }
-
-      openSidebar.onclick = toggleMenu;
-      closeMobileMenu.onclick = toggleMenu;
-      mobileMenuOverlay.onclick = toggleMenu;
+        // Load the navbar component
+        fetch('Navbar.html')
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('navbar-container').innerHTML = html;
+                // Dynamically load the JS file
+                const script = document.createElement('script');
+                script.src = '../JavaScript/navbar.js';
+                script.onload = function() {
+                    if (window.initHamburgerMenu) window.initHamburgerMenu();
+                };
+                document.body.appendChild(script);
+            })
+            .catch(error => {
+                console.error('Error loading navbar:', error);
+            });
     </script>
     <main>
         <div class="hero-section">
