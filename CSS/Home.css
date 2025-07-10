@@ -648,7 +648,7 @@ body, html {
   z-index: 2001;
   transform: translateX(100%);
   transition: transform 0.3s;
-  padding: 2em 0 2em 0;
+  padding: 2em 2em 2em 2em;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -666,7 +666,8 @@ body, html {
   color: #CA3202;
   position: absolute;
   top: 1.2em;
-  right: 1.2em;
+  left: 8em;    /* <-- Move to left side */
+  right: auto;  /* <-- Remove or set to auto */
   cursor: pointer;
   transition: color 0.2s;
   margin: 0;
