@@ -47,29 +47,29 @@ body {
     display: none;
 }
 
-.input-field {
-    position: absolute;
-    left: 41px;
-    width: 337px;
+.input-field,
+.password-field {
+    width: 100%;
     background: white;
     border-radius: 12px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     border: none;
     padding: 16px;
     font-size: 16px;
     color: #333;
+    box-sizing: border-box;
 }
 
-.input-field::placeholder {
+.input-field::placeholder,
+.password-field::placeholder {
     color: #999;
 }
 
-.email-input {
+.email-container {
+    position: absolute;
+    left: 41px;
     top: 500px;
-}
-
-.password-input {
-    top: 570px;
+    width: 337px;
 }
 
 .password-container {
@@ -77,18 +77,6 @@ body {
     left: 41px;
     top: 570px;
     width: 337px;
-}
-
-.password-field {
-    width: 100%;
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    border: none;
-    padding: 16px;
-    font-size: 16px;
-    color: #333;
-    box-sizing: border-box;
 }
 
 .password-toggle {
@@ -101,6 +89,12 @@ body {
     color: #999;
     cursor: pointer;
     font-size: 20px;
+    padding: 0;
+    height: 40px;
+    width: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .login-button {
@@ -117,7 +111,11 @@ body {
     font-weight: bold;
     font-size: 30px;
     cursor: pointer;
-    box-shadow: 0 4px 5px rgba(0,0,0,0.2);
+    box-shadow: 0 4px 5px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
 }
 
 .login-button:hover {
@@ -139,7 +137,7 @@ body {
 }
 
 .loading {
-    display: inline-block;
+    display: none;
     width: 20px;
     height: 20px;
     border: 2px solid #ffffff;
@@ -149,11 +147,34 @@ body {
 }
 
 @keyframes spin {
-    to { transform: rotate(360deg); }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.visually-hidden {
+    position: absolute !important;
+    height: 1px;
+    width: 1px;
+    overflow: hidden;
+    clip: rect(1px, 1px, 1px, 1px);
+    white-space: nowrap;
 }
 
 @media (max-width: 430px) {
-    .logo { width: 250px; height: 375px; }
-    .subtitle { width: 294px; }
-    .error-message, .input-field, .password-container, .login-button { width: 337px; }
-} 
+    .logo {
+        width: 250px;
+        height: 375px;
+    }
+
+    .subtitle {
+        width: 294px;
+    }
+
+    .error-message,
+    .email-container,
+    .password-container,
+    .login-button {
+        width: 337px;
+    }
+}
