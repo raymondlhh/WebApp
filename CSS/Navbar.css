@@ -1,0 +1,103 @@
+/* Navbar.css - Consistent styles for the reusable Navbar component */
+
+.navbar {
+    width: 100%;
+    background: #b93a1c;
+    padding: 0.5em 0;
+    position: relative;
+    z-index: 1001;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+.hamburger {
+    background: none;
+    border: none;
+    font-size: 2rem;
+    color: #fff;
+    cursor: pointer;
+    padding: 0.25em 0.75em;
+    transition: background 0.2s;
+    border-radius: 6px;
+}
+.hamburger:active, .hamburger:focus {
+    background: rgba(0,0,0,0.08);
+    outline: none;
+}
+
+.mobile-menu {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 80vw;
+    max-width: 340px;
+    height: 100vh;
+    background: #fff;
+    box-shadow: -2px 0 16px rgba(0,0,0,0.12);
+    transform: translateX(100%);
+    transition: transform 0.3s cubic-bezier(.4,0,.2,1);
+    z-index: 1200;
+    display: flex;
+    flex-direction: column;
+    padding-top: 1.5em;
+}
+.mobile-menu.open {
+    transform: translateX(0);
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 2rem;
+    color: #b93a1c;
+    position: absolute;
+    top: 1em;
+    right: 1em;
+    cursor: pointer;
+    z-index: 2;
+}
+
+.mobile-menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,0.25);
+    display: none;
+    z-index: 1100;
+}
+
+.mobile-menu.open ~ .mobile-menu-overlay {
+    display: block;
+}
+
+.mobile-nav-links {
+    display: flex;
+    flex-direction: column;
+    gap: 2em;
+    margin-top: 2.5em;
+    padding-left: 2em;
+}
+.mobile-nav-links a {
+    display: flex;
+    align-items: center;
+    gap: 1em;
+    font-size: 1.25rem;
+    color: #b93a1c;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.2s;
+}
+.mobile-nav-links a:hover {
+    color: #e85c3a;
+}
+.mobile-nav-links img {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+    filter: drop-shadow(0 1px 2px rgba(0,0,0,0.08));
+}
+
+.sidebar-link-text {
+    vertical-align: middle;
+} 
