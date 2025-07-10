@@ -85,9 +85,11 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Navigate to ProfileEdit.html on edit
-  editBtn.onclick = () => {
-    window.location.href = 'ProfileEdit.html';
-  };
+  if (editBtn) {
+    editBtn.addEventListener('click', function() {
+      window.location.href = 'HTML/ProfileEdit.html';
+    });
+  }
 
   // Remove or comment out inline edit form logic
   // cancelEditBtn.onclick = () => {
@@ -209,14 +211,5 @@ document.addEventListener('DOMContentLoaded', () => {
     logoutBtn.onclick = () => {
       signOut(auth);
     };
-  }
-}); 
-
-document.addEventListener('DOMContentLoaded', function() {
-  const editBtn = document.getElementById('editProfileBtn');
-  if (editBtn) {
-    editBtn.addEventListener('click', function() {
-      window.location.href = 'ProfileEdit.html';
-    });
   }
 }); 
