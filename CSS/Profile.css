@@ -114,6 +114,11 @@ body, html {
   align-items: center;
   gap: 1.5em;
   margin-bottom: 1.5em;
+  position: relative;
+}
+.profile-pic-wrapper {
+  position: relative;
+  display: inline-block;
 }
 .profile-pic {
   width: 90px;
@@ -121,6 +126,67 @@ body, html {
   border-radius: 50%;
   object-fit: cover;
   border: 4px solid #CA3202;
+  position: relative;
+  z-index: 1;
+}
+.camera-btn {
+  position: absolute;
+  right: -14px;
+  bottom: -14px;
+  background: #fff;
+  border: 2.5px solid #CA3202;
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px #0002;
+  cursor: pointer;
+  z-index: 2;
+  transition: background 0.2s, border 0.2s;
+  padding: 0;
+  transform: none;
+}
+.camera-btn img {
+  width: 16px;
+  height: 16px;
+  display: block;
+  filter: none;
+}
+.camera-btn:hover {
+  background: #ffe0d0;
+  border-color: #CA3202;
+}
+.profile-pic-selector {
+  position: absolute;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px #0002;
+  padding: 0.7em 1em;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+  z-index: 300;
+  min-width: 180px;
+}
+.profile-pic-options {
+  display: flex;
+  gap: 0.7em;
+  justify-content: center;
+}
+.pic-option {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 2px solid #CA3202;
+  object-fit: cover;
+  cursor: pointer;
+  transition: border 0.2s, box-shadow 0.2s;
+}
+.pic-option:hover {
+  border: 2.5px solid #8AB98F;
+  box-shadow: 0 2px 8px #8AB98F55;
 }
 .profile-info h2 {
   margin: 0 0 0.2em 0;

@@ -69,6 +69,19 @@ body, html {
     background: none;
     overflow: hidden;
 }
+.hero-bg-img {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 1400px;
+    height: 320px;
+    background: url('../_Assets/images/icons/detail_home_screen/beijing.png') no-repeat center top;
+    background-size: contain;
+    opacity: 0.18;
+    z-index: 0;
+    pointer-events: none;
+}
 #smoke-canvas {
     position: absolute;
     left: 0; top: 0; width: 100%; height: 100%;
@@ -428,4 +441,109 @@ body, html {
     .card-title, .card-rating, .add-cart {
         text-align: center;
     }
+}
+.notification-btn {
+  background: none;
+  border: none;
+  margin-right: 0.7em;
+  cursor: pointer;
+  padding: 0.2em;
+  border-radius: 50%;
+  transition: background 0.2s;
+}
+.notification-btn:hover {
+  background: #ffe0d0;
+}
+.notification-modal {
+  position: fixed;
+  top: 0; left: 0; width: 100vw; height: 100vh;
+  background: rgba(0,0,0,0.18);
+  z-index: 300;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  transition: opacity 0.2s;
+  padding-top: 3vh;
+}
+.notification-modal.hidden {
+  display: none;
+}
+.notification-modal-content {
+  background: #FFF8E5;
+  border-radius: 18px;
+  box-shadow: 0 8px 32px #0002;
+  padding: 1.5em 1.2em 2em 1.2em;
+  min-width: 340px;
+  max-width: 98vw;
+  width: 400px;
+  position: relative;
+}
+.close-modal {
+  position: absolute;
+  top: 1em;
+  right: 1em;
+  background: none;
+  border: none;
+  font-size: 2em;
+  color: #CA3202;
+  cursor: pointer;
+  z-index: 10;
+}
+.notification-title {
+  text-align: center;
+  font-family: 'GaMaamli', 'Inter', Arial, sans-serif;
+  font-size: 1.3em;
+  font-weight: bold;
+  letter-spacing: 0.05em;
+  margin-bottom: 1.2em;
+}
+.notification-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7em;
+}
+.notification-item {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px #0001;
+  padding: 1em 1em 0.7em 1em;
+  margin-bottom: 0.2em;
+  border-bottom: 1px solid #eee;
+}
+.notification-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.2em;
+}
+.notification-main {
+  font-weight: bold;
+  font-size: 1.08em;
+  color: #222;
+}
+.notification-date {
+  color: #888;
+  font-size: 0.98em;
+}
+.notification-desc {
+  color: #555;
+  font-size: 0.98em;
+}
+.notification-time {
+  color: #888;
+  font-size: 0.98em;
+  margin-left: 1em;
+}
+@media (max-width: 600px) {
+  .notification-modal-content {
+    min-width: 98vw;
+    width: 99vw;
+    padding: 1em 0.2em 1.5em 0.2em;
+  }
+}
+.notification-btn img {
+  filter: brightness(0) invert(1);
+}
+.notification-btn:hover img {
+  filter: brightness(0) invert(1);
 }
