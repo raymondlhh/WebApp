@@ -66,8 +66,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const nameEl = document.getElementById('profile-name');
   const emailEl = document.getElementById('profile-email');
   const editBtn = document.getElementById('editProfileBtn');
-  const editForm = document.getElementById('edit-profile-form');
-  const cancelEditBtn = document.getElementById('cancelEdit');
+  // const editForm = document.getElementById('edit-profile-form');
+  // const cancelEditBtn = document.getElementById('cancelEdit');
 
   async function loadProfile() {
     const user = auth.currentUser;
@@ -76,36 +76,38 @@ document.addEventListener('DOMContentLoaded', () => {
     if (userData) {
       nameEl.textContent = userData.name || '';
       emailEl.textContent = userData.email || user.email;
-      document.getElementById('edit-name').value = userData.name || '';
-      document.getElementById('edit-email').value = userData.email || user.email;
-      document.getElementById('edit-password').value = '';
-      document.getElementById('edit-phone').value = userData.phone || '';
-      document.getElementById('edit-address').value = userData.address || '';
+      // document.getElementById('edit-name').value = userData.name || '';
+      // document.getElementById('edit-email').value = userData.email || user.email;
+      // document.getElementById('edit-password').value = '';
+      // document.getElementById('edit-phone').value = userData.phone || '';
+      // document.getElementById('edit-address').value = userData.address || '';
     }
   }
 
+  // Navigate to ProfileEdit.html on edit
   editBtn.onclick = () => {
-    editForm.classList.remove('hidden');
-    editBtn.style.display = 'none';
+    window.location.href = 'ProfileEdit.html';
   };
-  cancelEditBtn.onclick = () => {
-    editForm.classList.add('hidden');
-    editBtn.style.display = '';
-  };
-  editForm.onsubmit = async (e) => {
-    e.preventDefault();
-    const user = auth.currentUser;
-    if (!user) return;
-    await UserService.updateUser(user.uid, {
-      name: document.getElementById('edit-name').value,
-      email: document.getElementById('edit-email').value,
-      phone: document.getElementById('edit-phone').value,
-      address: document.getElementById('edit-address').value
-    });
-    loadProfile();
-    editForm.classList.add('hidden');
-    editBtn.style.display = '';
-  };
+
+  // Remove or comment out inline edit form logic
+  // cancelEditBtn.onclick = () => {
+  //   editForm.classList.add('hidden');
+  //   editBtn.style.display = '';
+  // };
+  // editForm.onsubmit = async (e) => {
+  //   e.preventDefault();
+  //   const user = auth.currentUser;
+  //   if (!user) return;
+  //   await UserService.updateUser(user.uid, {
+  //     name: document.getElementById('edit-name').value,
+  //     email: document.getElementById('edit-email').value,
+  //     phone: document.getElementById('edit-phone').value,
+  //     address: document.getElementById('edit-address').value
+  //   });
+  //   loadProfile();
+  //   editForm.classList.add('hidden');
+  //   editBtn.style.display = '';
+  // };
 
   // Favourites logic
   const favList = document.getElementById('favourites-list');
@@ -207,5 +209,14 @@ document.addEventListener('DOMContentLoaded', () => {
     logoutBtn.onclick = () => {
       signOut(auth);
     };
+  }
+}); 
+
+document.addEventListener('DOMContentLoaded', function() {
+  const editBtn = document.getElementById('editProfileBtn');
+  if (editBtn) {
+    editBtn.addEventListener('click', function() {
+      window.location.href = 'ProfileEdit.html';
+    });
   }
 }); 
