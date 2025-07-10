@@ -18,14 +18,14 @@
       const leftNum = Math.floor(Math.random() * 5) + 1;
       let rightNum = leftNum;
       while(rightNum === leftNum) rightNum = Math.floor(Math.random() * 5) + 1;
-      document.querySelector('.bg-left').style.backgroundImage = `url('../_Assets/images/Background/${leftNum}.png')`;
+      document.querySelector('.bg-left').style.backgroundImage = `url('../assets/images/Background/${leftNum}.png')`;
       // 右侧用jpg格式的5，否则用png
       const rightExt = rightNum === 5 ? 'jpg' : 'png';
-      document.querySelector('.bg-right').style.backgroundImage = `url('../_Assets/images/Background/${rightNum}.${rightExt}')`;
+      document.querySelector('.bg-right').style.backgroundImage = `url('../assets/images/Background/${rightNum}.${rightExt}')`;
     </script>
     <header class="navbar">
         <button class="hamburger" id="openSidebar">&#9776;</button>
-        <img src="../_Assets/images/icons/welcome_screen/Logo.png" class="nav-logo" alt="logo">
+        <img src="../assets/images/icons/welcome_screen/Logo.png" class="nav-logo" alt="logo">
         <nav>
             <a href="#">Home</a>
             <a href="#menu">Menu</a>
@@ -34,7 +34,7 @@
         </nav>
         <div class="nav-actions">
             <button class="notification-btn" id="notificationBtn" title="Notifications">
-                <img src="../_Assets/images/icons/Notification.png" alt="Notifications" style="width:28px;height:28px;">
+                <img src="../assets/images/icons/Notification.png" alt="Notifications" style="width:28px;height:28px;">
             </button>
             <span class="icon-cart">🛒</span>
             <button class="nav-contact">Contacts</button>
@@ -58,7 +58,7 @@
                 <div class="hero-jp hero-jp-left">
                     <span>伝</span><span>統</span><span>的</span><span>な</span>
                 </div>
-                <img src="../_Assets/images/icons/welcome_screen/Logo.png" class="hero-logo" alt="sushi logo">
+                <img src="../assets/images/icons/welcome_screen/Logo.png" class="hero-logo" alt="sushi logo">
                 <div class="hero-jp hero-jp-right">
                     <span>寿</span><span>司</span>
                 </div>
@@ -67,33 +67,33 @@
         <section class="menu-icons">
             <h2>OUR MENU</h2>
             <div class="menu-icon-list">
-                <div><img src="../_Assets/images/icons/menu_sidebar/party_set.png"><span>Party Set</span></div>
-                <div><img src="../_Assets/images/icons/menu_sidebar/appetizers.png"><span>Appetizers</span></div>
-                <div><img src="../_Assets/images/icons/menu_sidebar/maki_roll.png"><span>Maki Roll</span></div>
-                <div><img src="../_Assets/images/icons/menu_sidebar/nigiri.png"><span>Nigiri</span></div>
-                <div><img src="../_Assets/images/icons/menu_sidebar/gunkan.png"><span>Gunkan</span></div>
-                <div><img src="../_Assets/images/icons/menu_sidebar/curry_set.png"><span>Curry Set</span></div>
-                <div><img src="../_Assets/images/icons/menu_sidebar/condiments.png"><span>Condiments</span></div>
-                <div><img src="../_Assets/images/icons/menu_sidebar/drinks.png"><span>Drinks</span></div>
+                <div><img src="../assets/images/icons/menu_sidebar/party_set.png"><span>Party Set</span></div>
+                <div><img src="../assets/images/icons/menu_sidebar/appetizers.png"><span>Appetizers</span></div>
+                <div><img src="../assets/images/icons/menu_sidebar/maki_roll.png"><span>Maki Roll</span></div>
+                <div><img src="../assets/images/icons/menu_sidebar/nigiri.png"><span>Nigiri</span></div>
+                <div><img src="../assets/images/icons/menu_sidebar/gunkan.png"><span>Gunkan</span></div>
+                <div><img src="../assets/images/icons/menu_sidebar/curry_set.png"><span>Curry Set</span></div>
+                <div><img src="../assets/images/icons/menu_sidebar/condiments.png"><span>Condiments</span></div>
+                <div><img src="../assets/images/icons/menu_sidebar/drinks.png"><span>Drinks</span></div>
             </div>
         </section>
         <section class="sales-hits">
-            <h2><img src="../_Assets/images/icons/menu_sidebar/sushi_icon.png" style="height:1.2em;vertical-align:middle;"> SALES HITS <img src="../_Assets/images/icons/menu_sidebar/sushi_icon.png" style="height:1.2em;vertical-align:middle;"></h2>
+            <h2><img src="../assets/images/icons/menu_sidebar/sushi_icon.png" style="height:1.2em;vertical-align:middle;"> SALES HITS <img src="../assets/images/icons/menu_sidebar/sushi_icon.png" style="height:1.2em;vertical-align:middle;"></h2>
             <div class="sales-cards">
                 <div class="sales-card">
-                    <img src="../_Assets/images/menu/sushi_avocado.jpg" alt="Sushi Avocado">
+                    <img src="../assets/images/menu/sushi_avocado.jpg" alt="Sushi Avocado">
                     <div class="card-title">Sushi Avocado</div>
                     <div class="card-rating">★★★★★ 4.9</div>
                     <button class="add-cart">Add To Cart</button>
                 </div>
                 <div class="sales-card">
-                    <img src="../_Assets/images/menu/sushi_rainbow.jpg" alt="Sushi Rainbow">
+                    <img src="../assets/images/menu/sushi_rainbow.jpg" alt="Sushi Rainbow">
                     <div class="card-title">Sushi Rainbow</div>
                     <div class="card-rating">★★★★★ 4.9</div>
                     <button class="add-cart">Add To Cart</button>
                 </div>
                 <div class="sales-card">
-                    <img src="../_Assets/images/menu/sushi_4fish.jpg" alt="Sushi 4 Fish">
+                    <img src="../assets/images/menu/sushi_4fish.jpg" alt="Sushi 4 Fish">
                     <div class="card-title">Sushi 4 Fish</div>
                     <div class="card-rating">★★★★★ 4.9</div>
                     <button class="add-cart">Add To Cart</button>
@@ -111,7 +111,7 @@
         <section class="sashimi-section centered-section">
             <div class="sashimi-row">
                 <div class="sashimi-img">
-                    <img src="../_Assets/images/menu/salmon_sashimi.jpg" alt="Salmon Sashimi">
+                    <img src="../assets/images/menu/salmon_sashimi.jpg" alt="Salmon Sashimi">
                 </div>
                 <div class="sashimi-content">
                     <div class="sashimi-title">SALMON SASHIMI</div>
@@ -127,23 +127,23 @@
         <section class="why-section">
             <div class="centered-section">
                 <div class="why-title-row">
-                    <img src="../_Assets/images/icons/menu_sidebar/sushi_icon.png" class="why-icon" alt="sushi icon">
+                    <img src="../assets/images/icons/menu_sidebar/sushi_icon.png" class="why-icon" alt="sushi icon">
                     <span class="why-title">WHY ARE WE NUMBER ONE</span>
-                    <img src="../_Assets/images/icons/menu_sidebar/sushi_icon.png" class="why-icon" alt="sushi icon">
+                    <img src="../assets/images/icons/menu_sidebar/sushi_icon.png" class="why-icon" alt="sushi icon">
                 </div>
                 <div class="why-features">
                     <div class="why-feature">
-                        <div class="why-feature-img"><img src="../_Assets/images/why/unique_dishes.png" alt="Unique Dishes"></div>
+                        <div class="why-feature-img"><img src="../assets/images/why/unique_dishes.png" alt="Unique Dishes"></div>
                         <div class="why-feature-title">Unique Dishes</div>
                         <div class="why-feature-desc">traditional Japanese cuisine that we observe in the old traditions.</div>
                     </div>
                     <div class="why-feature">
-                        <div class="why-feature-img"><img src="../_Assets/images/why/round_pickup.png" alt="Round-The-Clock Pickup"></div>
+                        <div class="why-feature-img"><img src="../assets/images/why/round_pickup.png" alt="Round-The-Clock Pickup"></div>
                         <div class="why-feature-title">Round-The-Clock Pickup</div>
                         <div class="why-feature-desc">the kitchen is open around the clock and you can pick up your order at any time</div>
                     </div>
                     <div class="why-feature">
-                        <div class="why-feature-img"><img src="../_Assets/images/why/fast_delivery.png" alt="Fast Delivery"></div>
+                        <div class="why-feature-img"><img src="../assets/images/why/fast_delivery.png" alt="Fast Delivery"></div>
                         <div class="why-feature-title">Fast Delivery</div>
                         <div class="why-feature-desc">our courier will deliver your order directly to your door from 20-30 minutes</div>
                     </div>
@@ -159,9 +159,9 @@
           <section id="profile-section" class="spa-section">
             <div class="profile-header">
               <div class="profile-pic-wrapper">
-                <img src="../_Assets/images/others/Profile.png" alt="Profile Picture" class="profile-pic" id="profile-pic-img">
+                <img src="../assets/images/others/Profile.png" alt="Profile Picture" class="profile-pic" id="profile-pic-img">
                 <button class="camera-btn" id="cameraBtn" title="Change Profile Picture">
-                  <img src="../_Assets/images/icons/Profile.png" alt="Camera Icon" style="width:28px;height:28px;">
+                  <img src="../assets/images/icons/Profile.png" alt="Camera Icon" style="width:28px;height:28px;">
                 </button>
               </div>
               <div class="profile-info">
@@ -212,9 +212,9 @@
     <!-- Add profile picture selector modal -->
     <div id="profile-pic-selector" class="profile-pic-selector hidden">
       <div class="profile-pic-options">
-        <img src="../_Assets/images/others/Profile.png" alt="Profile 1" class="pic-option" data-img="../_Assets/images/others/Profile.png">
-        <img src="../_Assets/images/others/Profile2.png" alt="Profile 2" class="pic-option" data-img="../_Assets/images/others/Profile2.png">
-        <img src="../_Assets/images/others/Profile3.png" alt="Profile 3" class="pic-option" data-img="../_Assets/images/others/Profile3.png">
+        <img src="../assets/images/others/Profile.png" alt="Profile 1" class="pic-option" data-img="../assets/images/others/Profile.png">
+        <img src="../assets/images/others/Profile2.png" alt="Profile 2" class="pic-option" data-img="../assets/images/others/Profile2.png">
+        <img src="../assets/images/others/Profile3.png" alt="Profile 3" class="pic-option" data-img="../assets/images/others/Profile3.png">
       </div>
     </div>
     <!-- Notification script -->

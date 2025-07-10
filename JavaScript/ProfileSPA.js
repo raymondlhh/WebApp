@@ -122,7 +122,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const div = document.createElement('div');
       div.className = 'fav-item';
       div.innerHTML = `
-        <img src="${fav.img || '../_Assets/images/menu/default.jpg'}" alt="${fav.title || 'Menu Item'}">
+        <img src="${fav.img || '../assets/images/menu/default.jpg'}" alt="${fav.title || 'Menu Item'}">
         <div class="fav-info">
           <div class="fav-title">${fav.title || 'Menu Item'}</div>
           <div class="fav-price">RM ${fav.price || '0.00'}</div>
