@@ -30,6 +30,8 @@ body, html {
   font-weight: bold;
   letter-spacing: 0.05em;
 }
+/* --- Remove legacy sidebar styles to avoid conflicts with reusable navbar --- */
+/*
 .sidebar {
   position: fixed;
   top: 0; left: -260px;
@@ -74,6 +76,7 @@ body, html {
   background: #8AB98F;
   color: #222;
 }
+*/
 .overlay {
   display: none;
   position: fixed;
@@ -380,11 +383,11 @@ body, html {
     gap: 0.7em;
     align-items: flex-start;
   }
-  .sidebar {
+  /* .sidebar {
     width: 80vw;
     min-width: 180px;
     max-width: 320px;
-  }
+  } */
 }
 .hidden {
   display: none !important;
@@ -428,4 +431,25 @@ body, html {
     padding: 1em 0.2em 1.5em 0.2em;
     max-width: 99vw;
   }
+}
+
+/* Add a wrapper class to scope profile styles */
+.profile-content img {
+  /* If you have any global img styles, move them here */
+}
+.profile-content a {
+  /* If you have any global a styles, move them here */
+}
+
+/* Remove or comment out any global img or a selectors if present */
+
+/* If you want to be extra safe, add this to reset navbar icons in the sidebar: */
+.mobile-menu .mobile-nav-links img {
+  filter: none !important;
+  border-radius: 0 !important;
+  background: none !important;
+}
+.mobile-menu .mobile-nav-links a {
+  color: #b93a1c !important;
+  font-weight: 600 !important;
 }

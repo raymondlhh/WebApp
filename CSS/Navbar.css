@@ -28,8 +28,8 @@
     position: fixed;
     top: 0;
     right: 0;
-    width: 80vw;
-    max-width: 340px;
+    width: 65vw;
+    max-width: 250px;
     background: #fff;
     box-shadow: -2px 0 16px rgba(0,0,0,0.12);
     transform: translateX(100%);
