@@ -24,8 +24,10 @@
       document.querySelector('.bg-right').style.backgroundImage = `url('../_Assets/images/Background/${rightNum}.${rightExt}')`;
     </script>
     <header class="navbar">
-        <img src="../_Assets/images/icons/welcome_screen/Logo.png" class="nav-logo" alt="logo">
-        <button class="hamburger" id="openSidebar">&#9776;</button>
+        <div style="display: flex; align-items: center; width: 100%; justify-content: space-between;">
+            <img src="../_Assets/images/icons/welcome_screen/Logo.png" class="nav-logo" alt="logo">
+            <button class="hamburger" id="openSidebar">&#9776;</button>
+        </div>
     </header>
     <!-- Mobile Sidebar Menu -->
     <div class="mobile-menu" id="mobileMenu" style="display:none;">
