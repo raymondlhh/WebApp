@@ -1,23 +1,44 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>注册</title>
+    <title>Sign Up</title>
     <link rel="stylesheet" href="../CSS/Signup.css">
+    <!-- Firebase CDN scripts -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <!-- Firebase initialization -->
+    <script src="../JavaScript/firebase-init.js"></script>
+    <!-- Signup logic -->
+    <script src="../JavaScript/signup.js"></script>
 </head>
 <body>
-    <div class="signup-container">
-        <h2>注册</h2>
-        <form id="signupForm">
-            <input type="text" id="username" placeholder="用户名" required>
-            <input type="password" id="password" placeholder="密码" required>
-            <input type="password" id="confirmPassword" placeholder="确认密码" required>
-            <button type="submit">注册</button>
-        </form>
-        <p>已有账号？<a href="Login.html">登录</a></p>
-        <div id="signupError" class="error"></div>
+    <div class="container">
+        <img src="../_Assets/images/icons/welcome_screen/Logo.png" alt="Logo" class="logo">
+        <img src="../_Assets/images/icons/welcome_screen/subtitle.png" alt="Subtitle" class="subtitle">
+        
+        <div class="error-message" id="error-msg"></div>
+        
+        <input type="text" id="name" placeholder="Full Name" class="input-field name-input" required>
+        <input type="email" id="email" placeholder="Email" class="input-field email-input" required>
+        
+        <div class="password-container">
+            <input type="password" id="password" placeholder="Password" class="password-field" required>
+            <button type="button" class="password-toggle" id="password-toggle">👁</button>
+        </div>
+        
+        <input type="text" id="phone" placeholder="Phone Number" class="input-field phone-input" required>
+        
+        <button type="button" id="signup-btn" class="signup-button">
+            <span id="signup-text">Sign Up</span>
+            <span id="signup-loading" class="loading" style="display:none;"></span>
+        </button>
+        
+        <div class="login-link">
+            Already have an account? <a href="Login.html">Login</a>
+        </div>
     </div>
-    <script src="../JavaScript/Signup.js"></script>
 </body>
 </html> 
