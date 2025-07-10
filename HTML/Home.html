@@ -24,20 +24,18 @@
       document.querySelector('.bg-right').style.backgroundImage = `url('../assets/images/Background/${rightNum}.${rightExt}')`;
     </script>
     <header class="navbar">
-        <div style="display: flex; align-items: center; width: 100%; justify-content: space-between;">
-            <img src="../_Assets/images/icons/welcome_screen/Logo.png" class="nav-logo" alt="logo">
+        <div style="display: flex; align-items: center; width: 100%; justify-content: flex-end;">
             <button class="hamburger" id="openSidebar">&#9776;</button>
         </div>
     </header>
     <!-- Mobile Sidebar Menu (right side) -->
     <div class="mobile-menu" id="mobileMenu">
-        <img src="../_Assets/images/icons/welcome_screen/Logo.png" alt="Logo" style="width:60px; margin:2em auto 1em auto; display:block;">
         <button class="close-btn" id="closeMobileMenu">&times;</button>
         <nav class="mobile-nav-links">
-            <a href="#"><img src="../_Assets/images/icons/Home.png" alt="Home"><span>Home</span></a>
-            <a href="#menu"><img src="../_Assets/images/icons/Menu.png" alt="Menu"><span>Menu</span></a>
-            <a href="#rewards"><img src="../_Assets/images/icons/Reward.png" alt="Rewards"><span>Rewards</span></a>
-            <a href="#profile"><img src="../_Assets/images/icons/Profile.png" alt="Profile"><span>Profile</span></a>
+            <a href="#"><img src="../_Assets/images/icons/Home.png" alt="Home"><span class="sidebar-link-text">Home</span></a>
+            <a href="#menu"><img src="../_Assets/images/icons/Menu.png" alt="Menu"><span class="sidebar-link-text">Menu</span></a>
+            <a href="#rewards"><img src="../_Assets/images/icons/Reward.png" alt="Rewards"><span class="sidebar-link-text">Rewards</span></a>
+            <a href="#profile"><img src="../_Assets/images/icons/Profile.png" alt="Profile"><span class="sidebar-link-text">Profile</span></a>
         </nav>
     </div>
     <div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>

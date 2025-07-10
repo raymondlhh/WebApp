@@ -12,7 +12,7 @@ body, html {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0.5em 1em;
+    padding: 0.5em 0.5em 0.5em 1em;
     position: sticky;
     top: 0;
     z-index: 10;
@@ -643,15 +643,17 @@ body, html {
   left: auto;
   width: 80vw;
   max-width: 320px;
-  height: 100vh;
   background: #fff;
   box-shadow: -2px 0 12px #CA3202AA;
   z-index: 2001;
   transform: translateX(100%);
   transition: transform 0.3s;
-  padding: 0;
+  padding: 2em 0 2em 0;
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
+  min-height: unset;
+  height: auto;
 }
 .mobile-menu.open {
   transform: translateX(0);
@@ -662,10 +664,12 @@ body, html {
   border: none;
   font-size: 2em;
   color: #CA3202;
-  align-self: flex-end;
-  margin: 1.2em 1.2em 0 0;
+  position: absolute;
+  top: 1.2em;
+  right: 1.2em;
   cursor: pointer;
   transition: color 0.2s;
+  margin: 0;
 }
 .close-btn:hover {
   color: #f39c12;
@@ -673,9 +677,8 @@ body, html {
 .mobile-nav-links {
   display: flex;
   flex-direction: column;
-  margin-top: 2em;
   gap: 1.2em;
-  padding: 0 2em;
+  padding: 2em 2em 2em 2em;
 }
 .mobile-nav-links a {
   display: flex;
@@ -707,4 +710,12 @@ body, html {
 }
 .mobile-menu.open ~ .mobile-menu-overlay {
   display: block;
+}
+.sidebar-link-text {
+  font-size: 1.2em;
+  font-weight: bold;
+}
+.hamburger {
+  margin-left: auto;
+  margin-right: 0.5em;
 }
