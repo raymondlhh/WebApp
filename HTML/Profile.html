@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Profile</title>
+  <link rel="stylesheet" href="../CSS/Profile.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Noto+Serif+JP:wght@700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="navbar">
+    <button class="hamburger" id="openSidebar">&#9776;</button>
+    <span class="navbar-title">MY PROFILE</span>
+  </div>
+  <div class="sidebar" id="sidebar">
+    <button class="close-btn" id="closeSidebar">&times;</button>
+    <ul>
+      <li data-section="profile">Profile</li>
+      <li data-section="favourites">Favourites</li>
+      <li data-section="balance">Balance</li>
+    </ul>
+  </div>
+  <div class="overlay" id="overlay"></div>
+  <main>
+    <section id="profile-section" class="spa-section">
+      <!-- Profile content (view/edit) -->
+      <div class="profile-header">
+        <img src="../_Assets/images/others/Profile.png" alt="Profile Picture" class="profile-pic">
+        <div class="profile-info">
+          <h2 id="profile-name">Tone</h2>
+          <p id="profile-email">Tone@gmail.com</p>
+          <button class="edit-btn" id="editProfileBtn">Edit Profile</button>
+        </div>
+      </div>
+      <form id="edit-profile-form" class="hidden">
+        <label>Name <input type="text" id="edit-name"></label>
+        <label>Email <input type="email" id="edit-email"></label>
+        <label>Password <input type="password" id="edit-password"></label>
+        <label>Phone <input type="text" id="edit-phone"></label>
+        <label>Delivery Address <input type="text" id="edit-address"></label>
+        <button type="submit">Save</button>
+        <button type="button" id="cancelEdit">Cancel</button>
+      </form>
+      <button class="logout-btn">Log Out</button>
+    </section>
+    <section id="favourites-section" class="spa-section hidden">
+      <h2>Favourites</h2>
+      <div id="favourites-list">
+        <p class="empty-msg">No favourites yet</p>
+      </div>
+    </section>
+    <section id="balance-section" class="spa-section hidden">
+      <h2>Balance</h2>
+      <div class="balance-display">
+        <span>RM</span><span id="balance-amount">0.00</span>
+      </div>
+      <form id="topup-form">
+        <label>Enter your top-up amount (RM)</label>
+        <input type="number" id="topup-amount" min="10" max="500" step="10" value="0">
+        <div class="topup-buttons">
+          <button type="button" class="topup-btn" data-amount="10">10</button>
+          <button type="button" class="topup-btn" data-amount="50">50</button>
+          <button type="button" class="topup-btn" data-amount="100">100</button>
+          <button type="button" class="topup-btn" data-amount="200">200</button>
+          <button type="button" class="topup-btn" data-amount="350">350</button>
+          <button type="button" class="topup-btn" data-amount="500">500</button>
+        </div>
+        <button type="submit" class="topup-submit">Top Up</button>
+      </form>
+    </section>
+  </main>
+  <script src="../JavaScript/ProfileSPA.js"></script>
+</body>
+</html>

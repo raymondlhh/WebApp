@@ -5,9 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sushi Home</title>
     <link rel="stylesheet" href="../CSS/Home.css">
+    <link rel="stylesheet" href="../CSS/Profile.css">
 </head>
 <body>
     <header class="navbar">
+        <button class="hamburger" id="openSidebar">&#9776;</button>
         <img src="../_Assets/images/icons/welcome_screen/Logo.png" class="nav-logo" alt="logo">
         <nav>
             <a href="#">Home</a>
@@ -20,6 +22,15 @@
             <button class="nav-contact">Contacts</button>
         </div>
     </header>
+    <div class="sidebar" id="sidebar">
+        <button class="close-btn" id="closeSidebar">&times;</button>
+        <ul>
+            <li data-section="profile">Profile</li>
+            <li data-section="favourites">Favourites</li>
+            <li data-section="balance">Balance</li>
+        </ul>
+    </div>
+    <div class="overlay" id="overlay"></div>
     <main>
         <div class="hero-section">
             <canvas id="smoke-canvas"></canvas>
@@ -120,6 +131,79 @@
             </div>
         </section>
     </main>
+    <!-- Profile SPA Modal Overlay -->
+    <div id="profile-modal" class="profile-modal hidden">
+      <div class="profile-modal-content">
+        <button class="close-modal" id="closeProfileModal">&times;</button>
+        <main>
+          <section id="profile-section" class="spa-section">
+            <div class="profile-header">
+              <img src="../_Assets/images/others/Profile.png" alt="Profile Picture" class="profile-pic">
+              <div class="profile-info">
+                <h2 id="profile-name">Tone</h2>
+                <p id="profile-email">Tone@gmail.com</p>
+                <button class="edit-btn" id="editProfileBtn">Edit Profile</button>
+              </div>
+            </div>
+            <form id="edit-profile-form" class="hidden">
+              <label>Name <input type="text" id="edit-name"></label>
+              <label>Email <input type="email" id="edit-email"></label>
+              <label>Password <input type="password" id="edit-password"></label>
+              <label>Phone <input type="text" id="edit-phone"></label>
+              <label>Delivery Address <input type="text" id="edit-address"></label>
+              <button type="submit">Save</button>
+              <button type="button" id="cancelEdit">Cancel</button>
+            </form>
+            <button class="logout-btn">Log Out</button>
+          </section>
+          <section id="favourites-section" class="spa-section hidden">
+            <h2>Favourites</h2>
+            <div id="favourites-list">
+              <p class="empty-msg">No favourites yet</p>
+            </div>
+          </section>
+          <section id="balance-section" class="spa-section hidden">
+            <h2>Balance</h2>
+            <div class="balance-display">
+              <span>RM</span><span id="balance-amount">0.00</span>
+            </div>
+            <form id="topup-form">
+              <label>Enter your top-up amount (RM)</label>
+              <input type="number" id="topup-amount" min="10" max="500" step="10" value="0">
+              <div class="topup-buttons">
+                <button type="button" class="topup-btn" data-amount="10">10</button>
+                <button type="button" class="topup-btn" data-amount="50">50</button>
+                <button type="button" class="topup-btn" data-amount="100">100</button>
+                <button type="button" class="topup-btn" data-amount="200">200</button>
+                <button type="button" class="topup-btn" data-amount="350">350</button>
+                <button type="button" class="topup-btn" data-amount="500">500</button>
+              </div>
+              <button type="submit" class="topup-submit">Top Up</button>
+            </form>
+          </section>
+        </main>
+      </div>
+    </div>
     <script src="../JavaScript/Smoke.js"></script>
+    <script src="../JavaScript/ProfileSPA.js"></script>
+    <script>
+      // Modal logic
+      const profileModal = document.getElementById('profile-modal');
+      const closeProfileModal = document.getElementById('closeProfileModal');
+      // Show modal when sidebar item is clicked
+      document.querySelectorAll('.sidebar li').forEach(li => {
+        li.addEventListener('click', () => {
+          profileModal.classList.remove('hidden');
+        });
+      });
+      // Close modal
+      closeProfileModal.onclick = () => {
+        profileModal.classList.add('hidden');
+      };
+      // Optional: close modal when clicking outside content
+      profileModal.onclick = (e) => {
+        if (e.target === profileModal) profileModal.classList.add('hidden');
+      };
+    </script>
 </body>
 </html>
