@@ -24,32 +24,46 @@
       document.querySelector('.bg-right').style.backgroundImage = `url('../assets/images/Background/${rightNum}.${rightExt}')`;
     </script>
     <header class="navbar">
-        <button class="hamburger" id="openSidebar">&#9776;</button>
-        <img src="../assets/images/icons/welcome_screen/Logo.png" class="nav-logo" alt="logo">
-        <nav>
-            <a href="#">Home</a>
-            <a href="#menu">Menu</a>
-            <a href="#delivery">Delivery</a>
-            <a href="#about">About Us</a>
-        </nav>
-        <div class="nav-actions">
-            <button class="notification-btn" id="notificationBtn" title="Notifications">
-                <img src="../assets/images/icons/Notification.png" alt="Notifications" style="width:28px;height:28px;">
-            </button>
-            <span class="icon-cart">🛒</span>
-            <button class="nav-contact">Contacts</button>
+        <div style="display: flex; align-items: center; width: 100%; justify-content: space-between;">
+            <img src="../_Assets/images/icons/welcome_screen/Logo.png" class="nav-logo" alt="logo">
+            <button class="hamburger" id="openSidebar">&#9776;</button>
         </div>
     </header>
-    <!-- Remove sidebar and overlay -->
-    <!-- <div class="sidebar" id="sidebar">
-        <button class="close-btn" id="closeSidebar">&times;</button>
-        <ul>
-            <li data-section="profile">Profile</li>
-            <li data-section="favourites">Favourites</li>
-            <li data-section="balance">Balance</li>
-        </ul>
+    <!-- Mobile Sidebar Menu (right side) -->
+    <div class="mobile-menu" id="mobileMenu">
+        <img src="../_Assets/images/icons/welcome_screen/Logo.png" alt="Logo" style="width:60px; margin:2em auto 1em auto; display:block;">
+        <button class="close-btn" id="closeMobileMenu">&times;</button>
+        <nav class="mobile-nav-links">
+            <a href="#"><img src="../_Assets/images/icons/Home.png" alt="Home"><span>Home</span></a>
+            <a href="#menu"><img src="../_Assets/images/icons/Menu.png" alt="Menu"><span>Menu</span></a>
+            <a href="#rewards"><img src="../_Assets/images/icons/Reward.png" alt="Rewards"><span>Rewards</span></a>
+            <a href="#profile"><img src="../_Assets/images/icons/Profile.png" alt="Profile"><span>Profile</span></a>
+        </nav>
     </div>
-    <div class="overlay" id="overlay"></div> -->
+    <div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
+    <script>
+      const openSidebar = document.getElementById('openSidebar');
+      const mobileMenu = document.getElementById('mobileMenu');
+      const closeMobileMenu = document.getElementById('closeMobileMenu');
+      const mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
+
+      function toggleMenu() {
+        const isOpen = mobileMenu.classList.contains('open');
+        if (isOpen) {
+          mobileMenu.classList.remove('open');
+          mobileMenuOverlay.style.display = 'none';
+          document.body.style.overflow = '';
+        } else {
+          mobileMenu.classList.add('open');
+          mobileMenuOverlay.style.display = 'block';
+          document.body.style.overflow = 'hidden';
+        }
+      }
+
+      openSidebar.onclick = toggleMenu;
+      closeMobileMenu.onclick = toggleMenu;
+      mobileMenuOverlay.onclick = toggleMenu;
+    </script>
     <main>
         <div class="hero-section">
             <div class="hero-bg-img"></div>
