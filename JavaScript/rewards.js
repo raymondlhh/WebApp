@@ -6,7 +6,7 @@ const defaultRewards = [
   {
     name: 'Chuka Wakame',
     description: 'Seaweed salad with a subtly sweet and savory flavor.',
-    imagePath: '../assets/images/foods/appetizers/chuka_wakame.png',
+    imagePath: 'assets/images/foods/appetizers/chuka_wakame.png',
     points: 1500,
     validity: 8,
     maxRedemptions: 3
@@ -14,7 +14,7 @@ const defaultRewards = [
   {
     name: 'Ebi Curry Udon',
     description: 'Curry udon with ebi tempura.',
-    imagePath: '../assets/images/foods/curry_sets/ebi_curry_udon.png',
+    imagePath: 'assets/images/foods/curry_sets/ebi_curry_udon.png',
     points: 2000,
     validity: 6,
     maxRedemptions: 2
@@ -22,7 +22,7 @@ const defaultRewards = [
   {
     name: 'Chicken Teriyaki Ramen',
     description: 'Ramen with chicken teriyaki and vegetables.',
-    imagePath: '../assets/images/foods/ramen/chicken_teriyaki_ramen.png',
+    imagePath: 'assets/images/foods/ramen/chicken_teriyaki_ramen.png',
     points: 1800,
     validity: 7,
     maxRedemptions: 4
@@ -30,7 +30,7 @@ const defaultRewards = [
   {
     name: 'Ebi Tempura',
     description: 'Crispy battered shrimp tempura.',
-    imagePath: '../assets/images/foods/tempura/ebi_tempura.png',
+    imagePath: 'assets/images/foods/tempura/ebi_tempura.png',
     points: 1700,
     validity: 5,
     maxRedemptions: 2
