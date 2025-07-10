@@ -39,6 +39,7 @@ const defaultRewards = [
 
 let userRewardsPoints = 0;
 let userRedemptions = {};
+let userRedemptionDetails = []; // Store detailed redemption records
 
 // Initialize rewards in Firestore if they don't exist
 async function initializeRewards() {
@@ -78,12 +79,24 @@ async function loadUserData() {
     }
   }
   
-  // Load user redemptions
+  // Load user redemptions with full details
   const redemptions = await getUserRedemptions(user.uid);
   userRedemptions = {};
+  userRedemptionDetails = []; // Clear previous details
+  
   redemptions.forEach(redemption => {
     userRedemptions[redemption.rewardId] = (userRedemptions[redemption.rewardId] || 0) + 1;
+    userRedemptionDetails.push({
+      id: redemption.id,
+      userId: redemption.userId,
+      rewardId: redemption.rewardId,
+      rewardName: redemption.rewardName,
+      pointsSpent: redemption.pointsSpent,
+      redeemAt: redemption.redeemAt
+    });
   });
+  
+  console.log('Loaded user redemption details:', userRedemptionDetails);
 }
 
 // Database service functions using Firebase CDN compat API
@@ -223,6 +236,9 @@ async function handleRedeemReward(rewardId, rewardPoints, rewardName) {
       userPointsElement.textContent = userRewardsPoints;
     }
     
+    // Refresh redemption details
+    await loadUserData();
+    
     alert('Reward redeemed successfully!');
     return true;
   } catch (error) {
@@ -237,47 +253,73 @@ async function renderRewards(showAvailable = true) {
   if (!grid) return;
   
   try {
-    const rewards = await getRewards();
-    grid.innerHTML = '';
-    
-    let filtered = showAvailable
-      ? rewards.filter(r => (userRedemptions[r.id] || 0) < r.maxRedemptions)
-      : rewards.filter(r => (userRedemptions[r.id] || 0) > 0);
-    
-    if (filtered.length === 0) {
-      grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;color:#888;">No rewards to display.</div>`;
-      return;
+    if (showAvailable) {
+      // Show available rewards (existing logic)
+      const rewards = await getRewards();
+      grid.innerHTML = '';
+      
+      let filtered = rewards.filter(r => (userRedemptions[r.id] || 0) < r.maxRedemptions);
+      
+      if (filtered.length === 0) {
+        grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;color:#888;">No available rewards to display.</div>`;
+        return;
+      }
+      
+      filtered.forEach(r => {
+        const card = document.createElement('div');
+        card.className = 'reward-card';
+        const userRedemptionCount = userRedemptions[r.id] || 0;
+        card.innerHTML = `
+          <img src="${r.imagePath}" alt="${r.name}">
+          <div class="reward-title">${r.name}</div>
+          <div class="reward-desc">${r.description}</div>
+          <div class="reward-points">${r.points} points</div>
+          <div class="reward-validity">Validity: ${r.validity} months</div>
+          <div class="redemption-info">Redeemed: ${userRedemptionCount}/${r.maxRedemptions}</div>
+        `;
+        
+        card.onclick = e => {
+          window.location.href = 'reward_detail.html?id=' + r.id;
+        };
+        
+        grid.appendChild(card);
+      });
+    } else {
+      // Show redeemed rewards with details from userRewardRedemptions
+      grid.innerHTML = '';
+      
+      if (userRedemptionDetails.length === 0) {
+        grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;color:#888;">No redeemed rewards to display.</div>`;
+        return;
+      }
+      
+      // Get all rewards to match with redemption details
+      const rewards = await getRewards();
+      const rewardsMap = {};
+      rewards.forEach(r => rewardsMap[r.id] = r);
+      
+      // Show each redemption as its own card
+      userRedemptionDetails.forEach(redemption => {
+        const reward = rewardsMap[redemption.rewardId];
+        if (!reward) return; // Skip if reward not found
+        const card = document.createElement('div');
+        card.className = 'reward-card redeemed';
+        card.innerHTML = `
+          <img src="${reward.imagePath}" alt="${reward.name}">
+          <div class="reward-title">${reward.name}</div>
+          <div class="reward-desc">${reward.description}</div>
+          <div class="redemption-details">
+            <span class="redemption-date"><b>Redeemed At:</b> ${new Date(redemption.redeemAt.toDate()).toLocaleDateString()}</span>
+            <span class="redemption-points"><b>Used Points:</b> ${redemption.pointsSpent}</span>
+          </div>
+          <div class="reward-status">✓ Redeemed</div>
+        `;
+        card.onclick = e => {
+          window.location.href = 'reward_detail.html?id=' + reward.id;
+        };
+        grid.appendChild(card);
+      });
     }
-    
-    filtered.forEach(r => {
-      const card = document.createElement('div');
-      card.className = 'reward-card';
-      const userRedemptionCount = userRedemptions[r.id] || 0;
-      card.innerHTML = `
-        <img src="${r.imagePath}" alt="${r.name}">
-        <div class="reward-title">${r.name}</div>
-        <div class="reward-desc">${r.description}</div>
-        <div class="reward-points">${r.points} points</div>
-        <div class="reward-validity">Validity: ${r.validity} months</div>
-        <div class="redemption-info">Redeemed: ${userRedemptionCount}/${r.maxRedemptions}</div>
-        <button class="reward-redeem-btn" ${userRewardsPoints < r.points || userRedemptionCount >= r.maxRedemptions ? 'disabled' : ''} data-id="${r.id}">Redeem</button>
-      `;
-      
-      card.onclick = e => {
-        if (e.target.classList.contains('reward-redeem-btn')) return;
-        window.location.href = 'reward_detail.html?id=' + r.id;
-      };
-      
-      card.querySelector('.reward-redeem-btn').onclick = async (e) => {
-        e.stopPropagation();
-        const success = await handleRedeemReward(r.id, r.points, r.name);
-        if (success) {
-          renderRewards(showAvailable);
-        }
-      };
-      
-      grid.appendChild(card);
-    });
   } catch (error) {
     console.error('Error loading rewards:', error);
     grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;color:#888;">Error loading rewards.</div>`;

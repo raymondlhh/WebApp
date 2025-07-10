@@ -111,6 +111,75 @@ body, html {
     color: #fff;
     cursor: not-allowed;
 }
+
+/* Redeemed reward card styles */
+.reward-card.redeemed {
+    background: #F0F8F0;
+    border: 2px solid #8AB98F;
+    position: relative;
+}
+
+.reward-card.redeemed::before {
+    content: "✓";
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: #8AB98F;
+    color: white;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.reward-card .redemption-count {
+    color: #8AB98F;
+    font-weight: bold;
+    margin-bottom: 0.5em;
+    font-size: 0.95em;
+}
+
+.reward-card .redemption-details {
+    width: 100%;
+    margin-bottom: 0.5em;
+}
+
+.reward-card .redemption-record {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #fff;
+    padding: 0.3em 0.5em;
+    border-radius: 6px;
+    margin-bottom: 0.2em;
+    font-size: 0.85em;
+}
+
+.reward-card .redemption-date {
+    color: #666;
+}
+
+.reward-card .redemption-points {
+    color: #D24545;
+    font-weight: bold;
+}
+
+.reward-card .reward-status {
+    color: #8AB98F;
+    font-weight: bold;
+    font-size: 0.9em;
+    margin-top: 0.5em;
+}
+
+.reward-card .redemption-info {
+    font-size: 0.9em;
+    color: #666;
+    margin-bottom: 0.5em;
+}
 .reward-detail-card {
     background: #F8F3E7;
     border-radius: 16px;
