@@ -1,19 +1,7 @@
-import { auth, db } from './firebase-init.js';
-import { 
-  doc, 
-  getDoc, 
-  setDoc, 
-  updateDoc, 
-  collection, 
-  addDoc, 
-  getDocs, 
-  query, 
-  where 
-} from 'firebase/firestore';
-import { onAuthStateChanged } from 'firebase/auth';
-import { UserService, RewardsService, UserRewardRedemptionsService } from './Database.js';
+// Rewards Handler using Firebase CDN compat API
+// Assumes firebase-init.js is loaded before this script
 
-// Default rewards data structure matching the Rewards entity schema
+// Default rewards data structure
 const defaultRewards = [
   {
     name: 'Chuka Wakame',
@@ -54,13 +42,24 @@ let userRedemptions = {};
 
 // Initialize rewards in Firestore if they don't exist
 async function initializeRewards() {
-  const rewards = await RewardsService.getRewards();
-  
-  if (rewards.length === 0) {
-    // Add default rewards to Firestore
-    for (const reward of defaultRewards) {
-      await RewardsService.createReward(reward);
+  try {
+    console.log('Initializing rewards...');
+    const rewards = await getRewards();
+    console.log('Current rewards in database:', rewards.length);
+    
+    if (rewards.length === 0) {
+      console.log('No rewards found, creating default rewards...');
+      // Add default rewards to Firestore
+      for (const reward of defaultRewards) {
+        const rewardId = await createReward(reward);
+        console.log(`Created reward: ${reward.name} with ID: ${rewardId}`);
+      }
+      console.log('Default rewards created successfully!');
+    } else {
+      console.log('Rewards already exist in database');
     }
+  } catch (error) {
+    console.error('Error initializing rewards:', error);
   }
 }
 
@@ -69,26 +68,128 @@ async function loadUserData() {
   const user = auth.currentUser;
   if (!user) return;
   
-  const userData = await UserService.getUser(user.uid);
+  const userData = await getUser(user.uid);
   if (userData) {
     userRewardsPoints = userData.rewardsPoints || 0;
+    // Update the points display
+    const userPointsElement = document.getElementById('userPoints');
+    if (userPointsElement) {
+      userPointsElement.textContent = userRewardsPoints;
+    }
   }
   
   // Load user redemptions
-  const redemptions = await UserRewardRedemptionsService.getUserRedemptions(user.uid);
+  const redemptions = await getUserRedemptions(user.uid);
   userRedemptions = {};
   redemptions.forEach(redemption => {
     userRedemptions[redemption.rewardId] = (userRedemptions[redemption.rewardId] || 0) + 1;
   });
 }
 
-// Get rewards from Firestore
+// Database service functions using Firebase CDN compat API
 async function getRewards() {
-  return await RewardsService.getRewards();
+  try {
+    const rewardsRef = db.collection('rewards');
+    const snapshot = await rewardsRef.get();
+    const rewards = [];
+    snapshot.forEach(doc => {
+      rewards.push({ id: doc.id, ...doc.data() });
+    });
+    return rewards;
+  } catch (error) {
+    console.error('Error getting rewards:', error);
+    return [];
+  }
+}
+
+async function createReward(rewardData) {
+  try {
+    const docRef = await db.collection('rewards').add({
+      name: rewardData.name,
+      description: rewardData.description,
+      points: rewardData.points,
+      imagePath: rewardData.imagePath,
+      validity: rewardData.validity,
+      maxRedemptions: rewardData.maxRedemptions,
+      createdAt: new Date()
+    });
+    return docRef.id;
+  } catch (error) {
+    console.error('Error creating reward:', error);
+    return null;
+  }
+}
+
+async function getUser(userId) {
+  try {
+    const userDoc = await db.collection('users').doc(userId).get();
+    if (userDoc.exists) {
+      return { id: userDoc.id, ...userDoc.data() };
+    }
+    return null;
+  } catch (error) {
+    console.error('Error getting user:', error);
+    return null;
+  }
+}
+
+async function updateUserRewardsPoints(userId, points) {
+  try {
+    const userRef = db.collection('users').doc(userId);
+    const userSnap = await userRef.get();
+    if (userSnap.exists) {
+      const currentPoints = userSnap.data().rewardsPoints || 0;
+      await userRef.update({
+        rewardsPoints: currentPoints + points,
+        updatedAt: new Date()
+      });
+      return true;
+    }
+    return false;
+  } catch (error) {
+    console.error('Error updating user rewards points:', error);
+    return false;
+  }
+}
+
+async function getUserRedemptions(userId) {
+  try {
+    const redemptionsRef = db.collection('userRewardRedemptions');
+    const snapshot = await redemptionsRef.where('userId', '==', userId).get();
+    const redemptions = [];
+    snapshot.forEach(doc => {
+      redemptions.push({ id: doc.id, ...doc.data() });
+    });
+    return redemptions;
+  } catch (error) {
+    console.error('Error getting user redemptions:', error);
+    return [];
+  }
+}
+
+async function redeemReward(userId, rewardId, rewardName, pointsSpent) {
+  try {
+    // Add redemption record
+    await db.collection('userRewardRedemptions').add({
+      userId: userId,
+      rewardId: rewardId,
+      rewardName: rewardName,
+      pointsSpent: pointsSpent.toString(),
+      redeemAt: new Date()
+    });
+
+    // Update user rewards points
+    await updateUserRewardsPoints(userId, -parseInt(pointsSpent));
+
+    return true;
+  } catch (error) {
+    console.error('Error redeeming reward:', error);
+    return false;
+  }
 }
 
 // Redeem a reward
-async function redeemReward(rewardId, rewardPoints, rewardName) {
+async function handleRedeemReward(rewardId, rewardPoints, rewardName) {
   const user = auth.currentUser;
   if (!user) {
     alert('Please log in to redeem rewards.');
@@ -109,12 +210,18 @@ async function redeemReward(rewardId, rewardPoints, rewardName) {
   }
   
   try {
-    // Add redemption record using the new schema
-    await UserRewardRedemptionsService.redeemReward(user.uid, rewardId, rewardName, rewardPoints);
+    // Add redemption record
+    await redeemReward(user.uid, rewardId, rewardName, rewardPoints);
     
     // Update local state
     userRewardsPoints -= rewardPoints;
     userRedemptions[rewardId] = (userRedemptions[rewardId] || 0) + 1;
+    
+    // Update the points display
+    const userPointsElement = document.getElementById('userPoints');
+    if (userPointsElement) {
+      userPointsElement.textContent = userRewardsPoints;
+    }
     
     alert('Reward redeemed successfully!');
     return true;
@@ -163,7 +270,7 @@ async function renderRewards(showAvailable = true) {
       
       card.querySelector('.reward-redeem-btn').onclick = async (e) => {
         e.stopPropagation();
-        const success = await redeemReward(r.id, r.points, r.name);
+        const success = await handleRedeemReward(r.id, r.points, r.name);
         if (success) {
           renderRewards(showAvailable);
         }
@@ -222,7 +329,7 @@ async function renderRewardDetail() {
     const redeemBtn = document.getElementById('redeemBtn');
     redeemBtn.disabled = userRewardsPoints < reward.points || userRedemptionCount >= reward.maxRedemptions;
     redeemBtn.onclick = async () => {
-      const success = await redeemReward(id, reward.points, reward.name);
+      const success = await handleRedeemReward(id, reward.points, reward.name);
       if (success) {
         renderRewardDetail();
       }
@@ -232,10 +339,16 @@ async function renderRewardDetail() {
   }
 }
 
-// Initialize Firebase and load data
-onAuthStateChanged(auth, async (user) => {
+// Initialize rewards immediately when script loads
+document.addEventListener('DOMContentLoaded', async () => {
+  console.log('Rewards script loaded, initializing...');
+  await initializeRewards();
+});
+
+// Handle user authentication state changes
+auth.onAuthStateChanged(async (user) => {
   if (user) {
-    await initializeRewards();
+    console.log('User authenticated:', user.email);
     await loadUserData();
     
     if (document.getElementById('rewardsGrid')) {
@@ -244,6 +357,7 @@ onAuthStateChanged(auth, async (user) => {
     }
     renderRewardDetail();
   } else {
+    console.log('User not authenticated');
     // Redirect to login if not authenticated
     if (window.location.pathname.includes('rewards')) {
       window.location.href = 'Login.html';

@@ -6,7 +6,14 @@
     <title>Reward Detail</title>
     <link rel="stylesheet" href="../CSS/Home.css">
     <link rel="stylesheet" href="../CSS/rewards.css">
-    <script type="module" src="../JavaScript/firebase-init.js"></script>
+    <!-- Firebase CDN scripts -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <!-- Firebase initialization -->
+    <script src="../JavaScript/firebase-init.js"></script>
+    <!-- Rewards logic -->
+    <script src="../JavaScript/rewards.js"></script>
 </head>
 <body>
     <div id="header"></div>
@@ -24,7 +31,7 @@
             <p id="rewardDesc">Seaweed salad with a subtly sweet and savory flavor.</p>
             <div class="reward-info">
                 <div>Points Required: <span id="rewardPoints">1500</span></div>
-                <div>Your Points: <span id="userPoints">5000</span></div>
+                <div>Your Points: <span id="userPoints">0</span></div>
                 <div>Validity: <span id="rewardValidity">8</span> months</div>
                 <div>Redemptions: <span id="userRedemptions">0</span>/<span id="maxRedemptions">3</span></div>
             </div>
@@ -40,6 +47,5 @@
             </div>
         </section>
     </main>
-    <script src="../JavaScript/rewards.js"></script>
 </body>
 </html> 
