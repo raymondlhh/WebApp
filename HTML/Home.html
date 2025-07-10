@@ -24,32 +24,45 @@
       document.querySelector('.bg-right').style.backgroundImage = `url('../_Assets/images/Background/${rightNum}.${rightExt}')`;
     </script>
     <header class="navbar">
-        <button class="hamburger" id="openSidebar">&#9776;</button>
         <img src="../_Assets/images/icons/welcome_screen/Logo.png" class="nav-logo" alt="logo">
-        <nav>
-            <a href="#">Home</a>
-            <a href="#menu">Menu</a>
-            <a href="#delivery">Delivery</a>
-            <a href="#about">About Us</a>
-        </nav>
-        <div class="nav-actions">
-            <button class="notification-btn" id="notificationBtn" title="Notifications">
-                <img src="../_Assets/images/icons/Notification.png" alt="Notifications" style="width:28px;height:28px;">
-            </button>
-            <span class="icon-cart">🛒</span>
-            <button class="nav-contact">Contacts</button>
-        </div>
+        <button class="hamburger" id="openSidebar">&#9776;</button>
     </header>
-    <!-- Remove sidebar and overlay -->
-    <!-- <div class="sidebar" id="sidebar">
-        <button class="close-btn" id="closeSidebar">&times;</button>
+    <!-- Mobile Sidebar Menu -->
+    <div class="mobile-menu" id="mobileMenu" style="display:none;">
+        <button class="close-btn" id="closeMobileMenu">&times;</button>
         <ul>
-            <li data-section="profile">Profile</li>
-            <li data-section="favourites">Favourites</li>
-            <li data-section="balance">Balance</li>
+            <li><a href="#">Home</a></li>
+            <li><a href="#menu">Menu</a></li>
+            <li><a href="#rewards">Rewards</a></li>
+            <li><a href="#profile">Profile</a></li>
         </ul>
     </div>
-    <div class="overlay" id="overlay"></div> -->
+    <div class="mobile-menu-overlay" id="mobileMenuOverlay" style="display:none;"></div>
+    <script>
+      const openSidebar = document.getElementById('openSidebar');
+      const mobileMenu = document.getElementById('mobileMenu');
+      const closeMobileMenu = document.getElementById('closeMobileMenu');
+      const mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
+
+      openSidebar.onclick = function() {
+        mobileMenu.style.display = 'block';
+        mobileMenu.classList.add('open');
+        mobileMenuOverlay.style.display = 'block';
+        document.body.style.overflow = 'hidden';
+      };
+      closeMobileMenu.onclick = function() {
+        mobileMenu.style.display = 'none';
+        mobileMenu.classList.remove('open');
+        mobileMenuOverlay.style.display = 'none';
+        document.body.style.overflow = '';
+      };
+      mobileMenuOverlay.onclick = function() {
+        mobileMenu.style.display = 'none';
+        mobileMenu.classList.remove('open');
+        mobileMenuOverlay.style.display = 'none';
+        document.body.style.overflow = '';
+      };
+    </script>
     <main>
         <div class="hero-section">
             <div class="hero-bg-img"></div>
