@@ -29,8 +29,8 @@
             <button class="hamburger" id="openSidebar">&#9776;</button>
         </div>
     </header>
-    <!-- Mobile Sidebar Menu -->
-    <div class="mobile-menu" id="mobileMenu" style="display:none;">
+    <!-- Mobile Sidebar Menu (right side) -->
+    <div class="mobile-menu" id="mobileMenu">
         <button class="close-btn" id="closeMobileMenu">&times;</button>
         <ul>
             <li><a href="#">Home</a></li>
@@ -39,31 +39,29 @@
             <li><a href="#profile">Profile</a></li>
         </ul>
     </div>
-    <div class="mobile-menu-overlay" id="mobileMenuOverlay" style="display:none;"></div>
+    <div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
     <script>
       const openSidebar = document.getElementById('openSidebar');
       const mobileMenu = document.getElementById('mobileMenu');
       const closeMobileMenu = document.getElementById('closeMobileMenu');
       const mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
 
-      openSidebar.onclick = function() {
-        mobileMenu.style.display = 'block';
-        mobileMenu.classList.add('open');
-        mobileMenuOverlay.style.display = 'block';
-        document.body.style.overflow = 'hidden';
-      };
-      closeMobileMenu.onclick = function() {
-        mobileMenu.style.display = 'none';
-        mobileMenu.classList.remove('open');
-        mobileMenuOverlay.style.display = 'none';
-        document.body.style.overflow = '';
-      };
-      mobileMenuOverlay.onclick = function() {
-        mobileMenu.style.display = 'none';
-        mobileMenu.classList.remove('open');
-        mobileMenuOverlay.style.display = 'none';
-        document.body.style.overflow = '';
-      };
+      function toggleMenu() {
+        const isOpen = mobileMenu.classList.contains('open');
+        if (isOpen) {
+          mobileMenu.classList.remove('open');
+          mobileMenuOverlay.style.display = 'none';
+          document.body.style.overflow = '';
+        } else {
+          mobileMenu.classList.add('open');
+          mobileMenuOverlay.style.display = 'block';
+          document.body.style.overflow = 'hidden';
+        }
+      }
+
+      openSidebar.onclick = toggleMenu;
+      closeMobileMenu.onclick = toggleMenu;
+      mobileMenuOverlay.onclick = toggleMenu;
     </script>
     <main>
         <div class="hero-section">
