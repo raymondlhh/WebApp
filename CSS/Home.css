@@ -321,10 +321,21 @@ body, html {
     margin-right: 0.7em;
     flex-shrink: 0;
 }
+.sashimi-desc-content {
+    display: flex;
+    flex-direction: column;
+    min-width: 8.5em;
+}
+.sashimi-desc-item b {
+    font-weight: bold;
+    margin-bottom: 0.1em;
+    min-width: 8.5em;
+}
 .sashimi-desc-text {
     color: #555;
     font-size: 0.98em;
     font-weight: normal;
+    margin-left: 0;
 }
 @media (max-width: 900px) {
     .sashimi-section { flex-direction: column; padding: 2em 0.5em; }
