@@ -129,11 +129,12 @@ body {
 
 .forgot-password {
     position: absolute;
-    left: 120px;
+    left: 140px;
     top: 720px;
     color: #333;
     text-decoration: underline;
     cursor: pointer;
+    font-weight: 600;
 }
 
 .loading {
