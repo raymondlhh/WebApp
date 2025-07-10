@@ -3,9 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Menu</title>
+    <link rel="stylesheet" href="../CSS/Home.css">
+    <link rel="stylesheet" href="../CSS/Profile.css">
+    <link rel="stylesheet" href="../CSS/Navbar.css">
 </head>
 <body>
+    <div class="body-bg">
+      <div class="bg-side bg-left"></div>
+      <div class="bg-side bg-right"></div>
+    </div>
+    <!-- Include the navbar -->
+    <div id="navbar-container"></div>
     
+    <!-- Menu content will go here -->
+    <div class="menu-content">
+        <h1>Menu</h1>
+        <!-- Add your menu content here -->
+    </div>
+
+    <script>
+        fetch('Navbar.html')
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('navbar-container').innerHTML = html;
+                const script = document.createElement('script');
+                script.src = '../JavaScript/navbar.js';
+                script.onload = function() {
+                    if (window.initHamburgerMenu) window.initHamburgerMenu();
+                };
+                document.body.appendChild(script);
+            })
+            .catch(error => {
+                console.error('Error loading navbar:', error);
+            });
+    </script>
 </body>
 </html>
