@@ -68,6 +68,10 @@ body, html {
     justify-content: center;
     background: none;
     overflow: hidden;
+    background-image: url('../_Assets/images/Background/5.png'), url('../_Assets/images/Background/3.png');
+    background-size: 38% auto, 38% auto;
+    background-position: left bottom, right bottom;
+    background-repeat: no-repeat, no-repeat;
 }
 #smoke-canvas {
     position: absolute;
