@@ -5,9 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sushi Home</title>
     <link rel="stylesheet" href="../CSS/Home.css">
+    <link rel="stylesheet" href="../CSS/Profile.css">
 </head>
 <body>
     <header class="navbar">
+        <button class="hamburger" id="openSidebar">&#9776;</button>
         <img src="../_Assets/images/icons/welcome_screen/Logo.png" class="nav-logo" alt="logo">
         <nav>
             <a href="#">Home</a>
@@ -16,12 +18,25 @@
             <a href="#about">About Us</a>
         </nav>
         <div class="nav-actions">
+            <button class="notification-btn" id="notificationBtn" title="Notifications">
+                <img src="../_Assets/images/icons/Notification.png" alt="Notifications" style="width:28px;height:28px;">
+            </button>
             <span class="icon-cart">🛒</span>
             <button class="nav-contact">Contacts</button>
         </div>
     </header>
+    <div class="sidebar" id="sidebar">
+        <button class="close-btn" id="closeSidebar">&times;</button>
+        <ul>
+            <li data-section="profile">Profile</li>
+            <li data-section="favourites">Favourites</li>
+            <li data-section="balance">Balance</li>
+        </ul>
+    </div>
+    <div class="overlay" id="overlay"></div>
     <main>
         <div class="hero-section">
+            <div class="hero-bg-img"></div>
             <canvas id="smoke-canvas"></canvas>
             <div class="hero-content">
                 <div class="hero-jp hero-jp-left">
@@ -120,6 +135,182 @@
             </div>
         </section>
     </main>
+    <!-- Profile SPA Modal Overlay -->
+    <div id="profile-modal" class="profile-modal hidden">
+      <div class="profile-modal-content">
+        <button class="close-modal" id="closeProfileModal">&times;</button>
+        <main>
+          <section id="profile-section" class="spa-section">
+            <div class="profile-header">
+              <div class="profile-pic-wrapper">
+                <img src="../_Assets/images/others/Profile.png" alt="Profile Picture" class="profile-pic" id="profile-pic-img">
+                <button class="camera-btn" id="cameraBtn" title="Change Profile Picture">
+                  <img src="../_Assets/images/icons/Profile.png" alt="Camera Icon" style="width:28px;height:28px;">
+                </button>
+              </div>
+              <div class="profile-info">
+                <h2 id="profile-name">Tone</h2>
+                <p id="profile-email">Tone@gmail.com</p>
+                <button class="edit-btn" id="editProfileBtn">Edit Profile</button>
+              </div>
+            </div>
+            <form id="edit-profile-form" class="hidden">
+              <label>Name <input type="text" id="edit-name"></label>
+              <label>Email <input type="email" id="edit-email"></label>
+              <label>Password <input type="password" id="edit-password"></label>
+              <label>Phone <input type="text" id="edit-phone"></label>
+              <label>Delivery Address <input type="text" id="edit-address"></label>
+              <button type="submit">Save</button>
+              <button type="button" id="cancelEdit">Cancel</button>
+            </form>
+            <button class="logout-btn">Log Out</button>
+          </section>
+          <section id="favourites-section" class="spa-section hidden">
+            <h2>Favourites</h2>
+            <div id="favourites-list">
+              <p class="empty-msg">No favourites yet</p>
+            </div>
+          </section>
+          <section id="balance-section" class="spa-section hidden">
+            <h2>Balance</h2>
+            <div class="balance-display">
+              <span>RM</span><span id="balance-amount">0.00</span>
+            </div>
+            <form id="topup-form">
+              <label>Enter your top-up amount (RM)</label>
+              <input type="number" id="topup-amount" min="10" max="500" step="10" value="0">
+              <div class="topup-buttons">
+                <button type="button" class="topup-btn" data-amount="10">10</button>
+                <button type="button" class="topup-btn" data-amount="50">50</button>
+                <button type="button" class="topup-btn" data-amount="100">100</button>
+                <button type="button" class="topup-btn" data-amount="200">200</button>
+                <button type="button" class="topup-btn" data-amount="350">350</button>
+                <button type="button" class="topup-btn" data-amount="500">500</button>
+              </div>
+              <button type="submit" class="topup-submit">Top Up</button>
+            </form>
+          </section>
+        </main>
+      </div>
+    </div>
+    <!-- Add profile picture selector modal -->
+    <div id="profile-pic-selector" class="profile-pic-selector hidden">
+      <div class="profile-pic-options">
+        <img src="../_Assets/images/others/Profile.png" alt="Profile 1" class="pic-option" data-img="../_Assets/images/others/Profile.png">
+        <img src="../_Assets/images/others/Profile2.png" alt="Profile 2" class="pic-option" data-img="../_Assets/images/others/Profile2.png">
+        <img src="../_Assets/images/others/Profile3.png" alt="Profile 3" class="pic-option" data-img="../_Assets/images/others/Profile3.png">
+      </div>
+    </div>
+    <!-- Notification Modal -->
+    <div id="notification-modal" class="notification-modal hidden">
+      <div class="notification-modal-content">
+        <button class="close-modal" id="closeNotificationModal">&times;</button>
+        <h2 class="notification-title">NOTIFICATIONS</h2>
+        <div class="notification-list">
+          <div class="notification-item">
+            <div class="notification-row">
+              <span class="notification-main">Points Earned</span>
+              <span class="notification-date">27 Jun 2025</span>
+            </div>
+            <div class="notification-row">
+              <span class="notification-desc">You earned 998 points for this order</span>
+              <span class="notification-time">7:35</span>
+            </div>
+          </div>
+          <div class="notification-item">
+            <div class="notification-row">
+              <span class="notification-main">Payment Successful</span>
+              <span class="notification-date">27 Jun 2025</span>
+            </div>
+            <div class="notification-row">
+              <span class="notification-desc">RM 99.80 has been successfully paid</span>
+              <span class="notification-time">7:35</span>
+            </div>
+          </div>
+          <div class="notification-item">
+            <div class="notification-row">
+              <span class="notification-main">Top-Up Successful</span>
+              <span class="notification-date">27 Jun 2025</span>
+            </div>
+            <div class="notification-row">
+              <span class="notification-desc">RM 100.00 has been successfully topped-up</span>
+              <span class="notification-time">7:35</span>
+            </div>
+          </div>
+          <div class="notification-item">
+            <div class="notification-row">
+              <span class="notification-main">Top-Up Successful</span>
+              <span class="notification-date">27 Jun 2025</span>
+            </div>
+            <div class="notification-row">
+              <span class="notification-desc">RM 50.00 has been successfully topped-up</span>
+              <span class="notification-time">7:35</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     <script src="../JavaScript/Smoke.js"></script>
+    <script src="../JavaScript/ProfileSPA.js"></script>
+    <script>
+      // Modal logic
+      const profileModal = document.getElementById('profile-modal');
+      const closeProfileModal = document.getElementById('closeProfileModal');
+      // Show modal when sidebar item is clicked
+      document.querySelectorAll('.sidebar li').forEach(li => {
+        li.addEventListener('click', () => {
+          profileModal.classList.remove('hidden');
+        });
+      });
+      // Close modal
+      closeProfileModal.onclick = () => {
+        profileModal.classList.add('hidden');
+      };
+      // Optional: close modal when clicking outside content
+      profileModal.onclick = (e) => {
+        if (e.target === profileModal) profileModal.classList.add('hidden');
+      };
+      // Camera/profile picture change logic
+      const cameraBtn = document.getElementById('cameraBtn');
+      const picSelector = document.getElementById('profile-pic-selector');
+      const profilePicImg = document.getElementById('profile-pic-img');
+      cameraBtn.onclick = (e) => {
+        e.stopPropagation();
+        picSelector.classList.toggle('hidden');
+        // Position the selector below the profile pic
+        const rect = cameraBtn.getBoundingClientRect();
+        picSelector.style.top = (rect.bottom + window.scrollY + 8) + 'px';
+        picSelector.style.left = (rect.left + window.scrollX - 30) + 'px';
+      };
+      document.querySelectorAll('.pic-option').forEach(img => {
+        img.onclick = () => {
+          profilePicImg.src = img.dataset.img;
+          localStorage.setItem('profilePic', img.dataset.img);
+          picSelector.classList.add('hidden');
+        };
+      });
+      document.body.onclick = (e) => {
+        if (!picSelector.contains(e.target) && e.target !== cameraBtn) {
+          picSelector.classList.add('hidden');
+        }
+      };
+      // Load saved profile pic
+      const savedPic = localStorage.getItem('profilePic');
+      if (savedPic) profilePicImg.src = savedPic;
+
+      // Notification modal logic
+      const notificationBtn = document.getElementById('notificationBtn');
+      const notificationModal = document.getElementById('notification-modal');
+      const closeNotificationModal = document.getElementById('closeNotificationModal');
+      notificationBtn.onclick = () => {
+        notificationModal.classList.remove('hidden');
+      };
+      closeNotificationModal.onclick = () => {
+        notificationModal.classList.add('hidden');
+      };
+      notificationModal.onclick = (e) => {
+        if (e.target === notificationModal) notificationModal.classList.add('hidden');
+      };
+    </script>
 </body>
 </html>
