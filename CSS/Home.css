@@ -68,10 +68,10 @@ body, html {
     justify-content: center;
     background: none;
     overflow: hidden;
-    background-image: url('../_Assets/images/Background/5.png'), url('../_Assets/images/Background/3.png');
-    background-size: 38% auto, 38% auto;
-    background-position: left bottom, right bottom;
-    background-repeat: no-repeat, no-repeat;
+    background-image: url('../_Assets/images/Background/5.png');
+    background-size: 38% auto;
+    background-position: left bottom;
+    background-repeat: no-repeat;
 }
 .hero-bg-img {
     position: absolute;
@@ -321,10 +321,21 @@ body, html {
     margin-right: 0.7em;
     flex-shrink: 0;
 }
+.sashimi-desc-content {
+    display: flex;
+    flex-direction: column;
+    min-width: 8.5em;
+}
+.sashimi-desc-item b {
+    font-weight: bold;
+    margin-bottom: 0.1em;
+    min-width: 8.5em;
+}
 .sashimi-desc-text {
     color: #555;
     font-size: 0.98em;
     font-weight: normal;
+    margin-left: 0;
 }
 @media (max-width: 900px) {
     .sashimi-section { flex-direction: column; padding: 2em 0.5em; }
@@ -550,4 +561,78 @@ body, html {
 }
 .notification-btn:hover img {
   filter: brightness(0) invert(1);
+}
+/* 水墨画两侧背景带样式 */
+.body-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  pointer-events: none;
+  overflow: hidden;
+}
+.bg-side {
+  position: absolute;
+  top: 0;
+  width: 300px;
+  height: 100vh;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  opacity: 0.9;
+  border: 2px solid red; /* 调试用，后续可去掉 */
+}
+.bg-left {
+  left: 0;
+  background-image: url('../_Assets/images/Background/1.png');
+}
+.bg-right {
+  right: 0;
+  background-image: url('../_Assets/images/Background/2.png');
+}
+.login-video-overlay {
+  position: fixed;
+  z-index: 9999;
+  inset: 0;
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+.login-video-overlay video {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  z-index: 1;
+  top: 0; left: 0;
+}
+.login-video-mask {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.login-logo {
+  width: 120px;
+  margin-bottom: 32px;
+}
+.go-login-btn {
+  padding: 12px 36px;
+  font-size: 1.2em;
+  border-radius: 24px;
+  border: none;
+  background: #fff;
+  color: #222;
+  cursor: pointer;
+  margin-top: 24px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.2);
+  transition: background 0.2s;
+}
+.go-login-btn:hover {
+  background: #f5f5f5;
 }
