@@ -6,14 +6,21 @@
     <title>Rewards</title>
     <link rel="stylesheet" href="../CSS/Home.css">
     <link rel="stylesheet" href="../CSS/rewards.css">
-    <script type="module" src="../JavaScript/firebase-init.js"></script>
+    <!-- Firebase CDN scripts -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <!-- Firebase initialization -->
+    <script src="../JavaScript/firebase-init.js"></script>
+    <!-- Rewards logic -->
+    <script src="../JavaScript/rewards.js"></script>
 </head>
 <body>
     <div id="header"></div>
     <main class="rewards-main">
         <section class="rewards-header">
             <h1>My Rewards</h1>
-            <div class="user-points">Points: <span id="userPoints">5000</span></div>
+            <div class="user-points">Points: <span id="userPoints">0</span></div>
         </section>
         <div class="rewards-toggle">
             <button id="showAvailable" class="toggle-btn active">Available Rewards</button>
@@ -21,7 +28,6 @@
         </div>
         <section id="rewardsGrid" class="rewards-grid"></section>
     </main>
-    <script src="../JavaScript/rewards.js"></script>
     <script>
       fetch('header.html')
         .then(response => response.text())
