@@ -1,6 +1,7 @@
 import { auth, db } from './firebase-init.js';
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js';
-import { doc, setDoc } from 'https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
+import { doc, setDoc } from 'firebase/firestore';
+import { UserService } from './Database.js';
 
 const form = document.getElementById('auth-form');
 const emailInput = document.getElementById('email');
@@ -38,12 +39,14 @@ form.onsubmit = async (e) => {
       await signInWithEmailAndPassword(auth, email, password);
     } else {
       const userCred = await createUserWithEmailAndPassword(auth, email, password);
-      // Create user profile in Firestore
-      await setDoc(doc(db, 'users', userCred.user.uid), {
-        email: email,
+      // Create user profile in Firestore using the new schema
+      await UserService.createUser(userCred.user.uid, {
         name: '',
-        balance: 0,
-        createdAt: new Date()
+        email: email,
+        password: password, // In production, this should be encrypted
+        address: '',
+        phone: '',
+        rewardsPoints: 0
       });
     }
     window.location.href = 'Home.html';
