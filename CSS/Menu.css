@@ -79,3 +79,11 @@
   width: 100%;
   color: #333;
 }
+
+.vl {
+    border-left: 2px solid grey;
+    height: 60%;
+    position: absolute;
+    left: 25%;
+    top: 230px;
+}
