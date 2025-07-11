@@ -61,6 +61,11 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!user) return;
     const userData = await UserService.getUser(user.uid);
     if (userData) {
+      // Update main profile picture
+      const mainProfilePic = document.querySelector('.profile-pic-container .profile-pic');
+      if (mainProfilePic) {
+        mainProfilePic.src = userData.profilePic || '../assets/images/others/Profile.png';
+      }
       nameEl.textContent = userData.name || '';
       emailEl.textContent = userData.email || user.email;
       // Pre-fill edit form fields if present
@@ -139,13 +144,14 @@ document.addEventListener('DOMContentLoaded', () => {
     '../assets/images/others/Profile3.png'
   ];
   let currentProfilePicIndex = 0;
-  if (switchProfilePicBtn && modalProfilePic) {
-    switchProfilePicBtn.addEventListener('click', function(e) {
-      e.preventDefault();
-      currentProfilePicIndex = (currentProfilePicIndex + 1) % profilePics.length;
-      modalProfilePic.src = profilePics[currentProfilePicIndex];
-    });
-  }
+  // Remove cycling logic from camera button
+  // if (switchProfilePicBtn && modalProfilePic) {
+  //   switchProfilePicBtn.addEventListener('click', function(e) {
+  //     e.preventDefault();
+  //     currentProfilePicIndex = (currentProfilePicIndex + 1) % profilePics.length;
+  //     modalProfilePic.src = profilePics[currentProfilePicIndex];
+  //   });
+  // }
 
   // Show/hide password toggle with image icons
   if (toggleModalPasswordBtn && modalEditPassword) {
@@ -178,9 +184,14 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     // Handle image selection
     profilePicPanel.querySelectorAll('.pic-option').forEach(function(img) {
-      img.addEventListener('click', function() {
+      img.addEventListener('click', async function() {
         modalProfilePic.src = img.dataset.pic;
         profilePicPanel.classList.add('hidden');
+        // Update profile picture in the database
+        const user = firebase.auth().currentUser;
+        if (user) {
+          await UserService.updateUser(user.uid, { profilePic: img.dataset.pic });
+        }
       });
     });
   }

@@ -641,6 +641,23 @@ body, html {
   align-items: center;
   justify-content: center;
 }
+.profile-pic-panel {
+  display: flex;
+  gap: 0.7em;
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 4px 16px #0002;
+  padding: 0.5em 1em;
+  margin-top: 0.5em;
+  z-index: 10;
+}
+.profile-pic-panel.hidden {
+  display: none;
+}
 .profile-pic {
   width: 60px;
   height: 60px;
@@ -653,7 +670,7 @@ body, html {
   position: absolute;
   bottom: 0.1em;
   right: 0.1em;
-  background: #fff;
+  background: #fff; /* white */
   border: 2px solid #CA3202;
   border-radius: 50%;
   width: 22px;
