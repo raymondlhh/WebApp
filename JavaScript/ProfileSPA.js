@@ -123,8 +123,71 @@ document.addEventListener('DOMContentLoaded', () => {
   const profileEditModal = document.getElementById('profile-edit-modal');
   const openProfileEditModalBtn = document.getElementById('editProfileBtn');
   const closeProfileEditModalBtn = document.getElementById('closeProfileEditModal');
+  const saveProfileEditModalBtn = document.getElementById('saveProfileEditModal');
   const modalCancelEditBtn = document.getElementById('modal-cancelEdit');
   const modalEditProfileForm = document.getElementById('modal-edit-profile-form');
+  const modalProfilePic = document.getElementById('modal-profile-pic');
+  const switchProfilePicBtn = document.getElementById('switchProfilePicBtn');
+  const toggleModalPasswordBtn = document.getElementById('toggleModalPassword');
+  const modalEditPassword = document.getElementById('modal-edit-password');
+  const profilePicPanel = document.getElementById('profile-pic-panel');
+
+  // Profile picture switching logic
+  const profilePics = [
+    '../assets/images/others/Profile.png',
+    '../assets/images/others/Profile2.png',
+    '../assets/images/others/Profile3.png'
+  ];
+  let currentProfilePicIndex = 0;
+  if (switchProfilePicBtn && modalProfilePic) {
+    switchProfilePicBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      currentProfilePicIndex = (currentProfilePicIndex + 1) % profilePics.length;
+      modalProfilePic.src = profilePics[currentProfilePicIndex];
+    });
+  }
+
+  // Show/hide password toggle
+  if (toggleModalPasswordBtn && modalEditPassword) {
+    toggleModalPasswordBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      if (modalEditPassword.type === 'password') {
+        modalEditPassword.type = 'text';
+        toggleModalPasswordBtn.innerHTML = '&#128064;'; // open eye
+      } else {
+        modalEditPassword.type = 'password';
+        toggleModalPasswordBtn.innerHTML = '&#128065;'; // closed eye
+      }
+    });
+  }
+
+  // Profile picture panel logic
+  if (switchProfilePicBtn && profilePicPanel && modalProfilePic) {
+    switchProfilePicBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      profilePicPanel.classList.toggle('hidden');
+    });
+    // Hide panel if click outside
+    document.addEventListener('click', function(e) {
+      if (!profilePicPanel.contains(e.target) && e.target !== switchProfilePicBtn && e.target !== modalProfilePic) {
+        profilePicPanel.classList.add('hidden');
+      }
+    });
+    // Handle image selection
+    profilePicPanel.querySelectorAll('.pic-option').forEach(function(img) {
+      img.addEventListener('click', function() {
+        modalProfilePic.src = img.dataset.pic;
+        profilePicPanel.classList.add('hidden');
+      });
+    });
+  }
+
+  // Save button submits the modal form
+  if (saveProfileEditModalBtn && modalEditProfileForm) {
+    saveProfileEditModalBtn.addEventListener('click', function() {
+      modalEditProfileForm.requestSubmit();
+    });
+  }
 
   // Open modal and pre-fill fields
   if (openProfileEditModalBtn && profileEditModal) {

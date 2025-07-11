@@ -70,18 +70,43 @@
       </form>
       <!-- Profile Edit Modal -->
       <div id="profile-edit-modal" class="profile-modal hidden">
-        <div class="profile-modal-content">
-          <button class="close-modal" id="closeProfileEditModal">&times;</button>
-          <h2>Edit Profile</h2>
-          <form id="modal-edit-profile-form">
-            <label>Name <input type="text" id="modal-edit-name"></label>
-            <label>Email <input type="email" id="modal-edit-email"></label>
-            <label>Password <input type="password" id="modal-edit-password"></label>
-            <label>Phone <input type="text" id="modal-edit-phone"></label>
-            <label>Delivery Address <input type="text" id="modal-edit-address"></label>
-            <button type="submit">Save</button>
-            <button type="button" id="modal-cancelEdit">Cancel</button>
-          </form>
+        <div class="profile-modal-panel">
+          <div class="profile-edit-header">
+            <button class="back-btn" id="closeProfileEditModal">&#8592;</button>
+            <span class="edit-title">EDIT PROFILE</span>
+            <button class="save-btn" id="saveProfileEditModal">&#10003;</button>
+          </div>
+          <div class="profile-edit-body">
+            <div class="profile-pic-wrapper">
+              <img id="modal-profile-pic" src="../assets/images/others/Profile.png" alt="Profile Picture" class="profile-pic">
+              <button class="camera-btn" id="switchProfilePicBtn"><span class="camera-icon">&#128247;</span></button>
+              <div id="profile-pic-panel" class="profile-pic-panel hidden">
+                <img src="../assets/images/others/Profile.png" class="pic-option" data-pic="../assets/images/others/Profile.png" alt="Profile 1">
+                <img src="../assets/images/others/Profile2.png" class="pic-option" data-pic="../assets/images/others/Profile2.png" alt="Profile 2">
+                <img src="../assets/images/others/Profile3.png" class="pic-option" data-pic="../assets/images/others/Profile3.png" alt="Profile 3">
+              </div>
+            </div>
+            <form id="modal-edit-profile-form" class="profile-edit-form">
+              <label>Name
+                <input type="text" id="modal-edit-name">
+              </label>
+              <label>Email
+                <input type="email" id="modal-edit-email">
+              </label>
+              <label>Password
+                <div class="password-wrapper">
+                  <input type="password" id="modal-edit-password">
+                  <button type="button" class="toggle-password" id="toggleModalPassword">&#128065;</button>
+                </div>
+              </label>
+              <label>Phone Number
+                <input type="text" id="modal-edit-phone">
+              </label>
+              <label>Delivery Address
+                <input type="text" id="modal-edit-address">
+              </label>
+            </form>
+          </div>
         </div>
       </div>
       <button class="logout-btn">Log Out</button>
