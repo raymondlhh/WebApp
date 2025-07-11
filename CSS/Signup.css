@@ -160,6 +160,20 @@ body {
     to { transform: rotate(360deg); }
 }
 
+/* Hide browser built-in password reveal (eye) icon */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear,
+input[type="password"]::-webkit-credentials-auto-fill-button,
+input[type="password"]::-webkit-input-decoration,
+input[type="password"]::-webkit-input-clear-button,
+input[type="password"]::-webkit-input-password-reveal-button {
+  display: none !important;
+  pointer-events: none;
+  height: 0;
+  width: 0;
+  background: none;
+}
+
 @media (max-width: 430px) {
     .logo { width: 250px; height: 375px; }
     .subtitle { width: 294px; }

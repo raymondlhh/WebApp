@@ -147,24 +147,27 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Show/hide password toggle
+  // Show/hide password toggle with image icons
   if (toggleModalPasswordBtn && modalEditPassword) {
+    // Set initial icon
+    toggleModalPasswordBtn.innerHTML = '<img src="../assets/images/icons/CloseEye.png" alt="Show" style="width:22px;height:22px;vertical-align:middle;">';
     toggleModalPasswordBtn.addEventListener('click', function(e) {
       e.preventDefault();
       if (modalEditPassword.type === 'password') {
         modalEditPassword.type = 'text';
-        toggleModalPasswordBtn.innerHTML = '&#128064;'; // open eye
+        toggleModalPasswordBtn.innerHTML = '<img src="../assets/images/icons/OpenEye.png" alt="Hide" style="width:22px;height:22px;vertical-align:middle;">';
       } else {
         modalEditPassword.type = 'password';
-        toggleModalPasswordBtn.innerHTML = '&#128065;'; // closed eye
+        toggleModalPasswordBtn.innerHTML = '<img src="../assets/images/icons/CloseEye.png" alt="Show" style="width:22px;height:22px;vertical-align:middle;">';
       }
     });
   }
 
-  // Profile picture panel logic
+  // Profile picture selection panel logic
   if (switchProfilePicBtn && profilePicPanel && modalProfilePic) {
     switchProfilePicBtn.addEventListener('click', function(e) {
       e.preventDefault();
+      e.stopPropagation();
       profilePicPanel.classList.toggle('hidden');
     });
     // Hide panel if click outside
@@ -198,6 +201,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const userData = await UserService.getUser(user.uid);
         document.getElementById('modal-edit-name').value = userData?.name || '';
         document.getElementById('modal-edit-email').value = userData?.email || user.email;
+        // Leave password field blank
         document.getElementById('modal-edit-password').value = '';
         document.getElementById('modal-edit-phone').value = userData?.phone || '';
         document.getElementById('modal-edit-address').value = userData?.address || '';
@@ -219,12 +223,23 @@ document.addEventListener('DOMContentLoaded', () => {
       e.preventDefault();
       const user = firebase.auth().currentUser;
       if (!user) return;
+      const newPassword = document.getElementById('modal-edit-password').value;
+      // Update user profile fields
       await UserService.updateUser(user.uid, {
         name: document.getElementById('modal-edit-name').value,
         email: document.getElementById('modal-edit-email').value,
         phone: document.getElementById('modal-edit-phone').value,
         address: document.getElementById('modal-edit-address').value
       });
+      // If password field is not empty, update password
+      if (newPassword) {
+        try {
+          await user.updatePassword(newPassword);
+          alert('Password updated successfully.');
+        } catch (err) {
+          alert('Failed to update password: ' + (err.message || err));
+        }
+      }
       await loadProfile();
       closeProfileEditModal();
     });

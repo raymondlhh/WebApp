@@ -168,17 +168,21 @@ class SignupHandler {
   togglePasswordVisibility() {
     const passwordField = document.getElementById('password');
     const toggleBtn = document.getElementById('password-toggle');
-
     if (passwordField.type === 'password') {
       passwordField.type = 'text';
-      toggleBtn.textContent = '🙈';
+      toggleBtn.innerHTML = '<img src="../assets/images/icons/OpenEye.png" alt="Hide" style="width:22px;height:22px;vertical-align:middle;">';
     } else {
       passwordField.type = 'password';
-      toggleBtn.textContent = '👁';
+      toggleBtn.innerHTML = '<img src="../assets/images/icons/CloseEye.png" alt="Show" style="width:22px;height:22px;vertical-align:middle;">';
     }
   }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
   new SignupHandler();
+  // Set initial icon for password toggle
+  const toggleBtn = document.getElementById('password-toggle');
+  if (toggleBtn) {
+    toggleBtn.innerHTML = '<img src="../assets/images/icons/CloseEye.png" alt="Show" style="width:22px;height:22px;vertical-align:middle;">';
+  }
 }); 

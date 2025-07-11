@@ -757,7 +757,7 @@ body, html {
     max-width: 96vw;
     width: 96vw;
     padding: 0.5em 0.1em 0.7em 0.1em;
-    margin-top: 32px;
+    margin-top: 80px; /* push down below navbar */
     border-radius: 12px;
   }
   .profile-edit-form {
@@ -800,4 +800,18 @@ body, html {
 .mobile-menu .mobile-nav-links a {
   color: #b93a1c !important;
   font-weight: 600 !important;
+}
+
+/* Hide browser built-in password reveal (eye) icon */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear,
+input[type="password"]::-webkit-credentials-auto-fill-button,
+input[type="password"]::-webkit-input-decoration,
+input[type="password"]::-webkit-input-clear-button,
+input[type="password"]::-webkit-input-password-reveal-button {
+  display: none !important;
+  pointer-events: none;
+  height: 0;
+  width: 0;
+  background: none;
 }
