@@ -67,11 +67,11 @@ document.addEventListener('DOMContentLoaded', () => {
         mainProfilePic.src = userData.profilePic || '../assets/images/others/Profile.png';
       }
       nameEl.textContent = userData.name || '';
-      emailEl.textContent = userData.email || user.email;
+      emailEl.textContent = user.email; // Always use Auth email for display
       // Pre-fill edit form fields if present
       if (editForm) {
         document.getElementById('edit-name').value = userData.name || '';
-        document.getElementById('edit-email').value = userData.email || user.email;
+        // document.getElementById('edit-email').value = userData.email || user.email;
         document.getElementById('edit-password').value = '';
         document.getElementById('edit-phone').value = userData.phone || '';
         document.getElementById('edit-address').value = userData.address || '';
@@ -211,7 +211,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (user) {
         const userData = await UserService.getUser(user.uid);
         document.getElementById('modal-edit-name').value = userData?.name || '';
-        document.getElementById('modal-edit-email').value = userData?.email || user.email;
+        // document.getElementById('modal-edit-email').value = userData?.email || user.email;
         // Leave password field blank
         document.getElementById('modal-edit-password').value = '';
         document.getElementById('modal-edit-phone').value = userData?.phone || '';
@@ -234,11 +234,36 @@ document.addEventListener('DOMContentLoaded', () => {
       e.preventDefault();
       const user = firebase.auth().currentUser;
       if (!user) return;
+      // const newEmail = document.getElementById('modal-edit-email').value;
       const newPassword = document.getElementById('modal-edit-password').value;
-      // Update user profile fields
+      // If email changed, update in Auth first
+      /*
+      if (newEmail !== user.email) {
+        try {
+          // Prompt for password
+          const password = prompt("Please enter your current password to confirm email change:");
+          if (!password) {
+            alert("Email change cancelled. Password is required.");
+            return;
+          }
+          // Re-authenticate
+          const credential = firebase.auth.EmailAuthProvider.credential(user.email, password);
+          await user.reauthenticateWithCredential(credential);
+
+          // Now update email
+          await user.updateEmail(newEmail);
+          await user.sendEmailVerification();
+          alert('A verification email has been sent to your new email address. Please verify it to complete the change.');
+        } catch (err) {
+          alert('Failed to update email: ' + (err.message || err));
+          return;
+        }
+      }
+      */
+      // Update user profile fields in Firestore
       await UserService.updateUser(user.uid, {
         name: document.getElementById('modal-edit-name').value,
-        email: document.getElementById('modal-edit-email').value,
+        // email: document.getElementById('modal-edit-email').value, // removed because email field is gone
         phone: document.getElementById('modal-edit-phone').value,
         address: document.getElementById('modal-edit-address').value
       });
