@@ -1,17 +1,3 @@
-import { auth, db } from './firebase-init.js';
-import { 
-  doc, 
-  getDoc, 
-  setDoc, 
-  updateDoc, 
-  collection, 
-  addDoc, 
-  getDocs, 
-  deleteDoc, 
-  query, 
-  orderBy 
-} from 'firebase/firestore';
-import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { UserService, FavouritesService, NotificationsService } from './Database.js';
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -51,7 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Firebase logic
   // Redirect to login if not authenticated
-  onAuthStateChanged(auth, user => {
+  firebase.auth().onAuthStateChanged(user => {
     if (!user) {
       window.location.href = 'Login.html';
     } else {
@@ -66,55 +52,125 @@ document.addEventListener('DOMContentLoaded', () => {
   const nameEl = document.getElementById('profile-name');
   const emailEl = document.getElementById('profile-email');
   const editBtn = document.getElementById('editProfileBtn');
-  // const editForm = document.getElementById('edit-profile-form');
-  // const cancelEditBtn = document.getElementById('cancelEdit');
+  const editForm = document.getElementById('edit-profile-form');
+  const cancelEditBtn = document.getElementById('cancelEdit');
+  const profileHeader = document.querySelector('.profile-header');
 
   async function loadProfile() {
-    const user = auth.currentUser;
+    const user = firebase.auth().currentUser;
     if (!user) return;
     const userData = await UserService.getUser(user.uid);
     if (userData) {
       nameEl.textContent = userData.name || '';
       emailEl.textContent = userData.email || user.email;
-      // document.getElementById('edit-name').value = userData.name || '';
-      // document.getElementById('edit-email').value = userData.email || user.email;
-      // document.getElementById('edit-password').value = '';
-      // document.getElementById('edit-phone').value = userData.phone || '';
-      // document.getElementById('edit-address').value = userData.address || '';
+      // Pre-fill edit form fields if present
+      if (editForm) {
+        document.getElementById('edit-name').value = userData.name || '';
+        document.getElementById('edit-email').value = userData.email || user.email;
+        document.getElementById('edit-password').value = '';
+        document.getElementById('edit-phone').value = userData.phone || '';
+        document.getElementById('edit-address').value = userData.address || '';
+      }
     }
   }
 
-  // Navigate to ProfileEdit.html on edit
-  if (editBtn) {
-    editBtn.addEventListener('click', function() {
-      window.location.href = 'HTML/ProfileEdit.html';
+  // Show inline edit form instead of redirect
+  // if (editBtn && editForm && profileHeader) {
+  //   editBtn.addEventListener('click', function() {
+  //     // Pre-fill form fields with current profile data
+  //     const user = auth.currentUser;
+  //     if (user) {
+  //       UserService.getUser(user.uid).then(userData => {
+  //         document.getElementById('edit-name').value = userData?.name || '';
+  //         document.getElementById('edit-email').value = userData?.email || user.email;
+  //         document.getElementById('edit-password').value = '';
+  //         document.getElementById('edit-phone').value = userData?.phone || '';
+  //         document.getElementById('edit-address').value = userData?.address || '';
+  //       });
+  //     }
+  //     editForm.classList.remove('hidden');
+  //     profileHeader.style.display = 'none';
+  //   });
+  // }
+
+  // Cancel edit: hide form, show profile
+  if (cancelEditBtn && editForm && profileHeader) {
+    cancelEditBtn.addEventListener('click', function() {
+      editForm.classList.add('hidden');
+      profileHeader.style.display = '';
     });
   }
 
-  // Remove or comment out inline edit form logic
-  // cancelEditBtn.onclick = () => {
-  //   editForm.classList.add('hidden');
-  //   editBtn.style.display = '';
-  // };
-  // editForm.onsubmit = async (e) => {
-  //   e.preventDefault();
-  //   const user = auth.currentUser;
-  //   if (!user) return;
-  //   await UserService.updateUser(user.uid, {
-  //     name: document.getElementById('edit-name').value,
-  //     email: document.getElementById('edit-email').value,
-  //     phone: document.getElementById('edit-phone').value,
-  //     address: document.getElementById('edit-address').value
-  //   });
-  //   loadProfile();
-  //   editForm.classList.add('hidden');
-  //   editBtn.style.display = '';
-  // };
+  // Save edit: update user, hide form, show profile
+  if (editForm && profileHeader) {
+    editForm.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const user = firebase.auth().currentUser;
+      if (!user) return;
+      await UserService.updateUser(user.uid, {
+        name: document.getElementById('edit-name').value,
+        email: document.getElementById('edit-email').value,
+        phone: document.getElementById('edit-phone').value,
+        address: document.getElementById('edit-address').value
+      });
+      await loadProfile();
+      editForm.classList.add('hidden');
+      profileHeader.style.display = '';
+    });
+  }
+
+  // Modal elements
+  const profileEditModal = document.getElementById('profile-edit-modal');
+  const openProfileEditModalBtn = document.getElementById('editProfileBtn');
+  const closeProfileEditModalBtn = document.getElementById('closeProfileEditModal');
+  const modalCancelEditBtn = document.getElementById('modal-cancelEdit');
+  const modalEditProfileForm = document.getElementById('modal-edit-profile-form');
+
+  // Open modal and pre-fill fields
+  if (openProfileEditModalBtn && profileEditModal) {
+    openProfileEditModalBtn.addEventListener('click', async function() {
+      console.log('Edit Profile button clicked'); // Debug log
+      const user = firebase.auth().currentUser;
+      if (user) {
+        const userData = await UserService.getUser(user.uid);
+        document.getElementById('modal-edit-name').value = userData?.name || '';
+        document.getElementById('modal-edit-email').value = userData?.email || user.email;
+        document.getElementById('modal-edit-password').value = '';
+        document.getElementById('modal-edit-phone').value = userData?.phone || '';
+        document.getElementById('modal-edit-address').value = userData?.address || '';
+      }
+      profileEditModal.classList.remove('hidden');
+    });
+  }
+
+  // Close modal on X or Cancel
+  function closeProfileEditModal() {
+    profileEditModal.classList.add('hidden');
+  }
+  if (closeProfileEditModalBtn) closeProfileEditModalBtn.addEventListener('click', closeProfileEditModal);
+  if (modalCancelEditBtn) modalCancelEditBtn.addEventListener('click', closeProfileEditModal);
+
+  // Save profile from modal
+  if (modalEditProfileForm) {
+    modalEditProfileForm.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const user = firebase.auth().currentUser;
+      if (!user) return;
+      await UserService.updateUser(user.uid, {
+        name: document.getElementById('modal-edit-name').value,
+        email: document.getElementById('modal-edit-email').value,
+        phone: document.getElementById('modal-edit-phone').value,
+        address: document.getElementById('modal-edit-address').value
+      });
+      await loadProfile();
+      closeProfileEditModal();
+    });
+  }
 
   // Favourites logic
   const favList = document.getElementById('favourites-list');
   async function loadFavourites() {
-    const user = auth.currentUser;
+    const user = firebase.auth().currentUser;
     if (!user) return;
     const favourites = await FavouritesService.getUserFavourites(user.uid);
     favList.innerHTML = '';
@@ -147,7 +203,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const topupAmount = document.getElementById('topup-amount');
   const topupBtns = document.querySelectorAll('.topup-btn');
   async function loadBalance() {
-    const user = auth.currentUser;
+    const user = firebase.auth().currentUser;
     if (!user) return;
     const userData = await UserService.getUser(user.uid);
     if (userData) {
@@ -161,7 +217,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   topupForm.onsubmit = async (e) => {
     e.preventDefault();
-    const user = auth.currentUser;
+    const user = firebase.auth().currentUser;
     if (!user) return;
     let amt = parseFloat(topupAmount.value);
     if (isNaN(amt) || amt < 10 || amt > 500) {
@@ -177,7 +233,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const notificationList = document.querySelector('.notification-list');
   async function loadNotifications() {
     if (!notificationList) return;
-    const user = auth.currentUser;
+    const user = firebase.auth().currentUser;
     if (!user) return;
     const notifications = await NotificationsService.getUserNotifications(user.uid);
     notificationList.innerHTML = '';
@@ -209,7 +265,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const logoutBtn = document.querySelector('.logout-btn');
   if (logoutBtn) {
     logoutBtn.onclick = () => {
-      signOut(auth);
+      firebase.auth().signOut();
     };
   }
 }); 

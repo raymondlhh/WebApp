@@ -9,6 +9,10 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Noto+Serif+JP:wght@700&display=swap" rel="stylesheet">
+  <!-- Firebase CDN scripts -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
   <script type="module" src="../JavaScript/firebase-init.js"></script>
 </head>
 <body>
@@ -64,6 +68,22 @@
         <button type="submit">Save</button>
         <button type="button" id="cancelEdit">Cancel</button>
       </form>
+      <!-- Profile Edit Modal -->
+      <div id="profile-edit-modal" class="profile-modal hidden">
+        <div class="profile-modal-content">
+          <button class="close-modal" id="closeProfileEditModal">&times;</button>
+          <h2>Edit Profile</h2>
+          <form id="modal-edit-profile-form">
+            <label>Name <input type="text" id="modal-edit-name"></label>
+            <label>Email <input type="email" id="modal-edit-email"></label>
+            <label>Password <input type="password" id="modal-edit-password"></label>
+            <label>Phone <input type="text" id="modal-edit-phone"></label>
+            <label>Delivery Address <input type="text" id="modal-edit-address"></label>
+            <button type="submit">Save</button>
+            <button type="button" id="modal-cancelEdit">Cancel</button>
+          </form>
+        </div>
+      </div>
       <button class="logout-btn">Log Out</button>
     </section>
     <section id="favourites-section" class="spa-section hidden">
@@ -92,6 +112,6 @@
       </form>
     </section>
   </main>
-  <script src="../JavaScript/ProfileSPA.js"></script>
+  <script type="module" src="../JavaScript/ProfileSPA.js"></script>
 </body>
 </html>

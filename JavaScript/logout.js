@@ -1,6 +1,5 @@
 // Logout Handler
 import { auth } from './firebase-init.js';
-import { signOut } from 'firebase/auth';
 import { authUtils } from './auth-utils.js';
 
 export class LogoutHandler {
@@ -10,7 +9,7 @@ export class LogoutHandler {
 
   async logout() {
     try {
-      await signOut(this.auth);
+      await firebase.auth().signOut();
       console.log('User logged out successfully');
       
       // Clear stored user data

@@ -1,6 +1,5 @@
 // Authentication Utilities
 import { auth } from './firebase-init.js';
-import { onAuthStateChanged } from 'firebase/auth';
 
 export class AuthUtils {
   constructor() {
@@ -11,7 +10,7 @@ export class AuthUtils {
   }
 
   initializeAuthStateListener() {
-    onAuthStateChanged(this.auth, (user) => {
+    firebase.auth().onAuthStateChanged((user) => {
       this.currentUser = user;
       console.log('Auth state changed:', user ? user.email : 'No user');
       

@@ -1,6 +1,4 @@
 import { auth, db } from './firebase-init.js';
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
-import { doc, setDoc } from 'firebase/firestore';
 import { UserService } from './Database.js';
 
 const form = document.getElementById('auth-form');
@@ -36,9 +34,9 @@ form.onsubmit = async (e) => {
   const password = passwordInput.value;
   try {
     if (isLogin) {
-      await signInWithEmailAndPassword(auth, email, password);
+      await firebase.auth().signInWithEmailAndPassword(auth, email, password);
     } else {
-      const userCred = await createUserWithEmailAndPassword(auth, email, password);
+      const userCred = await firebase.auth().createUserWithEmailAndPassword(auth, email, password);
       // Create user profile in Firestore using the new schema
       await UserService.createUser(userCred.user.uid, {
         name: '',

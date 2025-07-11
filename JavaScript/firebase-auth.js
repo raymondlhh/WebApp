@@ -1,6 +1,5 @@
 // Firebase Authentication Module
 import { auth } from './firebase-init.js';
-import { signInWithEmailAndPassword } from 'firebase/auth';
 
 export class FirebaseAuth {
   constructor() {
