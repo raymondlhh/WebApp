@@ -688,7 +688,7 @@ body, html {
   letter-spacing: 0.01em;
 }
 .profile-edit-form label:last-child {
-  margin-bottom: 0;
+  margin-bottom: 1.5em;
 }
 .profile-edit-form input:last-child {
   margin-bottom: 0;
