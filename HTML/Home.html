@@ -244,6 +244,15 @@
         const rect = cameraBtn.getBoundingClientRect();
         picSelector.style.top = (rect.bottom + window.scrollY + 8) + 'px';
         picSelector.style.left = (rect.left + window.scrollX - 30) + 'px';
+
+        // Highlight the current profile picture
+        const currentPic = profilePicImg.src;
+        document.querySelectorAll('.pic-option').forEach(img => {
+          img.classList.remove('selected');
+          if (img.src === currentPic) {
+            img.classList.add('selected');
+          }
+        });
       };
       document.querySelectorAll('.pic-option').forEach(img => {
         img.onclick = () => {

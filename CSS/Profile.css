@@ -755,6 +755,11 @@ body, html {
   border: 2.5px solid #8AB98F;
   box-shadow: 0 2px 8px #8AB98F55;
 }
+.pic-option.selected {
+  border: 3px solid #b94a2c;
+  border-radius: 50%;
+  box-shadow: 0 0 8px #b94a2c;
+}
 @media (max-width: 600px) {
   .profile-modal {
     align-items: flex-start;
