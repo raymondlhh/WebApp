@@ -40,7 +40,7 @@
       <!-- Profile content (view/edit) -->
       <div class="profile-header">
         <div class="profile-pic-container">
-          <img src="../assets/images/others/Profile.png" alt="Profile Picture" class="profile-pic">
+          <img src="../assets/images/others/Profile.png" alt="Profile Picture" class="profile-pic" id="profile-pic-img">
         </div>
         <div class="profile-info">
           <h2 id="profile-name">Tone</h2>
@@ -138,5 +138,26 @@
     </section>
   </main>
   <script type="module" src="../JavaScript/ProfileSPA.js"></script>
+  <script>
+    // Ensure the edit profile modal shows the current profile picture
+    function updateModalProfilePic() {
+      const modalProfilePic = document.getElementById('modal-profile-pic');
+      const savedPic = localStorage.getItem('profilePic');
+      if (modalProfilePic && savedPic) {
+        modalProfilePic.src = savedPic;
+      }
+    }
+    // Show modal and update pic when Edit Profile is clicked
+    const editProfileBtn = document.getElementById('editProfileBtn');
+    const profileEditModal = document.getElementById('profile-edit-modal');
+    if (editProfileBtn && profileEditModal) {
+      editProfileBtn.addEventListener('click', function() {
+        updateModalProfilePic();
+        profileEditModal.classList.remove('hidden');
+      });
+    }
+    // Also update when modal is opened by other means (optional)
+    // You can call updateModalProfilePic() wherever the modal is shown
+  </script>
 </body>
 </html>

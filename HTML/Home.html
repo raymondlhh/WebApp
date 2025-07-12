@@ -233,6 +233,16 @@
       profileModal.onclick = (e) => {
         if (e.target === profileModal) profileModal.classList.add('hidden');
       };
+      // Utility to update all profile pic images
+      function updateProfilePics(newSrc) {
+        const profilePicImg = document.getElementById('profile-pic-img');
+        const modalProfilePic = document.getElementById('modal-profile-pic');
+        if (profilePicImg) profilePicImg.src = newSrc;
+        if (modalProfilePic) modalProfilePic.src = newSrc;
+      }
+      // On page load, set both images to saved profile pic
+      const savedPic = localStorage.getItem('profilePic');
+      if (savedPic) updateProfilePics(savedPic);
       // Camera/profile picture change logic
       const cameraBtn = document.getElementById('cameraBtn');
       const picSelector = document.getElementById('profile-pic-selector');
@@ -244,7 +254,6 @@
         const rect = cameraBtn.getBoundingClientRect();
         picSelector.style.top = (rect.bottom + window.scrollY + 8) + 'px';
         picSelector.style.left = (rect.left + window.scrollX - 30) + 'px';
-
         // Highlight the current profile picture
         const currentPic = profilePicImg.src;
         document.querySelectorAll('.pic-option').forEach(img => {
@@ -256,8 +265,8 @@
       };
       document.querySelectorAll('.pic-option').forEach(img => {
         img.onclick = () => {
-          profilePicImg.src = img.dataset.img;
           localStorage.setItem('profilePic', img.dataset.img);
+          updateProfilePics(img.dataset.img);
           picSelector.classList.add('hidden');
         };
       });
@@ -266,10 +275,6 @@
           picSelector.classList.add('hidden');
         }
       };
-      // Load saved profile pic
-      const savedPic = localStorage.getItem('profilePic');
-      if (savedPic) profilePicImg.src = savedPic;
-
       // Notification modal logic
       const notificationBtn = document.getElementById('notificationBtn');
       
