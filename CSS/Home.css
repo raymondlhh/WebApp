@@ -258,6 +258,14 @@ body, html {
     align-items: center;
     justify-content: center;
 }
+.sashimi-section.centered-section {
+    max-width: 1000px;
+    margin: 0 auto;
+    background: #fffbe9;
+    border-radius: 32px;
+    box-shadow: 0 8px 32px #0001;
+    padding: 3em 2em 2.5em 2em;
+}
 .sashimi-row {
     display: flex;
     flex-direction: row;
@@ -272,8 +280,8 @@ body, html {
     justify-content: center;
 }
 .sashimi-img img {
-    width: 320px;
-    height: 320px;
+    width: 400px;
+    height: 400px;
     object-fit: cover;
     border-radius: 32px;
     box-shadow: 0 8px 32px #0002;
@@ -295,6 +303,8 @@ body, html {
     letter-spacing: 0.08em;
     margin-bottom: 1.2em;
     text-shadow: 0 2px 8px #fff8, 0 0 1px #CA3202;
+    text-align: center;
+    width: 100%;
 }
 .sashimi-desc-list {
     display: flex;
