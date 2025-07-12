@@ -72,34 +72,64 @@
             </div>
         </section>
         <section class="sales-hits">
-            <h2><img src="../assets/images/icons/menu_sidebar/sushi_icon.png" style="height:1.2em;vertical-align:middle;"> SALES HITS <img src="../assets/images/icons/menu_sidebar/sushi_icon.png" style="height:1.2em;vertical-align:middle;"></h2>
-            <div class="sales-cards">
-                <div class="sales-card">
-                    <img src="../assets/images/menu/sushi_avocado.jpg" alt="Sushi Avocado">
-                    <div class="card-title">Sushi Avocado</div>
-                    <div class="card-rating">★★★★★ 4.9</div>
+            <h2><img src="assets/icons/Hit.png" style="height:2em;vertical-align:middle;"> SALES HITS <img src="assets/icons/Hit.png" style="height:2em;vertical-align:middle;"></h2>
+            <div class="sales-cards" id="sales-cards"></div>
+            <div class="carousel-indicator" id="carousel-indicator"></div>
+            <script>
+            const salesData = [
+              { img: "assets/images/foods/party_set/party_set_a.png", title: "Sushi Avocado", rating: "4.8" },
+              { img: "assets/images/foods/party_set/party_set_b.png", title: "Sushi Rainbow", rating: "4.9" },
+              { img: "assets/images/foods/party_set/party_set_c.png", title: "Sushi 4 Fish", rating: "4.6" },
+              { img: "assets/images/foods/party_set/maki_set.png", title: "Maki Set", rating: "4.7" },
+              { img: "assets/images/foods/party_set/gunkan_set.png", title: "Gunkan Set", rating: "4.5" },
+              { img: "assets/images/foods/party_set/nigiri_set.png", title: "Nigiri Set", rating: "4.8" },
+              { img: "assets/images/foods/party_set/party_set_a.png", title: "Avocado Deluxe", rating: "4.6" },
+              { img: "assets/images/foods/party_set/party_set_b.png", title: "Rainbow Deluxe", rating: "4.7" },
+              { img: "assets/images/foods/party_set/party_set_c.png", title: "Fish Deluxe", rating: "4.8" },
+              { img: "assets/images/foods/party_set/maki_set.png", title: "Maki Special", rating: "4.9" },
+              { img: "assets/images/foods/party_set/gunkan_set.png", title: "Gunkan Special", rating: "4.6" },
+              { img: "assets/images/foods/party_set/nigiri_set.png", title: "Nigiri Special", rating: "4.7" }
+            ];
+            const cardsPerPage = 3;
+            let currentPage = 0;
+            function renderCards() {
+              const container = document.getElementById('sales-cards');
+              container.innerHTML = '';
+              const totalPages = Math.ceil(salesData.length / cardsPerPage);
+              const start = currentPage * cardsPerPage;
+              let cards = salesData.slice(start, start + cardsPerPage);
+              // 如果到最后一页不足3个，循环补足
+              if (cards.length < cardsPerPage) {
+                cards = cards.concat(salesData.slice(0, cardsPerPage - cards.length));
+              }
+              cards.forEach(card => {
+                container.innerHTML += `
+                  <div class="sales-card">
+                    <img src="${card.img}" alt="${card.title}">
+                    <div class="card-title">${card.title}</div>
+                    <div class="card-rating">★★★★★ ${card.rating}</div>
                     <button class="add-cart">Add To Cart</button>
-                </div>
-                <div class="sales-card">
-                    <img src="../assets/images/menu/sushi_rainbow.jpg" alt="Sushi Rainbow">
-                    <div class="card-title">Sushi Rainbow</div>
-                    <div class="card-rating">★★★★★ 4.9</div>
-                    <button class="add-cart">Add To Cart</button>
-                </div>
-                <div class="sales-card">
-                    <img src="../assets/images/menu/sushi_4fish.jpg" alt="Sushi 4 Fish">
-                    <div class="card-title">Sushi 4 Fish</div>
-                    <div class="card-rating">★★★★★ 4.9</div>
-                    <button class="add-cart">Add To Cart</button>
-                </div>
-            </div>
-            <div class="carousel-indicator">
-                <span class="dot active"></span>
-                <span class="dot"></span>
-                <span class="dot"></span>
-                <span class="dot"></span>
-                <span class="dot"></span>
-            </div>
+                  </div>
+                `;
+              });
+              renderIndicators();
+            }
+            function renderIndicators() {
+              const indicator = document.getElementById('carousel-indicator');
+              const totalPages = Math.ceil(salesData.length / cardsPerPage);
+              indicator.innerHTML = '';
+              for (let i = 0; i < totalPages; i++) {
+                indicator.innerHTML += `<span class="dot${i === currentPage ? ' active' : ''}"></span>`;
+              }
+            }
+            function nextPage() {
+              const totalPages = Math.ceil(salesData.length / cardsPerPage);
+              currentPage = (currentPage + 1) % totalPages;
+              renderCards();
+            }
+            renderCards();
+            setInterval(nextPage, 3000);
+            </script>
         </section>
         <!-- Sashimi介绍区块 -->
         <section class="sashimi-section centered-section">

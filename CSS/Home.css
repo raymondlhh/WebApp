@@ -186,9 +186,10 @@ body, html {
 .sales-card img {
     width: 100%;
     height: 120px;
-    object-fit: cover;
+    object-fit: contain;
     border-radius: 12px;
     margin-bottom: 0.7em;
+    display: block;
 }
 .card-title {
     font-size: 1.1em;
