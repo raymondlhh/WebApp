@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout</title>
+  <link rel="stylesheet" href="../CSS/Checkout.css">
+</head>
+<body>
+  <div class="checkout-header">
+    <button class="checkout-back-btn" onclick="window.location.href='Cart.html'" aria-label="Back to cart">&#8592;</button>
+    <span class="checkout-title">CHECKOUT</span>
+  </div>
+  <div class="checkout-container">
+    <h3>Order Summary</h3>
+    <div id="checkout-items"></div>
+    <h3>Payment Method</h3>
+    <div class="checkout-payment-method">
+      <span class="payment-icon">&#128179;</span>
+      <span id="checkout-balance">Current Balance: RM 0.00</span>
+    </div>
+    <h3>Order Details</h3>
+    <div class="checkout-order-details">
+      <div>Item Count: <span id="checkout-item-count"></span></div>
+      <div>Points Earned: <span id="checkout-points"></span></div>
+    </div>
+    <div class="checkout-total-row">
+      <span>Total</span>
+      <span id="checkout-total" class="checkout-total-amount"></span>
+    </div>
+    <button class="checkout-confirm-btn" id="checkout-confirm-btn">Confirm Order</button>
+  </div>
+  <script type="module" src="../JavaScript/checkout-page.js"></script>
+</body>
+</html> 
