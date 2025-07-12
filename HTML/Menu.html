@@ -29,8 +29,10 @@
           </select>
         </div>
         <div class="cart-container">
-          <img src="../assets/images/icons/menu/cart.png" alt="Cart" class="icon-cart">
-          <span class="cart-badge">1</span>
+          <a href="Cart.html">
+            <img src="../assets/images/icons/menu/cart.png" alt="Cart" class="icon-cart">
+            <span class="cart-badge">1</span>
+          </a>
         </div>
       </div>
       <div class="search-bar">
@@ -40,8 +42,7 @@
     </div>
     <div class="menu-content">
         <hr width="100%" color="grey"/>
-        <div class="vl"></div>
-        <!-- Add your menu content here -->
+        <div class="menu-categories"></div>
     </div>
 
     <script>
@@ -60,5 +61,61 @@
                 console.error('Error loading navbar:', error);
             });
     </script>
+    <script type="module">
+import { menuItems } from '../JavaScript/menu-data.js';
+
+const categories = [
+  { key: 'party_set', name: 'Party Set', icon: '../assets/images/icons/menu_sidebar/party_set.png', items: [
+    'party_set_b', 'maki_set', 'party_set_a', 'gunkan_set', 'party_set_c', 'nigiri_set'] },
+  { key: 'appetizers', name: 'Appetizers', icon: '../assets/images/icons/menu_sidebar/appetizers.png', items: [
+    'chuka_hotate', 'chuka_idako', 'chuka_kurage', 'chuka_wakame', 'mochi'] },
+  { key: 'moriawase_makimono', name: 'Moriawase Makimono', icon: '../assets/images/icons/menu_sidebar/moriawase_makimono.png', items: [
+    'salmon_moriawase', 'moriawase_a', 'moriawase_b'] },
+  { key: 'maki_roll', name: 'Maki Roll', icon: '../assets/images/icons/menu_sidebar/maki_roll.png', items: [
+    'kani_maki', 'kappa_maki', 'sake_maki', 'tamago_maki'] },
+  { key: 'nigiri', name: 'Nigiri Sushi', icon: '../assets/images/icons/menu_sidebar/nigiri.png', items: [
+    'ebi_nigiri', 'ika_nigiri', 'kani_mentai', 'sake_nigiri', 'tako_nigiri', 'tamago_mentai', 'unagi_nigiri'] },
+  { key: 'gunkan', name: 'Gunkan Sushi', icon: '../assets/images/icons/menu_sidebar/gunkan.png', items: [
+    'ebiko', 'kani_mayo', 'lobster_salad_gunkan'] },
+  { key: 'curry_set', name: 'Curry Set', icon: '../assets/images/icons/menu_sidebar/curry_set.png', items: [
+    'chicken_katsu_curry_don', 'chicken_katsu_curry_udon', 'ebi_curry_don', 'ebi_curry_udon'] },
+  { key: 'ramen', name: 'Ramen', icon: '../assets/images/icons/menu_sidebar/ramen.png', items: [
+    'chicken_teriyaki_ramen', 'chicken_katsu_ramen', 'smoke_duck_ramen', 'dori_fish_ramen'] },
+  { key: 'drinks', name: 'Drinks', icon: '../assets/images/icons/menu_sidebar/drinks.png', items: [
+    '_100plus', 'coke', 'oyoshi_green_tea', 'sprite'] },
+  { key: 'condiments', name: 'Condiments', icon: '../assets/images/icons/menu_sidebar/condiments.png', items: [
+    'ginger', 'soy_sauce', 'wasabi'] }
+];
+
+const menuCategoriesDiv = document.querySelector('.menu-categories');
+menuCategoriesDiv.innerHTML = '';
+categories.forEach(cat => {
+  const section = document.createElement('div');
+  section.className = 'category-section';
+  section.innerHTML = `
+    <div class="category-header">
+      <img src="${cat.icon}" alt="${cat.name}" class="category-icon">
+      <h2>${cat.name}</h2>
+    </div>
+    <div class="category-carousel"></div>
+  `;
+  const carousel = section.querySelector('.category-carousel');
+  cat.items.forEach(id => {
+    const item = menuItems[id];
+    if (!item) return;
+    const a = document.createElement('a');
+    a.className = 'menu-card';
+    a.href = `MenuItem.html?id=${id === '_100plus' ? '100plus' : id}`;
+    a.innerHTML = `
+      <img src="${item.image}" alt="${item.name}">
+      <div class="menu-card-title">${item.name}</div>
+      <div class="menu-card-price">${item.price}</div>
+    `;
+    carousel.appendChild(a);
+  });
+  menuCategoriesDiv.appendChild(section);
+});
+</script>
+<script src="../JavaScript/menu-cart-badge.js"></script>
 </body>
 </html>

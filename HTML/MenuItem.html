@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Menu Item</title>
+  <link rel="stylesheet" href="../CSS/MenuItem.css">
+</head>
+<body>
+  <button class="back-button" onclick="window.location.href='Menu.html'" aria-label="Back to menu">&#8592;</button>
+  <div class="item-detail-container">
+    <div class="item-image-wrapper">
+      <img id="item-image" src="" alt="Menu Item" />
+    </div>
+    <h1 id="item-title"></h1>
+    <div class="item-rating">
+      <span id="item-stars"></span>
+      <span id="item-rating-value"></span>
+    </div>
+    <div class="item-review-count" id="item-review-count"></div>
+    <div class="item-reviews" id="item-reviews"></div>
+    <div class="item-included">
+      <h3>What's Included</h3>
+      <div id="item-included-list"></div>
+    </div>
+  </div>
+  <div class="item-footer">
+    <span class="item-price" id="item-price"></span>
+    <div class="quantity-selector">
+      <button id="decrease-qty">-</button>
+      <span id="item-qty">1</span>
+      <button id="increase-qty">+</button>
+    </div>
+    <button class="add-to-cart" id="add-to-cart">ADD TO CART</button>
+  </div>
+  <script src="../JavaScript/menu-item.js"></script>
+</body>
+</html> 
