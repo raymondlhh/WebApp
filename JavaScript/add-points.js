@@ -1,6 +1,9 @@
 // Utility script to add points to users for testing
 // This can be run in the browser console or included in a page
 
+// Import Firebase dependencies
+import { auth, db } from './firebase-init.js';
+
 async function addPointsToUser(userId, pointsToAdd) {
   try {
     const userRef = db.collection('users').doc(userId);
@@ -41,6 +44,9 @@ async function addPointsToCurrentUser(pointsToAdd) {
 // Make functions available globally for testing
 window.addPointsToUser = addPointsToUser;
 window.addPointsToCurrentUser = addPointsToCurrentUser;
+
+// Export functions for module imports
+export { addPointsToUser, addPointsToCurrentUser };
 
 // Example usage:
 // addPointsToCurrentUser(1000); // Adds 1000 points to current user

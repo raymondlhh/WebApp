@@ -1,5 +1,8 @@
 import { getCart, getCartTotal, getCartCount, saveCart } from './cart.js';
 
+// Import add-points functionality
+import { addPointsToCurrentUser } from './add-points.js';
+
 function getUserBalance() {
   return parseFloat(localStorage.getItem('userBalance') || '0');
 }
@@ -70,10 +73,13 @@ document.getElementById('checkout-confirm-btn').onclick = async () => {
     return;
   }
   setUserBalance(balance - total);
+  
   // Award points: 10 points per RM1 spent
   let points = Math.floor(total * 10);
   let currentPoints = parseInt(localStorage.getItem('userPoints') || '0', 10);
   localStorage.setItem('userPoints', currentPoints + points);
+
+  console.log(`Checkout completed: Total: RM${total.toFixed(2)}, Points earned: ${points}`);
 
   // Add notification for order
   const notifications = JSON.parse(localStorage.getItem('notifications') || '[]');
@@ -96,29 +102,34 @@ document.getElementById('checkout-confirm-btn').onclick = async () => {
   if (typeof updateNotificationBadge === 'function') updateNotificationBadge();
   if (typeof showNotificationModal === 'function') showNotificationModal();
 
-  // Update Firestore if user is logged in
+  // Update Firestore if user is logged in using the add-points function
   if (window.firebase && firebase.auth && firebase.auth().currentUser) {
-    const user = firebase.auth().currentUser;
-    const db = firebase.firestore();
-    const userRef = db.collection('users').doc(user.uid);
     try {
-      const doc = await userRef.get();
-      const firestorePoints = (doc.exists && doc.data().rewardsPoints) ? doc.data().rewardsPoints : 0;
-      await userRef.update({ rewardsPoints: firestorePoints + points });
+      console.log('User is logged in, updating points in Firestore...');
+      // Use the add-points function to add points to the user
+      const pointsAdded = await addPointsToCurrentUser(points);
       
-      // Refresh points display immediately after updating Firestore
-      await refreshPointsDisplay();
+      if (pointsAdded) {
+        console.log(`Successfully added ${points} points to user account`);
+        // Refresh points display immediately after updating Firestore
+        await refreshPointsDisplay();
+      } else {
+        console.error('Failed to add points to user account');
+        // Still proceed with the order even if points update fails
+      }
       
       saveCart([]);
       alert('Order confirmed! Thank you for your purchase.');
       window.location.href = 'Menu.html';
     } catch (error) {
       console.error('Error updating points in Firestore:', error);
+      // Still proceed with the order even if points update fails
       saveCart([]);
       alert('Order confirmed! Thank you for your purchase.');
       window.location.href = 'Menu.html';
     }
   } else {
+    console.log('User not logged in, points will be stored locally only');
     saveCart([]);
     alert('Order confirmed! Thank you for your purchase.');
     window.location.href = 'Menu.html';

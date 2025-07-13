@@ -3,8 +3,8 @@
 
 class SignupHandler {
   constructor() {
-    this.auth = auth;
-    this.db = firebase.firestore();
+    this.auth = window.auth;
+    this.db = window.db;
     this.initializeEventListeners();
   }
 

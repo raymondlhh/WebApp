@@ -9,8 +9,20 @@ const firebaseConfig = {
   measurementId: "G-84DKBZ85HV"
 };
 
+// Initialize Firebase
 firebase.initializeApp(firebaseConfig);
+
+// Initialize Firebase services
 const auth = firebase.auth();
 const db = firebase.firestore();
+
+// Make variables globally available for other scripts (non-module usage)
+window.auth = auth;
+window.db = db;
+window.firebase = firebase;
+
+// Export for ES6 modules (module usage)
+export { auth, db };
+
 // If you need Storage, you can also initialize it here
 // const storage = firebase.storage(); 

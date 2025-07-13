@@ -3,7 +3,7 @@
 
 class LoginHandler {
   constructor() {
-    this.auth = auth;
+    this.auth = window.auth;
     this.initializeEventListeners();
     this.checkAuthState();
   }
