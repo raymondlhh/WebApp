@@ -41,6 +41,17 @@ let userRewardsPoints = 0;
 let userRedemptions = {};
 let userRedemptionDetails = []; // Store detailed redemption records
 
+// Helper function to get Firebase instances
+function getFirebaseInstances() {
+  if (!window.firebase) {
+    throw new Error('Firebase not initialized');
+  }
+  return {
+    auth: window.auth || firebase.auth(),
+    db: window.db || firebase.firestore()
+  };
+}
+
 // Initialize rewards in Firestore if they don't exist
 async function initializeRewards() {
   try {
@@ -66,7 +77,8 @@ async function initializeRewards() {
 
 // Load user data from Firestore
 async function loadUserData() {
-  const user = window.auth.currentUser;
+  const { auth } = getFirebaseInstances();
+  const user = auth.currentUser;
   if (!user) return;
   
   const userData = await getUser(user.uid);
@@ -102,6 +114,7 @@ async function loadUserData() {
 // Database service functions using Firebase CDN compat API
 async function getRewards() {
   try {
+    const { db } = getFirebaseInstances();
     const rewardsRef = db.collection('rewards');
     const snapshot = await rewardsRef.get();
     const rewards = [];
@@ -117,6 +130,7 @@ async function getRewards() {
 
 async function createReward(rewardData) {
   try {
+    const { db } = getFirebaseInstances();
     const docRef = await db.collection('rewards').add({
       name: rewardData.name,
       description: rewardData.description,
@@ -135,6 +149,7 @@ async function createReward(rewardData) {
 
 async function getUser(userId) {
   try {
+    const { db } = getFirebaseInstances();
     const userDoc = await db.collection('users').doc(userId).get();
     if (userDoc.exists) {
       return { id: userDoc.id, ...userDoc.data() };
@@ -148,6 +163,7 @@ async function getUser(userId) {
 
 async function updateUserRewardsPoints(userId, points) {
   try {
+    const { db } = getFirebaseInstances();
     const userRef = db.collection('users').doc(userId);
     const userSnap = await userRef.get();
     if (userSnap.exists) {
@@ -167,6 +183,7 @@ async function updateUserRewardsPoints(userId, points) {
 
 async function getUserRedemptions(userId) {
   try {
+    const { db } = getFirebaseInstances();
     const redemptionsRef = db.collection('userRewardRedemptions');
     const snapshot = await redemptionsRef.where('userId', '==', userId).get();
     const redemptions = [];
@@ -182,6 +199,7 @@ async function getUserRedemptions(userId) {
 
 async function redeemReward(userId, rewardId, rewardName, pointsSpent) {
   try {
+    const { db } = getFirebaseInstances();
     // Add redemption record
     await db.collection('userRewardRedemptions').add({
       userId: userId,
@@ -203,7 +221,8 @@ async function redeemReward(userId, rewardId, rewardName, pointsSpent) {
 
 // Redeem a reward
 async function handleRedeemReward(rewardId, rewardPoints, rewardName) {
-  const user = window.auth.currentUser;
+  const { auth } = getFirebaseInstances();
+  const user = auth.currentUser;
   if (!user) {
     alert('Please log in to redeem rewards.');
     return false;
@@ -401,14 +420,19 @@ function updateUserPointsDisplay() {
 }
 
 async function refreshUserPointsFromFirestore() {
-  if (!(window.firebase && firebase.auth && firebase.auth().currentUser)) return;
-  const user = firebase.auth().currentUser;
-  const db = firebase.firestore();
-  const userDoc = await db.collection('users').doc(user.uid).get();
-  if (userDoc.exists) {
-    const points = userDoc.data().rewardsPoints || 0;
-    const userPointsElement = document.getElementById('userPoints');
-    if (userPointsElement) userPointsElement.textContent = points;
+  try {
+    const { auth, db } = getFirebaseInstances();
+    const user = auth.currentUser;
+    if (!user) return;
+    
+    const userDoc = await db.collection('users').doc(user.uid).get();
+    if (userDoc.exists) {
+      const points = userDoc.data().rewardsPoints || 0;
+      const userPointsElement = document.getElementById('userPoints');
+      if (userPointsElement) userPointsElement.textContent = points;
+    }
+  } catch (error) {
+    console.error('Error refreshing user points from Firestore:', error);
   }
 }
 
@@ -429,21 +453,28 @@ window.addEventListener('storage', function(e) {
 });
 
 // Handle user authentication state changes
-window.auth.onAuthStateChanged(async (user) => {
-  if (user) {
-    console.log('User authenticated:', user.email);
-    await loadUserData();
-    
-    if (document.getElementById('rewardsGrid')) {
-      renderRewards(true);
-      setupToggle();
-    }
-    renderRewardDetail();
-  } else {
-    console.log('User not authenticated');
-    // Redirect to login if not authenticated
-    if (window.location.pathname.includes('rewards')) {
-      window.location.href = 'Login.html';
-    }
+document.addEventListener('DOMContentLoaded', () => {
+  try {
+    const { auth } = getFirebaseInstances();
+    auth.onAuthStateChanged(async (user) => {
+      if (user) {
+        console.log('User authenticated:', user.email);
+        await loadUserData();
+        
+        if (document.getElementById('rewardsGrid')) {
+          renderRewards(true);
+          setupToggle();
+        }
+        renderRewardDetail();
+      } else {
+        console.log('User not authenticated');
+        // Redirect to login if not authenticated
+        if (window.location.pathname.includes('rewards')) {
+          window.location.href = 'Login.html';
+        }
+      }
+    });
+  } catch (error) {
+    console.error('Error setting up auth state listener:', error);
   }
 }); 
