@@ -1,10 +1,25 @@
 // Assumes cart.js and add-points.js are loaded before this script
 
-function getUserBalance() {
-  return parseFloat(localStorage.getItem('userBalance') || '0');
+// Fetch the current user's balance from Firestore
+async function getUserBalance() {
+  if (window.firebase && firebase.auth && firebase.auth().currentUser) {
+    const user = firebase.auth().currentUser;
+    const userDoc = await firebase.firestore().collection('users').doc(user.uid).get();
+    if (userDoc.exists) {
+      return userDoc.data().rewardsPoints || 0;
+    }
+  }
+  return 0;
 }
-function setUserBalance(val) {
-  localStorage.setItem('userBalance', val.toFixed(2));
+
+// Deduct from the current user's balance in Firestore
+async function deductUserBalance(amount) {
+  if (window.firebase && firebase.auth && firebase.auth().currentUser) {
+    const user = firebase.auth().currentUser;
+    // Use your UserService method to update
+    return await window.UserService.updateUserRewardsPoints(user.uid, -amount);
+  }
+  return false;
 }
 
 // Global function to refresh points display from Firestore
@@ -51,11 +66,13 @@ function renderCheckout() {
     `;
     itemsDiv.appendChild(div);
   });
+  // Always fetch and display the latest balance from Firestore
+  getUserBalance().then(balance => {
+    document.getElementById('checkout-balance').textContent = 'Current Balance: RM ' + balance.toFixed(2);
+  });
   document.getElementById('checkout-total').textContent = 'RM ' + (window.getCartTotal ? window.getCartTotal() : 0).toFixed(2);
   document.getElementById('checkout-item-count').textContent = window.getCartCount ? window.getCartCount() : 0;
   document.getElementById('checkout-points').textContent = Math.floor((window.getCartTotal ? window.getCartTotal() : 0) * 10);
-  // Update balance display
-  document.getElementById('checkout-balance').textContent = 'Current Balance: RM ' + getUserBalance().toFixed(2);
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -64,13 +81,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
 document.getElementById('checkout-confirm-btn').onclick = async () => {
   const total = window.getCartTotal ? window.getCartTotal() : 0;
-  let balance = getUserBalance();
+  let balance = await getUserBalance();
   if (balance < total) {
     alert('Insufficient balance to complete this order. Please top up your balance.');
     return;
   }
-  setUserBalance(balance - total);
-  
+  // Deduct balance in Firestore
+  const success = await deductUserBalance(total);
+  if (!success) {
+    alert('Failed to deduct balance. Please try again.');
+    return;
+  }
   // Award points: 10 points per RM1 spent
   let points = Math.floor(total * 10);
   let currentPoints = parseInt(localStorage.getItem('userPoints') || '0', 10);
@@ -102,20 +123,23 @@ document.getElementById('checkout-confirm-btn').onclick = async () => {
         console.error('Failed to add points to user account');
         // Still proceed with the order even if points update fails
       }
-      
       if (window.saveCart) window.saveCart([]);
+      // Refresh balance display before redirect
+      await renderCheckout();
       alert('Order confirmed! Thank you for your purchase.');
       window.location.href = 'Menu.html';
     } catch (error) {
       console.error('Error updating points in Firestore:', error);
       // Still proceed with the order even if points update fails
       if (window.saveCart) window.saveCart([]);
+      await renderCheckout();
       alert('Order confirmed! Thank you for your purchase.');
       window.location.href = 'Menu.html';
     }
   } else {
     console.log('User not logged in, points will be stored locally only');
     if (window.saveCart) window.saveCart([]);
+    await renderCheckout();
     alert('Order confirmed! Thank you for your purchase.');
     window.location.href = 'Menu.html';
   }
