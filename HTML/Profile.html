@@ -110,8 +110,8 @@
         </div>
       </div>
       <div id="favourites-modal" class="profile-modal hidden">
-        <div class="profile-modal-content" style="max-width: 400px; background: #fff; border-radius: 24px; box-shadow: 0 4px 24px #0002; padding: 32px 24px 24px 24px; position: relative;">
-          <button class="close-modal" id="closeFavouritesModal">&times;</button>
+        <div class="profile-modal-panel">
+          <button class="close-modal" id="closeFavouritesModal" style="position:absolute;top:12px;left:12px;font-size:1.5em;background:none;border:none;cursor:pointer;z-index:2;">&times;</button>
           <h2 style="text-align:center;">FAVOURITES</h2>
           <div id="favourites-list-modal"></div>
         </div>
@@ -188,7 +188,7 @@
         return;
       }
       favouritesListModal.innerHTML = favourites.map((item, idx) => `
-        <div style="display:flex;align-items:center;justify-content:space-between;background:#8AB98F55;padding:10px 12px;margin:10px 0;border-radius:10px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;background:#8AB98F55;padding:10px 12px;margin:10px 0;border-radius:10px;cursor:pointer;" onclick="addFavouriteToCart('${encodeURIComponent(item.id)}')">
           <div style="display:flex;align-items:center;gap:10px;">
             <img src="${item.image}" alt="${item.name}" style="width:48px;height:48px;border-radius:8px;object-fit:cover;">
             <div>
@@ -196,7 +196,7 @@
               <div style="font-size:0.95em;">RM ${item.price}</div>
             </div>
           </div>
-          <button style="background:none;border:none;cursor:pointer;" onclick="removeFavourite(${idx})"><img src='../assets/images/icons/menu_sidebar/condiments.png' alt='Delete' style='width:24px;height:24px;'></button>
+          <button style="background:none;border:none;cursor:pointer;z-index:2;" onclick="event.stopPropagation();removeFavourite(${idx})"><img src='../assets/images/icons/menu/trash.png' alt='Delete' style='width:24px;height:24px;'></button>
         </div>
       `).join('');
     }
@@ -205,6 +205,28 @@
       favourites.splice(idx, 1);
       localStorage.setItem('favouriteFoods', JSON.stringify(favourites));
       renderFavouritesList();
+    }
+    window.addFavouriteToCart = function(id) {
+      // Find the item in favourites
+      const favourites = JSON.parse(localStorage.getItem('favouriteFoods') || '[]');
+      const item = favourites.find(f => encodeURIComponent(f.id) === id);
+      if (!item) return;
+      // Add to cart logic (same as MenuItem.html)
+      let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+      const existing = cart.find(i => i.id === item.id);
+      if (existing) {
+        existing.qty += 1;
+      } else {
+        cart.push({
+          id: item.id,
+          name: item.name,
+          price: item.price,
+          image: item.image,
+          qty: 1
+        });
+      }
+      localStorage.setItem('cart', JSON.stringify(cart));
+      alert('Added to cart!');
     }
     if (favouriteBtn && favouritesModal && closeFavouritesModal) {
       favouriteBtn.onclick = function() {
