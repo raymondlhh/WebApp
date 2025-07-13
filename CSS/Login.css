@@ -19,6 +19,14 @@ body {
     box-sizing: border-box;
 }
 
+.main-logo {
+    width: 200px;
+    height: auto;
+    object-fit: contain;
+    margin-bottom: 16px;
+    display: block;
+}
+
 .logo {
     width: 180px;
     height: auto;
@@ -192,6 +200,7 @@ input[type="password"]::-webkit-input-password-reveal-button {
 }
 
 @media (max-width: 430px) {
+    .main-logo { width: 160px; }
     .logo { width: 140px; }
     .subtitle { width: 160px; }
     .error-message, .input-field, .password-container, .login-button { width: 95vw; min-width: 0; }

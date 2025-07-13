@@ -8,6 +8,10 @@
     <link rel="stylesheet" href="../CSS/Profile.css">
     <link rel="stylesheet" href="../CSS/Navbar.css">
     <link rel="stylesheet" href="../CSS/Footer.css">
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
     <script src="../JavaScript/firebase-init.js"></script>
 </head>
 <body>
@@ -38,6 +42,8 @@
                 script.onload = function() {
                     if (window.initHamburgerMenu) window.initHamburgerMenu();
                     if (window.initNotificationSidebar) window.initNotificationSidebar();
+                    // Setup notification button after navbar is fully loaded
+                    setupNotificationButton();
                 };
                 document.body.appendChild(script);
             })
@@ -244,7 +250,6 @@
     </div>
     <!-- Notification script -->
     <script src="../JavaScript/Notification.js"></script>
-    <script src="../JavaScript/Smoke.js"></script>
     <script src="../JavaScript/ProfileSPA.js"></script>
     <script>
       // Modal logic
@@ -306,15 +311,21 @@
           picSelector.classList.add('hidden');
         }
       };
-      // Notification modal logic
-      const notificationBtn = document.getElementById('notificationBtn');
       
-      notificationBtn.onclick = () => {
-        // Call the notification function from Notification.html
-        if (typeof showNotificationModal === 'function') {
-          showNotificationModal();
+      // Notification modal logic - moved here to ensure navbar is loaded first
+      function setupNotificationButton() {
+        const notificationBtn = document.getElementById('notificationBtn');
+        if (notificationBtn) {
+          notificationBtn.onclick = () => {
+            // Call the notification function from Notification.html
+            if (typeof showNotificationModal === 'function') {
+              showNotificationModal();
+            }
+          };
         }
-      };
+      }
+      
+      // Setup notification button after navbar loads
     </script>
     
     <!-- Video Module - Auto Loop Player -->
