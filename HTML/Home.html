@@ -315,5 +315,112 @@
         }
       };
     </script>
+    
+    <!-- Video Module - Auto Loop Player -->
+    <section class="video-module">
+        <div class="video-container">
+            <video id="login-success-video" autoplay muted loop>
+                <source src="assets/login_success.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+            <div class="video-overlay">
+                <h3>Welcome to Our Sushi Experience</h3>
+                <p>Discover the art of traditional Japanese cuisine</p>
+            </div>
+        </div>
+    </section>
+    
+    <style>
+        .video-module {
+            width: 100%;
+            margin: 2rem 0;
+            padding: 0;
+        }
+        
+        .video-container {
+            position: relative;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        #login-success-video {
+            width: 100%;
+            height: auto;
+            display: block;
+            object-fit: cover;
+        }
+        
+        .video-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: white;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 2rem;
+            border-radius: 10px;
+            backdrop-filter: blur(5px);
+        }
+        
+        .video-overlay h3 {
+            margin: 0 0 1rem 0;
+            font-size: 2.5rem;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+        }
+        
+        .video-overlay p {
+            margin: 0;
+            font-size: 1.2rem;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+        }
+        
+        @media (max-width: 768px) {
+            .video-overlay h3 {
+                font-size: 1.8rem;
+            }
+            
+            .video-overlay p {
+                font-size: 1rem;
+            }
+            
+            .video-overlay {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+    
+    <script>
+        // Video module functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const video = document.getElementById('login-success-video');
+            
+            // Ensure video starts playing
+            video.play().catch(function(error) {
+                console.log('Video autoplay was prevented:', error);
+                // Add a play button or other fallback if needed
+            });
+            
+            // Add click to play/pause functionality
+            video.addEventListener('click', function() {
+                if (video.paused) {
+                    video.play();
+                } else {
+                    video.pause();
+                }
+            });
+            
+            // Ensure video loops properly
+            video.addEventListener('ended', function() {
+                video.currentTime = 0;
+                video.play();
+            });
+        });
+    </script>
 </body>
 </html>
