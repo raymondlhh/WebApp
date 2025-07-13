@@ -96,35 +96,77 @@ const categories = [
 ];
 
 const menuCategoriesDiv = document.querySelector('.menu-categories');
-menuCategoriesDiv.innerHTML = '';
-categories.forEach(cat => {
-  const section = document.createElement('div');
-  section.className = 'category-section';
-  section.innerHTML = `
-    <div class="category-header">
-      <img src="${cat.icon}" alt="${cat.name}" class="category-icon">
-      <h2>${cat.name}</h2>
-    </div>
-    <div class="category-carousel"></div>
-  `;
-  const carousel = section.querySelector('.category-carousel');
-  cat.items.forEach(id => {
-    const item = menuItems[id];
-    if (!item) return;
-    const a = document.createElement('a');
-    a.className = 'menu-card';
-    a.href = `MenuItem.html?id=${id === '_100plus' ? '100plus' : id}`;
-    a.innerHTML = `
-      <img src="${item.image}" alt="${item.name}">
-      <div class="menu-card-title">${item.name}</div>
-      <div class="menu-card-price">${item.price}</div>
+
+function renderMenu(filteredItemsByCategory = null) {
+  menuCategoriesDiv.innerHTML = '';
+  (filteredItemsByCategory || categories).forEach(cat => {
+    // If filtering, skip categories with no items
+    const itemIds = filteredItemsByCategory ? cat.items : cat.items;
+    const filteredIds = itemIds.filter(id => menuItems[id]);
+    if (filteredIds.length === 0) return;
+    const section = document.createElement('div');
+    section.className = 'category-section';
+    section.innerHTML = `
+      <div class="category-header">
+        <img src="${cat.icon}" alt="${cat.name}" class="category-icon">
+        <h2>${cat.name}</h2>
+      </div>
+      <div class="category-carousel"></div>
     `;
-    carousel.appendChild(a);
+    const carousel = section.querySelector('.category-carousel');
+    filteredIds.forEach(id => {
+      const item = menuItems[id];
+      if (!item) return;
+      const a = document.createElement('a');
+      a.className = 'menu-card';
+      a.href = `MenuItem.html?id=${id === '_100plus' ? '100plus' : id}`;
+      a.innerHTML = `
+        <img src="${item.image}" alt="${item.name}">
+        <div class="menu-card-title">${item.name}</div>
+        <div class="menu-card-price">${item.price}</div>
+      `;
+      carousel.appendChild(a);
+    });
+    menuCategoriesDiv.appendChild(section);
   });
-  menuCategoriesDiv.appendChild(section);
-});
+}
+
+renderMenu();
+
+const searchInput = document.querySelector('.search-input');
+if (searchInput) {
+  searchInput.addEventListener('input', function() {
+    const query = searchInput.value.trim().toLowerCase();
+    if (!query) {
+      renderMenu();
+      return;
+    }
+    // Filter items by name
+    const filteredCategories = categories.map(cat => {
+      const filteredIds = cat.items.filter(id => {
+        const item = menuItems[id];
+        return item && item.name.toLowerCase().includes(query);
+      });
+      return { ...cat, items: filteredIds };
+    }).filter(cat => cat.items.length > 0);
+    renderMenu(filteredCategories);
+  });
+}
 </script>
 <script src="../JavaScript/menu-cart-badge.js"></script>
+
+<script>
+// Synchronize branch selection with localStorage
+const branchDropdown = document.querySelector('.location-dropdown');
+if (branchDropdown) {
+  // Set dropdown value from localStorage if available
+  const savedBranch = localStorage.getItem('selectedBranch');
+  if (savedBranch) branchDropdown.value = savedBranch;
+  branchDropdown.addEventListener('change', function() {
+    localStorage.setItem('selectedBranch', branchDropdown.value);
+  });
+}
+</script>
 
 <div id="footer-container"></div>
 <script>
