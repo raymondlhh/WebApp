@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Checkout</title>
   <link rel="stylesheet" href="../CSS/Checkout.css">
+  <link rel="stylesheet" href="../CSS/Navbar.css">
+  <link rel="stylesheet" href="../CSS/Footer.css">
   <!-- Firebase CDN scripts -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
@@ -40,5 +42,18 @@
     <button class="checkout-confirm-btn" id="checkout-confirm-btn">Confirm Order</button>
   </div>
   <script type="module" src="../JavaScript/checkout-page.js"></script>
+  
+  <div id="footer-container"></div>
+  <script>
+      // Load the footer component
+      fetch('Footer.html')
+          .then(response => response.text())
+          .then(html => {
+              document.getElementById('footer-container').innerHTML = html;
+          })
+          .catch(error => {
+              console.error('Error loading footer:', error);
+          });
+  </script>
 </body>
 </html> 

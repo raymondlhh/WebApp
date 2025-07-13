@@ -1,0 +1,54 @@
+/* Footer.css - Consistent styles for the reusable Footer component */
+
+.footer {
+    width: 100%;
+    background: #b93a1c;
+    padding: 1em 0;
+    position: relative;
+    z-index: 1000;
+    box-shadow: 0 -2px 8px rgba(0,0,0,0.04);
+    margin-top: auto;
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.5em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.footer-content p {
+    color: #fff;
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin: 0;
+    text-align: center;
+    letter-spacing: 0.02em;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .footer {
+        padding: 0.8em 0;
+    }
+    
+    .footer-content {
+        padding: 0 1em;
+    }
+    
+    .footer-content p {
+        font-size: 0.85rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .footer {
+        padding: 0.6em 0;
+    }
+    
+    .footer-content p {
+        font-size: 0.8rem;
+    }
+} 

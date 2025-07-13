@@ -6,6 +6,10 @@
     <title>Rewards FAQ</title>
     <link rel="stylesheet" href="../CSS/Home.css">
     <link rel="stylesheet" href="../CSS/rewards.css">
+    <link rel="stylesheet" href="../CSS/faq.css">
+    <link rel="stylesheet" href="../CSS/Navbar.css">
+    <link rel="stylesheet" href="../CSS/Footer.css">
+    <script src="../JavaScript/firebase-init.js"></script>
 </head>
 <body>
     <header class="navbar">
@@ -43,5 +47,18 @@
             </div>
         </div>
     </main>
+    
+    <div id="footer-container"></div>
+    <script>
+        // Load the footer component
+        fetch('Footer.html')
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('footer-container').innerHTML = html;
+            })
+            .catch(error => {
+                console.error('Error loading footer:', error);
+            });
+    </script>
 </body>
 </html> 

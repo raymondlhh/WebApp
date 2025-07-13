@@ -7,6 +7,7 @@
     <title>Login</title>
     <link rel="stylesheet" href="../CSS/Login.css">
     <link rel="stylesheet" href="../CSS/Navbar.css">
+    <link rel="stylesheet" href="../CSS/Footer.css">
     <!-- Firebase CDN scripts -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
@@ -63,6 +64,25 @@
             Don't have an account? <a href="Signup.html">Sign Up</a>
         </div>
     </div>
+    <div id="footer-container"></div>
+    <script>
+        // Load the footer component
+        fetch('Footer.html')
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('footer-container').innerHTML = html;
+                // Dynamically load the JS file
+                const script = document.createElement('script');
+                script.src = '../JavaScript/footer.js';
+                script.onload = function() {
+                    if (window.initFooter) window.initFooter();
+                };
+                document.body.appendChild(script);
+            })
+            .catch(error => {
+                console.error('Error loading footer:', error);
+            });
+    </script>
 </body>
 
 </html>

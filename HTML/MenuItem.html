@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Menu Item</title>
   <link rel="stylesheet" href="../CSS/MenuItem.css">
+  <link rel="stylesheet" href="../CSS/Navbar.css">
+  <link rel="stylesheet" href="../CSS/Footer.css">
+  <script src="../JavaScript/firebase-init.js"></script>
 </head>
 <body>
   <button id="save-favourite-btn" style="position:absolute;top:16px;right:16px;background:none;border:none;cursor:pointer;z-index:10;" title="Save to Favourites">
@@ -83,6 +86,19 @@
         alert('Removed from favourites!');
       }
     };
+  </script>
+  
+  <div id="footer-container"></div>
+  <script>
+      // Load the footer component
+      fetch('Footer.html')
+          .then(response => response.text())
+          .then(html => {
+              document.getElementById('footer-container').innerHTML = html;
+          })
+          .catch(error => {
+              console.error('Error loading footer:', error);
+          });
   </script>
 </body>
 </html> 

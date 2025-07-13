@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="../CSS/Profile.css">
     <link rel="stylesheet" href="../CSS/Navbar.css">
     <link rel="stylesheet" href="../CSS/Menu.css">
+    <link rel="stylesheet" href="../CSS/Footer.css">
+    <script src="../JavaScript/firebase-init.js"></script>
 </head>
 <body>
     <div class="body-bg">
@@ -118,5 +120,18 @@ categories.forEach(cat => {
 });
 </script>
 <script src="../JavaScript/menu-cart-badge.js"></script>
+
+<div id="footer-container"></div>
+<script>
+    // Load the footer component
+    fetch('Footer.html')
+        .then(response => response.text())
+        .then(html => {
+            document.getElementById('footer-container').innerHTML = html;
+        })
+        .catch(error => {
+            console.error('Error loading footer:', error);
+        });
+</script>
 </body>
 </html>
