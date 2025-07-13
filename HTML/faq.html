@@ -6,22 +6,37 @@
     <title>Rewards FAQ</title>
     <link rel="stylesheet" href="../CSS/Home.css">
     <link rel="stylesheet" href="../CSS/rewards.css">
-    <link rel="stylesheet" href="../CSS/faq.css">
     <link rel="stylesheet" href="../CSS/Navbar.css">
     <link rel="stylesheet" href="../CSS/Footer.css">
+    <!-- Firebase CDN scripts -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <!-- Firebase initialization -->
     <script src="../JavaScript/firebase-init.js"></script>
 </head>
 <body>
-    <header class="navbar">
-        <img src="../assets/images/icons/welcome_screen/Logo.png" class="nav-logo" alt="logo">
-        <nav>
-            <a href="Home.html">Home</a>
-            <a href="#">Menu</a>
-            <a href="#">Delivery</a>
-            <a href="#">About Us</a>
-            <a href="faq.html">FAQ</a>
-        </nav>
-    </header>
+    <!-- Include the reusable navbar component -->
+    <div id="navbar-container"></div>
+    <script>
+        // Load the navbar component
+        fetch('Navbar.html')
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('navbar-container').innerHTML = html;
+                // Dynamically load the JS file
+                const script = document.createElement('script');
+                script.src = '../JavaScript/navbar.js';
+                script.onload = function() {
+                    if (window.initHamburgerMenu) window.initHamburgerMenu();
+                    if (window.initNotificationSidebar) window.initNotificationSidebar();
+                };
+                document.body.appendChild(script);
+            })
+            .catch(error => {
+                console.error('Error loading navbar:', error);
+            });
+    </script>
     <main class="faq-main">
         <h1>Rewards FAQ</h1>
         <div class="faq-list">
