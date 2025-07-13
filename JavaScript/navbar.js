@@ -42,6 +42,21 @@ function updateNotificationBadge() {
 
 window.updateNotificationBadge = updateNotificationBadge;
 
+// Helper: Mark all notifications as read for the current user
+async function markAllNotificationsAsRead() {
+    const user = firebase.auth().currentUser;
+    if (!user) return;
+    const notificationsRef = firebase.firestore()
+        .collection('users').doc(user.uid)
+        .collection('notifications');
+    const snapshot = await notificationsRef.where('isRead', '==', 0).get();
+    const batch = firebase.firestore().batch();
+    snapshot.forEach(doc => {
+        batch.update(doc.ref, { isRead: 1 });
+    });
+    await batch.commit();
+}
+
 function initNotificationSidebar() {
     const notificationBtn = document.getElementById('notificationBtn');
     const notificationSidebar = document.getElementById('notificationSidebar');
@@ -74,6 +89,19 @@ function initNotificationSidebar() {
         `).join('');
     }
 
+    // Real-time notifications listener
+    let unsubscribeNotif = null;
+    firebase.auth().onAuthStateChanged(user => {
+        if (unsubscribeNotif) unsubscribeNotif();
+        if (user) {
+            const notifRef = firebase.firestore().collection('users').doc(user.uid).collection('notifications').orderBy('date', 'desc');
+            unsubscribeNotif = notifRef.onSnapshot(async () => {
+                await renderNotifications();
+                updateNotificationBadge();
+            });
+        }
+    });
+
     async function openNotificationSidebar() {
         notificationSidebar.classList.add('open');
         notificationSidebarOverlay.style.display = 'block';
@@ -87,18 +115,28 @@ function initNotificationSidebar() {
     if (notificationBtn && notificationSidebar && closeNotificationSidebar && notificationSidebarOverlay) {
         notificationBtn.onclick = openNotificationSidebar;
         closeNotificationSidebar.onclick = closeNotificationSidebarFn;
-        notificationSidebarOverlay.onclick = closeNotificationSidebarFn;
-    }
-    if (markAllReadBtn) {
-        markAllReadBtn.onclick = async function() {
-            const user = firebase.auth().currentUser;
-            if (!user) return;
-            const notifs = await window.NotificationsService.getUserNotifications(user.uid);
-            await Promise.all(notifs.filter(n => !n.isRead).map(n => window.NotificationsService.markNotificationAsRead(n.id)));
-            await renderNotifications();
-            updateNotificationBadge();
-        };
+        // Add Mark all as read event
+        if (markAllReadBtn) {
+            markAllReadBtn.onclick = async () => {
+                await markAllNotificationsAsRead();
+                await renderNotifications();
+                updateNotificationBadge();
+            };
+        }
     }
     updateNotificationBadge();
 }
-window.initNotificationSidebar = initNotificationSidebar; 
+window.initNotificationSidebar = initNotificationSidebar;
+
+// Add style for read notifications
+document.addEventListener('DOMContentLoaded', function() {
+    const style = document.createElement('style');
+    style.textContent = `
+    .notification-read {
+        background: #f0f0f0 !important;
+        color: #aaa !important;
+        opacity: 0.7;
+    }
+    `;
+    document.head.appendChild(style);
+}); 

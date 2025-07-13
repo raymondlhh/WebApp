@@ -277,13 +277,16 @@ class UserRewardRedemptionsService {
   }
 }
 
-// Notifications Management - matches the Notifications entity schema
+// Notifications Management - per-user subcollection version
 class NotificationsService {
+  // Get all notifications for a user
   static async getUserNotifications(userId) {
     try {
-      const notificationsRef = firebase.firestore().collection('notifications');
-      const q = firebase.firestore().collection('notifications').where('userId', '==', userId).orderBy('date', 'desc');
-      const snapshot = await q.get();
+      const snapshot = await firebase.firestore()
+        .collection('users').doc(userId)
+        .collection('notifications')
+        .orderBy('date', 'desc')
+        .get();
       const notifications = [];
       snapshot.forEach(doc => {
         notifications.push({ id: doc.id, ...doc.data() });
@@ -295,15 +298,18 @@ class NotificationsService {
     }
   }
 
+  // Create a notification for a user
   static async createNotification(userId, message, title = '') {
     try {
-      await firebase.firestore().collection('notifications').add({
-        userId: userId, // INTEGER Foreign Key → Users(id)
-        date: new Date(), // DATE
-        message: message, // String
-        title: title, // String (optional)
-        isRead: 0 // INTEGER (0 = unread, 1 = read)
-      });
+      await firebase.firestore()
+        .collection('users').doc(userId)
+        .collection('notifications')
+        .add({
+          date: new Date(),
+          message: message,
+          title: title,
+          isRead: 0 // 0 = unread, 1 = read
+        });
       return true;
     } catch (error) {
       console.error('Error creating notification:', error);
@@ -311,11 +317,15 @@ class NotificationsService {
     }
   }
 
-  static async markNotificationAsRead(notificationId) {
+  // Mark a notification as read
+  static async markNotificationAsRead(userId, notificationId) {
     try {
-      await firebase.firestore().collection('notifications').doc(notificationId).update({
-        isRead: 1 // INTEGER (0 = unread, 1 = read)
-      });
+      await firebase.firestore()
+        .collection('users').doc(userId)
+        .collection('notifications').doc(notificationId)
+        .update({
+          isRead: 1
+        });
       return true;
     } catch (error) {
       console.error('Error marking notification as read:', error);
@@ -323,11 +333,14 @@ class NotificationsService {
     }
   }
 
+  // Get unread notifications count
   static async getUnreadNotificationsCount(userId) {
     try {
-      const notificationsRef = firebase.firestore().collection('notifications');
-      const q = firebase.firestore().collection('notifications').where('userId', '==', userId).where('isRead', '==', 0);
-      const snapshot = await q.get();
+      const snapshot = await firebase.firestore()
+        .collection('users').doc(userId)
+        .collection('notifications')
+        .where('isRead', '==', 0)
+        .get();
       return snapshot.size;
     } catch (error) {
       console.error('Error getting unread notifications count:', error);
