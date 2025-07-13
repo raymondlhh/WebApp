@@ -264,6 +264,10 @@ async function handleRedeemReward(rewardId, rewardPoints, rewardName) {
     }
     
     alert('Reward redeemed successfully!');
+    
+    // Redirect to main rewards page after successful redemption
+    window.location.href = 'rewards.html';
+    
     return true;
   } catch (error) {
     console.error('Error redeeming reward:', error);

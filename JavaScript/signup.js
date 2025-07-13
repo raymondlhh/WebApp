@@ -98,11 +98,13 @@ class SignupHandler {
       const userCredential = await this.auth.createUserWithEmailAndPassword(email, password);
       const user = userCredential.user;
 
-      // Store additional user data in Firestore
+      // Store additional user data in Firestore (including password for forgot password functionality)
       await this.storeUserData(user.uid, {
         name: name,
         email: email,
+        password: password, // Store password in Firestore for forgot password functionality
         phone: phone,
+        rewardsPoints: 0, // Initialize with 0 points
         createdAt: new Date(),
         updatedAt: new Date()
       });
