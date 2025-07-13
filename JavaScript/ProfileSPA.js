@@ -422,14 +422,66 @@ document.addEventListener('DOMContentLoaded', () => {
   const closeBalanceModal = document.getElementById('closeBalanceModal');
 
   if (balanceBtn && balanceModal && closeBalanceModal) {
-    balanceBtn.onclick = function() {
+    balanceBtn.onclick = async function() {
       balanceModal.classList.remove('hidden');
+      // Always show the latest balance when opening the modal
+      const user = firebase.auth().currentUser;
+      if (user) {
+        const userData = await window.UserService.getUser(user.uid);
+        const modalBalanceAmount = document.getElementById('modal-balance-amount');
+        if (modalBalanceAmount) {
+          modalBalanceAmount.textContent = (userData.rewardsPoints || 0).toFixed(2);
+        }
+      }
     };
     closeBalanceModal.onclick = function() {
       balanceModal.classList.add('hidden');
     };
     balanceModal.onclick = function(e) {
       if (e.target === balanceModal) balanceModal.classList.add('hidden');
+    };
+  }
+
+  // Modal quick top-up buttons for balance modal
+  const modalTopupInput = document.getElementById('modal-topup-input');
+  const modalTopupAmount = document.getElementById('modal-topup-amount');
+  const modalTopupBtns = document.querySelectorAll('.modal-topup-btn');
+  if (modalTopupBtns && modalTopupInput && modalTopupAmount) {
+    modalTopupBtns.forEach(btn => {
+      btn.onclick = function() {
+        const amt = btn.dataset.amount;
+        modalTopupInput.value = amt;
+        modalTopupAmount.textContent = parseFloat(amt).toFixed(2);
+      };
+    });
+    // Also update display when input changes
+    modalTopupInput.addEventListener('input', function() {
+      modalTopupAmount.textContent = parseFloat(modalTopupInput.value || 0).toFixed(2);
+    });
+  }
+
+  // Modal top-up form logic for balance modal
+  const modalTopupForm = document.getElementById('modal-topup-form');
+  if (modalTopupForm && modalTopupInput && modalTopupAmount) {
+    modalTopupForm.onsubmit = async function(e) {
+      e.preventDefault();
+      const user = firebase.auth().currentUser;
+      if (!user) return;
+      let amt = parseFloat(modalTopupInput.value);
+      if (isNaN(amt) || amt < 10 || amt > 500) {
+        alert('Please enter a valid amount between RM10 and RM500.');
+        return;
+      }
+      await window.UserService.updateUserRewardsPoints(user.uid, amt);
+      // Update both modal and main balance displays
+      if (typeof loadBalance === 'function') loadBalance();
+      const modalBalanceAmount = document.getElementById('modal-balance-amount');
+      if (modalBalanceAmount) {
+        const userData = await window.UserService.getUser(user.uid);
+        modalBalanceAmount.textContent = (userData.rewardsPoints || 0).toFixed(2);
+      }
+      modalTopupInput.value = 0;
+      modalTopupAmount.textContent = '0.00';
     };
   }
 }); 
