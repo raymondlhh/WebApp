@@ -481,6 +481,27 @@ class RealtimeService {
   }
 }
 
+// Order Management
+class OrderService {
+  /**
+   * Create a new order in the 'orders' collection.
+   * @param {Object} orderData - The order data object (see checkout-page.js for structure)
+   * @returns {Promise<string|false>} The new order's document ID, or false on error
+   */
+  static async createOrder(orderData) {
+    try {
+      const docRef = await firebase.firestore().collection('orders').add({
+        ...orderData,
+        createdAt: new Date()
+      });
+      return docRef.id;
+    } catch (error) {
+      console.error('Error creating order:', error);
+      return false;
+    }
+  }
+}
+
 // Make all services globally available
 window.UserService = UserService;
 window.RewardsService = RewardsService;
@@ -489,3 +510,4 @@ window.NotificationsService = NotificationsService;
 window.FavouritesService = FavouritesService;
 window.StorageService = StorageService;
 window.RealtimeService = RealtimeService;
+window.OrderService = OrderService;
