@@ -345,6 +345,26 @@
       alert('Top-up successful!');
       modalTopupInput.value = 0;
       modalTopupAmount.textContent = '0.00';
+      // Add notification to localStorage
+      const notifications = JSON.parse(localStorage.getItem('notifications') || '[]');
+      const now = new Date();
+      notifications.unshift({
+        title: 'Top-Up Successful',
+        message: `RM ${val.toFixed(2)} has been successfully topped-up.`,
+        date: now.toLocaleDateString(),
+        time: now.toLocaleTimeString()
+      });
+      localStorage.setItem('notifications', JSON.stringify(notifications));
+      // Update notification badge
+      if (typeof updateNotificationBadge === 'function') {
+        updateNotificationBadge();
+      }
+      // Show notification panel
+      if (typeof showNotificationModal === 'function') {
+        showNotificationModal();
+      } else {
+        alert('Top-Up notification: RM ' + val.toFixed(2) + ' has been successfully topped-up.');
+      }
     };
     // Settings Modal Logic
     const settingBtn = document.getElementById('settingBtn');

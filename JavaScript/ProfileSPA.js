@@ -344,36 +344,36 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   // Notifications logic
-  const notificationList = document.querySelector('.notification-list');
-  async function loadNotifications() {
-    if (!notificationList) return;
-    const user = firebase.auth().currentUser;
-    if (!user) return;
-    const notifications = await NotificationsService.getUserNotifications(user.uid);
-    notificationList.innerHTML = '';
-    if (notifications.length === 0) {
-      notificationList.innerHTML = '<p class="empty-msg">No notifications yet</p>';
-      return;
-    }
-    notifications.forEach(n => {
-      const div = document.createElement('div');
-      div.className = 'notification-item';
-      const date = n.date ? new Date(n.date.toDate ? n.date.toDate() : n.date) : new Date();
-      const dateStr = date.toLocaleDateString('en-GB');
-      const timeStr = date.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
-      div.innerHTML = `
-        <div class="notification-row">
-          <span class="notification-main">${n.message || 'Notification'}</span>
-          <span class="notification-date">${dateStr}</span>
-        </div>
-        <div class="notification-row">
-          <span class="notification-desc">${n.message || 'Notification message'}</span>
-          <span class="notification-time">${timeStr}</span>
-        </div>
-      `;
-      notificationList.appendChild(div);
-    });
-  }
+  // const notificationList = document.querySelector('.notification-list');
+  // async function loadNotifications() {
+  //   if (!notificationList) return;
+  //   const user = firebase.auth().currentUser;
+  //   if (!user) return;
+  //   const notifications = await NotificationsService.getUserNotifications(user.uid);
+  //   notificationList.innerHTML = '';
+  //   if (notifications.length === 0) {
+  //     notificationList.innerHTML = '<p class="empty-msg">No notifications yet</p>';
+  //     return;
+  //   }
+  //   notifications.forEach(n => {
+  //     const div = document.createElement('div');
+  //     div.className = 'notification-item';
+  //     const date = n.date ? new Date(n.date.toDate ? n.date.toDate() : n.date) : new Date();
+  //     const dateStr = date.toLocaleDateString('en-GB');
+  //     const timeStr = date.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+  //     div.innerHTML = `
+  //       <div class="notification-row">
+  //         <span class="notification-main">${n.message || 'Notification'}</span>
+  //         <span class="notification-date">${dateStr}</span>
+  //       </div>
+  //       <div class="notification-row">
+  //         <span class="notification-desc">${n.message || 'Notification message'}</span>
+  //         <span class="notification-time">${timeStr}</span>
+  //       </div>
+  //     `;
+  //     notificationList.appendChild(div);
+  //   });
+  // }
 
   // Log out
   const logoutBtn = document.querySelector('.logout-btn');

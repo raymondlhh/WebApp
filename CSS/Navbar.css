@@ -190,4 +190,11 @@
     color: #888;
     text-align: right;
     margin-top: 0.2em;
+}
+.notification-read .notification-title,
+.notification-read .notification-date {
+    color: #aaa !important;
+}
+.notification-read {
+    background: #f5f5f5 !important;
 } 

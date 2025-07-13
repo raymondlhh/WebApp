@@ -25,32 +25,32 @@ function initHamburgerMenu() {
 
 window.initHamburgerMenu = initHamburgerMenu;
 
+function updateNotificationBadge() {
+    const badge = document.getElementById('notificationBadge');
+    if (!badge) return;
+    const notifs = JSON.parse(localStorage.getItem('notifications') || '[]');
+    const unreadCount = notifs.filter(n => !n.read).length;
+    if (unreadCount > 0) {
+        badge.textContent = unreadCount > 99 ? '99+' : unreadCount;
+        badge.style.display = 'flex';
+    } else {
+        badge.style.display = 'none';
+    }
+}
+
+window.updateNotificationBadge = updateNotificationBadge;
+
 function initNotificationSidebar() {
     const notificationBtn = document.getElementById('notificationBtn');
     const notificationSidebar = document.getElementById('notificationSidebar');
     const closeNotificationSidebar = document.getElementById('closeNotificationSidebar');
     const notificationSidebarOverlay = document.getElementById('notificationSidebarOverlay');
     const notificationList = document.getElementById('notificationList');
+    const markAllReadBtn = document.getElementById('markAllReadBtn');
 
     function getNotifications() {
         let notifs = JSON.parse(localStorage.getItem('notifications') || '[]');
-        if (!notifs.length) {
-            notifs = [
-                {
-                    title: 'Order Confirmed',
-                    message: 'Your order #1234 has been placed successfully!',
-                    date: new Date().toLocaleDateString(),
-                    time: new Date().toLocaleTimeString()
-                },
-                {
-                    title: 'Points Earned',
-                    message: 'You earned 100 points for your last purchase.',
-                    date: new Date().toLocaleDateString(),
-                    time: new Date().toLocaleTimeString()
-                }
-            ];
-            localStorage.setItem('notifications', JSON.stringify(notifs));
-        }
+        // Do not auto-populate with demo data
         return notifs;
     }
 
@@ -61,9 +61,11 @@ function initNotificationSidebar() {
             return;
         }
         notificationList.innerHTML = notifs.map(n => `
-            <div class="notification-item">
-                <div class="notification-title">${n.title}</div>
-                <div class="notification-date">${n.date}</div>
+            <div class="notification-item${n.read ? ' notification-read' : ''}">
+                <div class="notification-header-row" style="display:flex;justify-content:space-between;align-items:center;">
+                    <div class="notification-title" style="font-weight:bold;text-align:left;">${n.title}</div>
+                    <div class="notification-date">${n.date}</div>
+                </div>
                 <div class="notification-message">${n.message}</div>
                 <div class="notification-time">${n.time}</div>
             </div>
@@ -74,6 +76,7 @@ function initNotificationSidebar() {
         notificationSidebar.classList.add('open');
         notificationSidebarOverlay.style.display = 'block';
         renderNotifications();
+        updateNotificationBadge();
     }
     function closeNotificationSidebarFn() {
         notificationSidebar.classList.remove('open');
@@ -84,5 +87,15 @@ function initNotificationSidebar() {
         closeNotificationSidebar.onclick = closeNotificationSidebarFn;
         notificationSidebarOverlay.onclick = closeNotificationSidebarFn;
     }
+    if (markAllReadBtn) {
+        markAllReadBtn.onclick = function() {
+            let notifs = getNotifications();
+            notifs = notifs.map(n => ({ ...n, read: true }));
+            localStorage.setItem('notifications', JSON.stringify(notifs));
+            renderNotifications();
+            updateNotificationBadge();
+        };
+    }
+    updateNotificationBadge();
 }
 window.initNotificationSidebar = initNotificationSidebar; 

@@ -2,8 +2,9 @@
 <header class="navbar">
     <div style="display: flex; align-items: center; width: 100%; justify-content: space-between;">
         <button class="hamburger" id="openSidebar" style="margin-left:0em;">&#9776;</button>
-        <button class="notification-btn" id="notificationBtn" style="background:none;border:none;cursor:pointer;margin-right:1em;">
+        <button class="notification-btn" id="notificationBtn" style="background:none;border:none;cursor:pointer;margin-right:1em;position:relative;">
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 22c1.1 0 2-.9 2-2h-4a2 2 0 0 0 2 2zm6-6V11c0-3.07-1.63-5.64-5-6.32V4a1 1 0 1 0-2 0v.68C7.63 5.36 6 7.92 6 11v5l-1.29 1.29A1 1 0 0 0 6 19h12a1 1 0 0 0 .71-1.71L18 16z" fill="#fff"/></svg>
+            <span class="notification-badge" id="notificationBadge" style="display:none;position:absolute;top:2px;right:2px;min-width:18px;height:18px;background:#d32f2f;color:#fff;font-size:0.85em;font-weight:bold;border-radius:50%;display:flex;align-items:center;justify-content:center;padding:0 4px;z-index:2;"></span>
         </button>
     </div>
 </header>
@@ -13,6 +14,9 @@
     <div class="notification-sidebar-header">
         <span class="notification-sidebar-title">Notifications</span>
         <button class="notification-close-btn" id="closeNotificationSidebar">&times;</button>
+    </div>
+    <div style="width:100%;margin-top:0.2em;margin-bottom:0.7em;text-align:center;">
+        <button class="notification-markall-btn" id="markAllReadBtn" style="background:none;border:none;color:#b93a1c;font-size:0.98em;font-weight:600;cursor:pointer;padding:0;">Mark all as read</button>
     </div>
     <div class="notification-list" id="notificationList">
         <!-- Notifications will be dynamically inserted here -->

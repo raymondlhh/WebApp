@@ -48,6 +48,27 @@ document.getElementById('checkout-confirm-btn').onclick = () => {
   let currentPoints = parseInt(localStorage.getItem('userPoints') || '0', 10);
   localStorage.setItem('userPoints', currentPoints + points);
 
+  // Add notification for order
+  const notifications = JSON.parse(localStorage.getItem('notifications') || '[]');
+  const now = new Date();
+  notifications.unshift({
+    title: 'Payment Successful',
+    message: `RM ${total.toFixed(2)} has been successfully paid`,
+    date: now.toLocaleDateString(),
+    time: now.toLocaleTimeString(),
+    read: false
+  });
+  notifications.unshift({
+    title: 'Points Earned',
+    message: `You earned ${points} points for this order`,
+    date: now.toLocaleDateString(),
+    time: now.toLocaleTimeString(),
+    read: false
+  });
+  localStorage.setItem('notifications', JSON.stringify(notifications));
+  if (typeof updateNotificationBadge === 'function') updateNotificationBadge();
+  if (typeof showNotificationModal === 'function') showNotificationModal();
+
   // Update Firestore if user is logged in
   if (window.firebase && firebase.auth && firebase.auth().currentUser) {
     const user = firebase.auth().currentUser;
