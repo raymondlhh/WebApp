@@ -381,10 +381,24 @@ async function renderRewardDetail() {
   }
 }
 
+function updateUserPointsDisplay() {
+  const userPointsElement = document.getElementById('userPoints');
+  if (userPointsElement) {
+    let points = parseInt(localStorage.getItem('userPoints') || '0', 10);
+    userPointsElement.textContent = points;
+  }
+}
+
 // Initialize rewards immediately when script loads
 document.addEventListener('DOMContentLoaded', async () => {
   console.log('Rewards script loaded, initializing...');
   await initializeRewards();
+  // Show user points from localStorage
+  updateUserPointsDisplay();
+});
+
+window.addEventListener('storage', function(e) {
+  if (e.key === 'userPoints') updateUserPointsDisplay();
 });
 
 // Handle user authentication state changes

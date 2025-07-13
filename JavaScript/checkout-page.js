@@ -43,7 +43,27 @@ document.getElementById('checkout-confirm-btn').onclick = () => {
     return;
   }
   setUserBalance(balance - total);
-  saveCart([]);
-  alert('Order confirmed! Thank you for your purchase.');
-  window.location.href = 'Menu.html';
+  // Award points: 10 points per RM1 spent
+  let points = Math.floor(total * 10);
+  let currentPoints = parseInt(localStorage.getItem('userPoints') || '0', 10);
+  localStorage.setItem('userPoints', currentPoints + points);
+
+  // Update Firestore if user is logged in
+  if (window.firebase && firebase.auth && firebase.auth().currentUser) {
+    const user = firebase.auth().currentUser;
+    const db = firebase.firestore();
+    const userRef = db.collection('users').doc(user.uid);
+    userRef.get().then(doc => {
+      const firestorePoints = (doc.exists && doc.data().rewardsPoints) ? doc.data().rewardsPoints : 0;
+      userRef.update({ rewardsPoints: firestorePoints + points }).then(() => {
+        saveCart([]);
+        alert('Order confirmed! Thank you for your purchase.');
+        window.location.href = 'Menu.html';
+      });
+    });
+  } else {
+    saveCart([]);
+    alert('Order confirmed! Thank you for your purchase.');
+    window.location.href = 'Menu.html';
+  }
 }; 
