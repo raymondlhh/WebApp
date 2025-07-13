@@ -4,44 +4,37 @@ body {
     font-family: 'Inter', sans-serif;
     background-color: #FDF3E7;
     min-height: 100vh;
-    /* 新增flex布局让内容居中 */
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    position: relative;
 }
 
 .container {
-    /* 居中容器，移除绝对定位和100vh高度 */
-    position: relative;
-    width: 337px;
-    min-height: 700px;
-    background: none;
+    min-height: 100vh;
+    width: 100vw;
     display: flex;
     flex-direction: column;
+    justify-content: center;
     align-items: center;
-    justify-content: flex-start;
-    padding-top: 10px;
-    margin-top: -60px;
     box-sizing: border-box;
 }
 
 .logo {
-    width: 337px;
+    width: 180px;
     height: auto;
-    margin: 30px auto 0 auto;
+    object-fit: contain;
+    margin-bottom: 12px;
     display: block;
 }
 
 .subtitle {
-    width: 337px;
-    margin: 0 auto 0 auto;
+    width: 220px;
+    object-fit: contain;
+    margin-bottom: 24px;
     display: block;
 }
 
 .error-message {
-    position: static;
-    width: 337px;
-    margin: 0 0 10px 0;
+    width: 320px;
+    max-width: 90vw;
     padding: 8px;
     background-color: #ffebee;
     border-radius: 8px;
@@ -49,37 +42,57 @@ body {
     font-size: 14px;
     text-align: center;
     display: none;
+    margin-bottom: 12px;
 }
 
-.input-field,
-.password-field {
-    width: 100%;
+.input-field {
+    width: 320px;
+    max-width: 90vw;
     background: white;
     border-radius: 12px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     border: none;
     padding: 16px;
     font-size: 16px;
     color: #333;
     box-sizing: border-box;
+    margin-bottom: 18px;
+    display: block;
 }
 
-.input-field::placeholder,
-.password-field::placeholder {
+.input-field::placeholder {
     color: #999;
 }
 
-.email-container,
-.password-container {
-    position: static;
-    width: 337px;
-    margin-bottom: 20px;
+.email-input {
+    top: 490px;
 }
 
 .password-container {
+    width: 320px;
+    max-width: 90vw;
+    display: flex;
+    align-items: center;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-bottom: 18px;
     position: relative;
-    margin-bottom: 30px;
-    width: 337px;
+}
+
+.password-field {
+    width: 100%;
+    background: transparent;
+    border: none;
+    padding: 16px;
+    font-size: 16px;
+    color: #333;
+    box-sizing: border-box;
+    outline: none;
+}
+
+.password-field::placeholder {
+    color: #999;
 }
 
 .password-toggle {
@@ -92,17 +105,11 @@ body {
     color: #999;
     cursor: pointer;
     font-size: 20px;
-    padding: 0;
-    height: 40px;
-    width: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
 }
 
 .login-button {
-    position: static;
-    width: 337px;
+    width: 320px;
+    max-width: 90vw;
     height: 53px;
     background: black;
     border: none;
@@ -112,12 +119,13 @@ body {
     font-weight: bold;
     font-size: 30px;
     cursor: pointer;
-    box-shadow: 0 4px 5px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 5px rgba(0,0,0,0.2);
+    margin-bottom: 18px;
+    margin-top: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 10px;
-    margin-bottom: 20px;
 }
 
 .login-button:hover {
@@ -130,18 +138,31 @@ body {
 }
 
 .forgot-password {
-    position: static;
     color: #333;
     text-decoration: underline;
     cursor: pointer;
     font-weight: 600;
-    margin-top: 10px;
-    margin-bottom: 10px;
+    margin-top: 8px;
+    margin-bottom: 0;
+    text-align: center;
+    font-size: 16px;
+}
+
+.signup-link {
+    color: #333;
+    margin-top: 8px;
+    margin-bottom: 0;
+    font-size: 16px;
     text-align: center;
 }
 
+.signup-link a {
+    color: #007bff;
+    text-decoration: none;
+}
+
 .loading {
-    display: none;
+    display: inline-block;
     width: 20px;
     height: 20px;
     border: 2px solid #ffffff;
@@ -151,18 +172,7 @@ body {
 }
 
 @keyframes spin {
-    to {
-        transform: rotate(360deg);
-    }
-}
-
-.visually-hidden {
-    position: absolute !important;
-    height: 1px;
-    width: 1px;
-    overflow: hidden;
-    clip: rect(1px, 1px, 1px, 1px);
-    white-space: nowrap;
+    to { transform: rotate(360deg); }
 }
 
 /* Hide browser built-in password reveal (eye) icon */
@@ -180,19 +190,7 @@ input[type="password"]::-webkit-input-password-reveal-button {
 }
 
 @media (max-width: 430px) {
-    .logo {
-        width: 250px;
-        height: 375px;
-    }
-
-    .subtitle {
-        width: 294px;
-    }
-
-    .error-message,
-    .email-container,
-    .password-container,
-    .login-button {
-        width: 337px;
-    }
+    .logo { width: 140px; }
+    .subtitle { width: 160px; }
+    .error-message, .input-field, .password-container, .login-button { width: 95vw; min-width: 0; }
 }
