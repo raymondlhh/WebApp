@@ -7,6 +7,33 @@ function setUserBalance(val) {
   localStorage.setItem('userBalance', val.toFixed(2));
 }
 
+// Global function to refresh points display from Firestore
+async function refreshPointsDisplay() {
+  if (window.firebase && firebase.auth && firebase.auth().currentUser) {
+    try {
+      const user = firebase.auth().currentUser;
+      const db = firebase.firestore();
+      const userDoc = await db.collection('users').doc(user.uid).get();
+      if (userDoc.exists) {
+        const points = userDoc.data().rewardsPoints || 0;
+        // Update all userPoints elements on the page
+        const userPointsElements = document.querySelectorAll('#userPoints');
+        userPointsElements.forEach(element => {
+          element.textContent = points;
+        });
+        // Also update localStorage for consistency
+        localStorage.setItem('userPoints', points.toString());
+        console.log('Points display refreshed:', points);
+      }
+    } catch (error) {
+      console.error('Error refreshing points display:', error);
+    }
+  }
+}
+
+// Make the function globally available
+window.refreshPointsDisplay = refreshPointsDisplay;
+
 function renderCheckout() {
   const cart = getCart();
   const itemsDiv = document.getElementById('checkout-items');
@@ -35,7 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
   renderCheckout();
 });
 
-document.getElementById('checkout-confirm-btn').onclick = () => {
+document.getElementById('checkout-confirm-btn').onclick = async () => {
   const total = getCartTotal();
   let balance = getUserBalance();
   if (balance < total) {
@@ -74,14 +101,23 @@ document.getElementById('checkout-confirm-btn').onclick = () => {
     const user = firebase.auth().currentUser;
     const db = firebase.firestore();
     const userRef = db.collection('users').doc(user.uid);
-    userRef.get().then(doc => {
+    try {
+      const doc = await userRef.get();
       const firestorePoints = (doc.exists && doc.data().rewardsPoints) ? doc.data().rewardsPoints : 0;
-      userRef.update({ rewardsPoints: firestorePoints + points }).then(() => {
-        saveCart([]);
-        alert('Order confirmed! Thank you for your purchase.');
-        window.location.href = 'Menu.html';
-      });
-    });
+      await userRef.update({ rewardsPoints: firestorePoints + points });
+      
+      // Refresh points display immediately after updating Firestore
+      await refreshPointsDisplay();
+      
+      saveCart([]);
+      alert('Order confirmed! Thank you for your purchase.');
+      window.location.href = 'Menu.html';
+    } catch (error) {
+      console.error('Error updating points in Firestore:', error);
+      saveCart([]);
+      alert('Order confirmed! Thank you for your purchase.');
+      window.location.href = 'Menu.html';
+    }
   } else {
     saveCart([]);
     alert('Order confirmed! Thank you for your purchase.');
