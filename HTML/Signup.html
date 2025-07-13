@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign Up</title>
     <link rel="stylesheet" href="../CSS/Signup.css">
-    <link rel="stylesheet" href="../CSS/Navbar.css">
+    <link rel="stylesheet" href="../CSS/plainHeader.css">
     <link rel="stylesheet" href="../CSS/Footer.css">
     <!-- Firebase CDN scripts -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
@@ -17,29 +17,20 @@
     <script src="../JavaScript/signup.js"></script>
 </head>
 <body>
-    <div id="navbar-container"></div>
+    <div id="plain-header-container"></div>
     <script>
-        // Load the navbar component
-        fetch('Navbar.html')
+        // Load the plain header component
+        fetch('plainHeader.html')
             .then(response => response.text())
             .then(html => {
-                document.getElementById('navbar-container').innerHTML = html;
-                // Dynamically load the JS file
-                const script = document.createElement('script');
-                script.src = '../JavaScript/navbar.js';
-                script.onload = function() {
-                    if (window.initHamburgerMenu) window.initHamburgerMenu();
-                    if (window.initNotificationSidebar) window.initNotificationSidebar();
-                };
-                document.body.appendChild(script);
+                document.getElementById('plain-header-container').innerHTML = html;
             })
             .catch(error => {
-                console.error('Error loading navbar:', error);
+                console.error('Error loading plain header:', error);
             });
     </script>
     
     <div class="container">
-        <img src="../assets/images/icons/welcome_screen/Logo.png" alt="Logo" class="logo">
         <img src="../assets/images/icons/welcome_screen/subtitle.png" alt="Subtitle" class="subtitle">
         
         <div class="error-message" id="error-msg"></div>
