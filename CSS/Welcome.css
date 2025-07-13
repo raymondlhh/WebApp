@@ -80,16 +80,6 @@ main {
 .login-btn:hover {
     background: #333;
 }
-.welcome-forgot {
-    margin-top: 7vw;
-    text-align: center;
-}
-.welcome-forgot a {
-    color: #222;
-    text-decoration: underline;
-    font-size: 1rem;
-    cursor: pointer;
-}
 @media (max-width: 600px) {
     .welcome-logo, .welcome-subtitle, .welcome-btns {
         max-width: 95vw;

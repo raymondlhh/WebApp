@@ -147,17 +147,6 @@ body {
     cursor: not-allowed;
 }
 
-.forgot-password {
-    color: #333;
-    text-decoration: underline;
-    cursor: pointer;
-    font-weight: 600;
-    margin-top: 8px;
-    margin-bottom: 0;
-    text-align: center;
-    font-size: 16px;
-}
-
 .signup-link {
     color: #333;
     margin-top: 8px;

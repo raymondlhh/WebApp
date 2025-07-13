@@ -44,7 +44,7 @@ form.onsubmit = async (e) => {
         await window.UserService.createUser(userCred.user.uid, {
           name: '',
           email: email,
-          password: password, // In production, this should be encrypted
+          password: password,
           address: '',
           phone: '',
           rewardsPoints: 0
