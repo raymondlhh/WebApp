@@ -15,26 +15,6 @@
   <script src="../JavaScript/firebase-init.js"></script>
 </head>
 <body>
-  <div id="navbar-container"></div>
-  <script>
-      // Load the navbar component
-      fetch('Navbar.html')
-          .then(response => response.text())
-          .then(html => {
-              document.getElementById('navbar-container').innerHTML = html;
-              // Dynamically load the JS file
-              const script = document.createElement('script');
-              script.src = '../JavaScript/navbar.js';
-              script.onload = function() {
-                  if (window.initHamburgerMenu) window.initHamburgerMenu();
-                  if (window.initNotificationSidebar) window.initNotificationSidebar();
-              };
-              document.body.appendChild(script);
-          })
-          .catch(error => {
-              console.error('Error loading navbar:', error);
-          });
-  </script>
   
   <main>
     <button id="save-favourite-btn" style="position:absolute;top:80px;right:16px;background:none;border:none;cursor:pointer;z-index:10;" title="Save to Favourites">
@@ -70,19 +50,36 @@
   </main>
   
   <script src="../JavaScript/menu-item.js"></script>
+  <script src="../JavaScript/menu-data.js"></script>
+  <script src="../JavaScript/Database.js"></script>
   <script>
-    // Save Favourite Button Logic
+    // Save Favourite Button Logic (Firestore version)
     const saveFavBtn = document.getElementById('save-favourite-btn');
     const heartGrey = document.getElementById('heart-grey');
     const heartRed = document.getElementById('heart-red');
-    function isCurrentInFavourites() {
-      const name = document.getElementById('item-title').textContent;
-      const image = document.getElementById('item-image').src;
-      let favourites = JSON.parse(localStorage.getItem('favouriteFoods') || '[]');
-      return favourites.some(f => f.name === name && f.image === image);
+
+    // Get itemId from URL or fallback
+    function getCurrentItemId() {
+      const params = new URLSearchParams(window.location.search);
+      let id = params.get('id');
+      if (!id) {
+        id = 'party_set_b'; // fallback to a known id
+      }
+      return id;
     }
-    function updateHeartIcon() {
-      if (isCurrentInFavourites()) {
+
+    // Check if current item is in user's Firestore favourites
+    async function isCurrentInFavourites() {
+      const user = firebase.auth().currentUser;
+      if (!user) return false;
+      const itemId = getCurrentItemId();
+      const favs = await window.FavouritesService.getUserFavourites(user.uid);
+      return favs.some(f => f.itemId === itemId);
+    }
+
+    // Update heart icon based on Firestore
+    async function updateHeartIcon() {
+      if (await isCurrentInFavourites()) {
         heartGrey.style.display = 'none';
         heartRed.style.display = 'block';
       } else {
@@ -90,30 +87,30 @@
         heartRed.style.display = 'none';
       }
     }
-    // On page load, update icon
+
+    // On page load and after auth state change, update icon
+    firebase.auth().onAuthStateChanged(updateHeartIcon);
     window.addEventListener('DOMContentLoaded', updateHeartIcon);
-    saveFavBtn.onclick = function() {
-      // Get current item details from the page
-      const id = window.location.search || Date.now(); // fallback to timestamp if no id
-      const name = document.getElementById('item-title').textContent;
-      const image = document.getElementById('item-image').src;
-      const price = document.getElementById('item-price').textContent.replace('RM','').trim();
-      if (!name || !image || !price) { alert('Food details not loaded.'); return; }
-      let favourites = JSON.parse(localStorage.getItem('favouriteFoods') || '[]');
-      const idx = favourites.findIndex(f => f.name === name && f.image === image);
-      if (idx === -1) {
-        // Not in favourites, add it
-        favourites.push({ id, name, image, price });
-        localStorage.setItem('favouriteFoods', JSON.stringify(favourites));
-        updateHeartIcon();
+
+    saveFavBtn.onclick = async function() {
+      const user = firebase.auth().currentUser;
+      if (!user) {
+        alert('Please log in to save favourites.');
+        return;
+      }
+      const itemId = getCurrentItemId();
+      const favs = await window.FavouritesService.getUserFavourites(user.uid);
+      const existing = favs.find(f => f.itemId === itemId);
+      if (!existing) {
+        // Add to Firestore
+        await window.FavouritesService.addToFavourites(user.uid, itemId);
         alert('Added to favourites!');
       } else {
-        // Already in favourites, remove it
-        favourites.splice(idx, 1);
-        localStorage.setItem('favouriteFoods', JSON.stringify(favourites));
-        updateHeartIcon();
+        // Remove from Firestore
+        await window.FavouritesService.removeFromFavourites(user.uid, itemId);
         alert('Removed from favourites!');
       }
+      updateHeartIcon();
     };
   </script>
   

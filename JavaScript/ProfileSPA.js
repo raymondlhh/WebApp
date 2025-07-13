@@ -305,7 +305,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="favourite-title">${food.name}</div>
             <div class="favourite-price">${food.price}</div>
           </div>
-          <button class="favourite-delete-btn" data-favid="${fav.id}" title="Remove">
+          <button class="favourite-delete-btn" data-itemid="${fav.itemId}" title="Remove">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M3 6h18M8 6v12a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2V6m-6 0V4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2" stroke="#e74c3c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M10 11v6M14 11v6" stroke="#e74c3c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </button>
         </div>
@@ -319,9 +319,12 @@ document.addEventListener('DOMContentLoaded', () => {
     favouritesModalList.onclick = async function(e) {
       const btn = e.target.closest('.favourite-delete-btn');
       if (btn) {
-        const favId = btn.getAttribute('data-favid');
-        await window.FavouritesService.removeFromFavourites(favId);
-        loadFavourites();
+        const itemId = btn.getAttribute('data-itemid');
+        const user = firebase.auth().currentUser;
+        if (user && itemId) {
+          await window.FavouritesService.removeFromFavourites(user.uid, itemId);
+          loadFavourites();
+        }
       }
     };
   }
