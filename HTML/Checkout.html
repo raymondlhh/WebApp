@@ -13,6 +13,8 @@
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
   <!-- Firebase initialization -->
   <script src="../JavaScript/firebase-init.js"></script>
+  <!-- Database services -->
+  <script src="../JavaScript/Database.js"></script>
   <!-- Notification scripts -->
   <script src="../JavaScript/navbar.js"></script>
   <script src="../JavaScript/Notification.js"></script>
@@ -28,7 +30,8 @@
     <h3>Payment Method</h3>
     <div class="checkout-payment-method">
       <span class="payment-icon">&#128179;</span>
-      <span id="checkout-balance">Current Balance: RM 0.00</span>
+      <span>Wallet Balance</span>
+      <span id="checkout-balance" class="checkout-balance-amount">RM 0.00</span>
     </div>
     <h3>Order Details</h3>
     <div class="checkout-order-details">
@@ -38,6 +41,9 @@
     <div class="checkout-total-row">
       <span>Total</span>
       <span id="checkout-total" class="checkout-total-amount"></span>
+    </div>
+    <div id="checkout-balance-warning" class="checkout-warning hidden">
+      <span>⚠️ Insufficient balance. Please top up your wallet.</span>
     </div>
     <button class="checkout-confirm-btn" id="checkout-confirm-btn">Confirm Order</button>
   </div>
