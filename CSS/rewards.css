@@ -1,5 +1,18 @@
 body, html {
     background: #FFF8E5;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1 0 auto;
 }
 .rewards-main, .reward-detail-main, .faq-main {
     max-width: 900px;
@@ -136,6 +149,63 @@ body, html {
     font-size: 14px;
 }
 
+/* Limit reached reward card styles */
+.reward-card.limit-reached {
+    background: #f5f5f5;
+    border: 2px solid #ccc;
+    opacity: 0.7;
+    position: relative;
+}
+
+.reward-card.limit-reached::before {
+    content: "⚠";
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: #999;
+    color: white;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.reward-card.limit-reached img {
+    filter: grayscale(100%);
+}
+
+.reward-card.limit-reached .reward-title {
+    color: #666;
+}
+
+.reward-card.limit-reached .reward-desc {
+    color: #888;
+}
+
+.reward-card.limit-reached .reward-points {
+    color: #999;
+}
+
+.reward-card.limit-reached .reward-validity {
+    color: #aaa;
+}
+
+.reward-card.limit-reached .redemption-info {
+    color: #999;
+}
+
+.reward-card .limit-reached-text {
+    color: #999;
+    font-size: 0.85em;
+    font-weight: bold;
+    margin-top: 0.3em;
+    text-align: center;
+}
+
 .reward-card .redemption-count {
     color: #8AB98F;
     font-weight: bold;
@@ -180,6 +250,40 @@ body, html {
     color: #666;
     margin-bottom: 0.5em;
 }
+
+/* FAQ Bar Styles */
+.faq-bar {
+    background: #8AB98F;
+    color: white;
+    padding: 1em;
+    text-align: center;
+    margin-top: 2em;
+    margin-bottom: 2em; /* Add bottom margin to create space from footer */
+    border-radius: 18px; /* Change to full border radius since it's not attached to main content */
+    box-shadow: 0 4px 24px #0001; /* Add shadow for better visual separation */
+}
+
+.faq-link {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1.1em;
+    transition: opacity 0.2s ease;
+}
+
+.faq-link:hover {
+    opacity: 0.8;
+}
+
+/* Remove the fixed positioning styles and adjust margins */
+.rewards-main {
+    margin-bottom: 0;
+}
+
+.reward-detail-main {
+    margin-bottom: 0;
+}
+
 .reward-detail-card {
     background: #F8F3E7;
     border-radius: 16px;
@@ -282,5 +386,16 @@ body, html {
     }
     .reward-detail-card {
         padding: 1em;
+    }
+    
+    /* Mobile FAQ Bar Styles */
+    .faq-bar {
+        border-radius: 8px; /* Change to full border radius for mobile */
+        padding: 0.8em;
+        margin-bottom: 1.5em; /* Add bottom margin for mobile */
+    }
+    
+    .faq-link {
+        font-size: 1em;
     }
 } 

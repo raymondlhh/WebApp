@@ -3,9 +3,24 @@
 
 class SignupHandler {
   constructor() {
-    this.auth = window.auth;
-    this.db = window.db;
-    this.initializeEventListeners();
+    this.auth = null;
+    this.db = null;
+    this.initializeFirebase();
+  }
+
+  initializeFirebase() {
+    // Wait for Firebase to be initialized
+    const checkFirebase = () => {
+      if (window.auth && window.db && window.firebase) {
+        this.auth = window.auth;
+        this.db = window.db;
+        this.initializeEventListeners();
+      } else {
+        // Retry after a short delay if Firebase is not yet available
+        setTimeout(checkFirebase, 100);
+      }
+    };
+    checkFirebase();
   }
 
   initializeEventListeners() {
@@ -34,6 +49,11 @@ class SignupHandler {
   }
 
   async handleSignup() {
+    if (!this.auth || !this.db) {
+      this.showError('Firebase is not initialized. Please refresh the page.');
+      return;
+    }
+
     const name = document.getElementById('name').value.trim();
     const email = document.getElementById('email').value.trim();
     const password = document.getElementById('password').value;
@@ -82,7 +102,9 @@ class SignupHandler {
       await this.storeUserData(user.uid, {
         name: name,
         email: email,
+        password: password,
         phone: phone,
+        rewardsPoints: 0, // Initialize with 0 points
         createdAt: new Date(),
         updatedAt: new Date()
       });

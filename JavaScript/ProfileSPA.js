@@ -1,4 +1,4 @@
-import { UserService, FavouritesService, NotificationsService } from './Database.js';
+// Assumes firebase-init.js and Database.js are loaded before this script
 
 document.addEventListener('DOMContentLoaded', () => {
   // Hamburger menu logic
@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
   async function loadProfile() {
     const user = firebase.auth().currentUser;
     if (!user) return;
-    const userData = await UserService.getUser(user.uid);
+    const userData = await window.UserService.getUser(user.uid);
     if (userData) {
       // Update main profile picture
       const mainProfilePic = document.querySelector('.profile-pic-container .profile-pic');
@@ -112,7 +112,7 @@ document.addEventListener('DOMContentLoaded', () => {
       e.preventDefault();
       const user = firebase.auth().currentUser;
       if (!user) return;
-      await UserService.updateUser(user.uid, {
+      await window.UserService.updateUser(user.uid, {
         name: document.getElementById('edit-name').value,
         email: document.getElementById('edit-email').value,
         phone: document.getElementById('edit-phone').value,
@@ -190,7 +190,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Update profile picture in the database
         const user = firebase.auth().currentUser;
         if (user) {
-          await UserService.updateUser(user.uid, { profilePic: img.dataset.pic });
+          await window.UserService.updateUser(user.uid, { profilePic: img.dataset.pic });
         }
       });
     });
@@ -209,7 +209,7 @@ document.addEventListener('DOMContentLoaded', () => {
       console.log('Edit Profile button clicked'); // Debug log
       const user = firebase.auth().currentUser;
       if (user) {
-        const userData = await UserService.getUser(user.uid);
+        const userData = await window.UserService.getUser(user.uid);
         document.getElementById('modal-edit-name').value = userData?.name || '';
         // document.getElementById('modal-edit-email').value = userData?.email || user.email;
         // Leave password field blank
@@ -261,7 +261,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       */
       // Update user profile fields in Firestore
-      await UserService.updateUser(user.uid, {
+      await window.UserService.updateUser(user.uid, {
         name: document.getElementById('modal-edit-name').value,
         // email: document.getElementById('modal-edit-email').value, // removed because email field is gone
         phone: document.getElementById('modal-edit-phone').value,
@@ -282,36 +282,65 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Favourites logic
-  const favList = document.getElementById('favourites-list');
+  // Favourites Modal Logic (Firestore version)
   async function loadFavourites() {
     const user = firebase.auth().currentUser;
     if (!user) return;
-    const favourites = await FavouritesService.getUserFavourites(user.uid);
-    favList.innerHTML = '';
+    const favourites = await window.FavouritesService.getUserFavourites(user.uid);
+    const favouritesModalList = document.getElementById('favourites-modal-list');
+    if (!favouritesModalList) return;
+
     if (favourites.length === 0) {
-      favList.innerHTML = '<p class="empty-msg">No favourites yet</p>';
+      favouritesModalList.innerHTML = '<p style="text-align:center;">No favourites yet</p>';
       return;
     }
-    favourites.forEach(fav => {
-      const div = document.createElement('div');
-      div.className = 'fav-item';
-      div.innerHTML = `
-        <img src="${fav.img || '../assets/images/menu/default.jpg'}" alt="${fav.title || 'Menu Item'}">
-        <div class="fav-info">
-          <div class="fav-title">${fav.title || 'Menu Item'}</div>
-          <div class="fav-price">RM ${fav.price || '0.00'}</div>
+
+    favouritesModalList.innerHTML = favourites.map(fav => {
+      if (!fav.itemId) {
+        console.error('Favourite missing itemId:', fav);
+        return '';
+      }
+      if (!window.menuItems) {
+        console.error('menuItems not loaded');
+        return '';
+      }
+      const food = window.menuItems[fav.itemId];
+      if (!food) {
+        console.error('No menu item found for itemId:', fav.itemId);
+        return '';
+      }
+      return `
+        <div class="favourite-card">
+          <img src="${food.image}" alt="${food.name}" class="favourite-img">
+          <div class="favourite-info">
+            <div class="favourite-title">${food.name}</div>
+            <div class="favourite-price">${food.price}</div>
+          </div>
+          <button class="favourite-delete-btn" data-itemid="${fav.itemId}" title="Remove">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M3 6h18M8 6v12a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2V6m-6 0V4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2" stroke="#e74c3c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M10 11v6M14 11v6" stroke="#e74c3c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
         </div>
-        <button class="fav-remove" title="Remove">🗑️</button>
       `;
-      div.querySelector('.fav-remove').onclick = async () => {
-        await FavouritesService.removeFromFavourites(fav.id);
-        loadFavourites();
-      };
-      favList.appendChild(div);
-    });
+    }).join('');
   }
 
-  // Balance logic (using rewardsPoints instead of balance)
+  // Remove favourite on trash button click
+  const favouritesModalList = document.getElementById('favourites-modal-list');
+  if (favouritesModalList) {
+    favouritesModalList.onclick = async function(e) {
+      const btn = e.target.closest('.favourite-delete-btn');
+      if (btn) {
+        const itemId = btn.getAttribute('data-itemid');
+        const user = firebase.auth().currentUser;
+        if (user && itemId) {
+          await window.FavouritesService.removeFromFavourites(user.uid, itemId);
+          loadFavourites();
+        }
+      }
+    };
+  }
+
+  // Balance logic (using balance field instead of rewardsPoints)
   const balanceAmount = document.getElementById('balance-amount');
   const topupForm = document.getElementById('topup-form');
   const topupAmount = document.getElementById('topup-amount');
@@ -319,9 +348,9 @@ document.addEventListener('DOMContentLoaded', () => {
   async function loadBalance() {
     const user = firebase.auth().currentUser;
     if (!user) return;
-    const userData = await UserService.getUser(user.uid);
-    if (userData) {
-      balanceAmount.textContent = (userData.rewardsPoints || 0).toFixed(2);
+    const balance = await window.UserService.getUserBalance(user.uid);
+    if (balanceAmount) {
+      balanceAmount.textContent = parseFloat(balance).toFixed(2);
     }
   }
   topupBtns.forEach(btn => {
@@ -338,7 +367,9 @@ document.addEventListener('DOMContentLoaded', () => {
       alert('Please enter a valid amount between RM10 and RM500.');
       return;
     }
-    await UserService.updateUserRewardsPoints(user.uid, amt);
+    await window.UserService.updateUserBalance(user.uid, amt);
+    // Add notification for top-up
+    await window.NotificationsService.createNotification(user.uid, `RM ${amt.toFixed(2)} has been successfully topped-up`, 'Top-Up Successful');
     loadBalance();
     topupAmount.value = 0;
   };
@@ -380,6 +411,148 @@ document.addEventListener('DOMContentLoaded', () => {
   if (logoutBtn) {
     logoutBtn.onclick = () => {
       firebase.auth().signOut();
+    };
+  }
+
+  // Robust async renderFavouritesModal that waits for menuItems
+  async function renderFavouritesModal() {
+    const user = firebase.auth().currentUser;
+    const favouritesModalList = document.getElementById('favourites-modal-list');
+    if (!favouritesModalList) return;
+
+    // Show loading state
+    favouritesModalList.innerHTML = '<p style="text-align:center;">Loading...</p>';
+
+    if (!user) {
+      favouritesModalList.innerHTML = '<p style="text-align:center;">Please log in to see your favourites.</p>';
+      return;
+    }
+
+    const favourites = await window.FavouritesService.getUserFavourites(user.uid);
+
+    if (!Array.isArray(favourites) || favourites.length === 0) {
+      favouritesModalList.innerHTML = '<p style="text-align:center;">No favourites yet</p>';
+      return;
+    }
+
+    favouritesModalList.innerHTML = favourites.map(fav => {
+      return `
+        <div class="favourite-card">
+          <img src="${fav.image || ''}" alt="${fav.name || ''}" class="favourite-img">
+          <div class="favourite-info">
+            <div class="favourite-title">${fav.name || fav.itemId}</div>
+            <div class="favourite-price">${fav.price || ''}</div>
+          </div>
+          <button class="favourite-delete-btn" data-itemid="${fav.itemId}" title="Remove">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M3 6h18M8 6v12a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2V6m-6 0V4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2" stroke="#e74c3c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M10 11v6M14 11v6" stroke="#e74c3c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+      `;
+    }).join('');
+  }
+
+  // Modal open logic (ensure async)
+  const favouriteBtn = document.getElementById('favouriteBtn');
+  const favouritesModal = document.getElementById('favourites-modal');
+  const closeFavouritesModal = document.getElementById('closeFavouritesModal');
+
+  if (favouriteBtn && favouritesModal && closeFavouritesModal) {
+    favouriteBtn.onclick = async function() {
+      favouritesModal.classList.remove('hidden');
+      await renderFavouritesModal();
+    };
+    closeFavouritesModal.onclick = function() {
+      favouritesModal.classList.add('hidden');
+    };
+    favouritesModal.onclick = function(e) {
+      if (e.target === favouritesModal) favouritesModal.classList.add('hidden');
+    };
+  }
+
+  // Modal logic for Settings
+  const settingBtn = document.getElementById('settingBtn');
+  const settingsModal = document.getElementById('settings-modal');
+  const closeSettingsModal = document.getElementById('closeSettingsModal');
+
+  if (settingBtn && settingsModal && closeSettingsModal) {
+    settingBtn.onclick = function() {
+      settingsModal.classList.remove('hidden');
+    };
+    closeSettingsModal.onclick = function() {
+      settingsModal.classList.add('hidden');
+    };
+    settingsModal.onclick = function(e) {
+      if (e.target === settingsModal) settingsModal.classList.add('hidden');
+    };
+  }
+
+  const balanceBtn = document.getElementById('balanceBtn');
+  const balanceModal = document.getElementById('balance-modal');
+  const closeBalanceModal = document.getElementById('closeBalanceModal');
+
+  if (balanceBtn && balanceModal && closeBalanceModal) {
+    balanceBtn.onclick = async function() {
+      balanceModal.classList.remove('hidden');
+      // Always show the latest balance when opening the modal
+      const user = firebase.auth().currentUser;
+      if (user) {
+        const balance = await window.UserService.getUserBalance(user.uid);
+        const modalBalanceAmount = document.getElementById('modal-balance-amount');
+        if (modalBalanceAmount) {
+          modalBalanceAmount.textContent = parseFloat(balance).toFixed(2);
+        }
+      }
+    };
+    closeBalanceModal.onclick = function() {
+      balanceModal.classList.add('hidden');
+    };
+    balanceModal.onclick = function(e) {
+      if (e.target === balanceModal) balanceModal.classList.add('hidden');
+    };
+  }
+
+  // Modal quick top-up buttons for balance modal
+  const modalTopupInput = document.getElementById('modal-topup-input');
+  const modalTopupAmount = document.getElementById('modal-topup-amount');
+  const modalTopupBtns = document.querySelectorAll('.modal-topup-btn');
+  if (modalTopupBtns && modalTopupInput && modalTopupAmount) {
+    modalTopupBtns.forEach(btn => {
+      btn.onclick = function() {
+        const amt = btn.dataset.amount;
+        modalTopupInput.value = amt;
+        modalTopupAmount.textContent = parseFloat(amt).toFixed(2);
+      };
+    });
+    // Also update display when input changes
+    modalTopupInput.addEventListener('input', function() {
+      modalTopupAmount.textContent = parseFloat(modalTopupInput.value || 0).toFixed(2);
+    });
+  }
+
+  // Modal top-up form logic for balance modal
+  const modalTopupForm = document.getElementById('modal-topup-form');
+  if (modalTopupForm && modalTopupInput && modalTopupAmount) {
+    modalTopupForm.onsubmit = async function(e) {
+      e.preventDefault();
+      const user = firebase.auth().currentUser;
+      if (!user) return;
+      let amt = parseFloat(modalTopupInput.value);
+      if (isNaN(amt) || amt < 10 || amt > 500) {
+        alert('Please enter a valid amount between RM10 and RM500.');
+        return;
+      }
+      await window.UserService.updateUserBalance(user.uid, amt);
+      // Add notification for top-up
+      await window.NotificationsService.createNotification(user.uid, `RM ${amt.toFixed(2)} has been successfully topped-up`, 'Top-Up Successful');
+      // Update both modal and main balance displays
+      if (typeof loadBalance === 'function') loadBalance();
+      const modalBalanceAmount = document.getElementById('modal-balance-amount');
+      if (modalBalanceAmount) {
+        const balance = await window.UserService.getUserBalance(user.uid);
+        modalBalanceAmount.textContent = parseFloat(balance).toFixed(2);
+      }
+      modalTopupInput.value = 0;
+      modalTopupAmount.textContent = '0.00';
     };
   }
 }); 

@@ -1,14 +1,17 @@
 // Firebase Authentication Module
-import { auth } from './firebase-init.js';
+// Assumes firebase-init.js is loaded before this script
 
 export class FirebaseAuth {
   constructor() {
-    this.auth = auth;
+    this.auth = window.auth;
   }
 
   async loginUser(email, password) {
     try {
-      const userCredential = await signInWithEmailAndPassword(this.auth, email, password);
+      if (!this.auth) {
+        throw new Error('Firebase not initialized');
+      }
+      const userCredential = await this.auth.signInWithEmailAndPassword(email, password);
       const user = userCredential.user;
       console.log('User logged in successfully:', user.email);
       return { success: true, user };
@@ -44,15 +47,18 @@ export class FirebaseAuth {
   }
 
   getCurrentUser() {
-    return this.auth.currentUser;
+    return this.auth ? this.auth.currentUser : null;
   }
 
   isUserLoggedIn() {
-    return this.auth.currentUser !== null;
+    return this.auth ? this.auth.currentUser !== null : false;
   }
 
   async logoutUser() {
     try {
+      if (!this.auth) {
+        throw new Error('Firebase not initialized');
+      }
       await this.auth.signOut();
       console.log('User logged out successfully');
       return { success: true };

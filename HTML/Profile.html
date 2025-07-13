@@ -13,7 +13,7 @@
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-  <script type="module" src="../JavaScript/firebase-init.js"></script>
+  <script src="../JavaScript/firebase-init.js"></script>
   <!-- Global points refresh function -->
   <script>
     // Global function to refresh points display from Firestore
@@ -42,6 +42,51 @@
     // Make the function globally available
     window.refreshPointsDisplay = refreshPointsDisplay;
   </script>
+  <style>
+    .favourite-card {
+      display: flex;
+      align-items: center;
+      background: #7bb47b;
+      border-radius: 16px;
+      padding: 12px 16px;
+      margin-bottom: 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      gap: 14px;
+    }
+    .favourite-img {
+      width: 56px;
+      height: 56px;
+      border-radius: 10px;
+      object-fit: cover;
+      background: #fff;
+    }
+    .favourite-info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .favourite-title {
+      font-weight: bold;
+      font-size: 1.1em;
+    }
+    .favourite-price {
+      font-size: 0.98em;
+      color: #222;
+      opacity: 0.85;
+    }
+    .favourite-delete-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0 4px;
+      display: flex;
+      align-items: center;
+    }
+    .favourite-delete-btn svg {
+      display: block;
+    }
+  </style>
 </head>
 <body>
   <!-- Reusable Navbar -->
@@ -138,13 +183,6 @@
           </div>
         </div>
       </div>
-      <div id="favourites-modal" class="profile-modal hidden">
-        <div class="profile-modal-panel" style="max-width:340px;width:95vw;padding:24px 14px 18px 14px;overflow-y:auto;max-height:420px;">
-          <button class="close-modal" id="closeFavouritesModal" style="position:absolute;top:12px;left:12px;font-size:1.5em;background:none;border:none;cursor:pointer;z-index:2;">&times;</button>
-          <h2 style="text-align:center;">FAVOURITES</h2>
-          <div id="favourites-list-modal"></div>
-        </div>
-      </div>
       <div id="balance-modal" class="profile-modal hidden">
         <div class="profile-modal-panel" style="max-width:340px;width:95vw;padding:24px 14px 18px 14px;overflow-y:auto;max-height:420px;">
           <button class="close-modal" id="closeBalanceModal" style="position:absolute;top:12px;left:12px;font-size:1.5em;background:none;border:none;cursor:pointer;z-index:2;">&times;</button>
@@ -190,6 +228,14 @@
           </div>
         </div>
       </div>
+      <!-- Favourites Modal -->
+      <div id="favourites-modal" class="profile-modal hidden">
+        <div class="profile-modal-panel" style="max-width:340px;width:95vw;padding:24px 14px 18px 14px;overflow-y:auto;max-height:420px;">
+          <button class="close-modal" id="closeFavouritesModal" style="position:absolute;top:12px;left:12px;font-size:1.5em;background:none;border:none;cursor:pointer;z-index:2;">&times;</button>
+          <h2 style="text-align:center;margin-top:0.5em;">FAVOURITES</h2>
+          <div id="favourites-modal-list" style="margin-top:1.5em;"></div>
+        </div>
+      </div>
       <button class="logout-btn">Log Out</button>
     </section>
     <section id="favourites-section" class="spa-section hidden">
@@ -218,197 +264,80 @@
       </form>
     </section>
   </main>
-  <script type="module" src="../JavaScript/ProfileSPA.js"></script>
+  <script src="../JavaScript/menu-data.js"></script>
+  <script src="../JavaScript/Database.js"></script>
+  <script src="../JavaScript/ProfileSPA.js"></script>
+  <!-- Old localStorage-based profile logic removed. Now handled by ProfileSPA.js and Database.js. -->
   <script>
-    // Ensure the edit profile modal shows the current profile picture
-    function updateProfilePics(newSrc) {
-      const profilePicImg = document.getElementById('profile-pic-img');
-      const modalProfilePic = document.getElementById('modal-profile-pic');
-      if (profilePicImg) profilePicImg.src = newSrc;
-      if (modalProfilePic) modalProfilePic.src = newSrc;
-    }
-    // On page load, set both images to saved profile pic
-    const savedPic = localStorage.getItem('profilePic');
-    if (savedPic) updateProfilePics(savedPic);
-    else updateProfilePics('../assets/images/others/Profile.png');
-    // Show modal and update pic when Edit Profile is clicked
-    const editProfileBtn = document.getElementById('editProfileBtn');
-    const profileEditModal = document.getElementById('profile-edit-modal');
-    if (editProfileBtn && profileEditModal) {
-      editProfileBtn.addEventListener('click', function() {
-        const savedPic = localStorage.getItem('profilePic');
-        if (savedPic) updateProfilePics(savedPic);
-        profileEditModal.classList.remove('hidden');
-      });
-    }
-    // When user selects a new profile picture in the modal
-    document.querySelectorAll('#profile-pic-panel .pic-option').forEach(img => {
-      img.onclick = () => {
-        const newPic = img.getAttribute('data-pic');
-        localStorage.setItem('profilePic', newPic);
-        updateProfilePics(newPic);
-        document.getElementById('profile-pic-panel').classList.add('hidden');
-      };
-    });
-    // Favourites Modal Logic
+    // --- Favourites Modal Logic ---
     const favouriteBtn = document.getElementById('favouriteBtn');
     const favouritesModal = document.getElementById('favourites-modal');
     const closeFavouritesModal = document.getElementById('closeFavouritesModal');
-    const favouritesListModal = document.getElementById('favourites-list-modal');
-    function renderFavouritesList() {
-      const favourites = JSON.parse(localStorage.getItem('favouriteFoods') || '[]');
-      if (favourites.length === 0) {
-        favouritesListModal.innerHTML = '<p class="empty-msg">No favourites yet</p>';
+    const favouritesModalList = document.getElementById('favourites-modal-list');
+
+    // Example food data (replace with your actual menu data source)
+    const allFoods = [
+      { id: 'party_set_b', name: 'Party Set B (74 PCS)', img: '../assets/images/foods/party_set/gunkan_set.png' },
+      { id: 'salmon_moriawase', name: 'Salmon Moriawase', img: '../assets/images/foods/moriawase_makimono_set/salmon_moriawase.png' },
+      { id: 'ebi_nigiri', name: 'Ebi Nigiri', img: '../assets/images/foods/nigiri/ebi_nigiri.png' },
+      { id: 'chicken_katsu_curry_don', name: 'Chicken Katsu Curry Don', img: '../assets/images/foods/curry_sets/chicken_katsu_curry_don.png' }
+      // Add more food items as needed
+    ];
+
+    // Get favourites from localStorage
+    function getFavourites() {
+      return JSON.parse(localStorage.getItem('favouriteFoods') || '[]');
+    }
+
+    // Save favourites to localStorage
+    function setFavourites(favs) {
+      localStorage.setItem('favouriteFoods', JSON.stringify(favs));
+    }
+
+    // Render the favourites list in the modal
+    function renderFavouritesModal() {
+      const favs = getFavourites();
+      if (allFoods.length === 0) {
+        favouritesModalList.innerHTML = '<p>No foods available.</p>';
         return;
       }
-      favouritesListModal.innerHTML = favourites.map((item, idx) => `
-        <div style="display:flex;align-items:center;justify-content:space-between;background:#8AB98F55;padding:10px 12px;margin:10px 0;border-radius:10px;cursor:pointer;" onclick="addFavouriteToCart('${encodeURIComponent(item.id)}')">
-          <div style="display:flex;align-items:center;gap:10px;">
-            <img src="${item.image}" alt="${item.name}" style="width:48px;height:48px;border-radius:8px;object-fit:cover;">
-            <div>
-              <div style="font-weight:bold;">${item.name}</div>
-              <div style="font-size:0.95em;">RM ${item.price}</div>
-            </div>
+      favouritesModalList.innerHTML = allFoods.map(food => {
+        const isFav = favs.includes(food.id);
+        return `
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+            <img src="${food.img}" alt="${food.name}" style="width:48px;height:48px;border-radius:8px;object-fit:cover;">
+            <span style="flex:1;font-weight:bold;">${food.name}</span>
+            <button class="heart-btn" data-id="${food.id}" style="background:none;border:none;font-size:1.7em;cursor:pointer;color:${isFav ? '#e74c3c' : '#bbb'};">
+              ${isFav ? '♥' : '♡'}
+            </button>
           </div>
-          <button style="background:none;border:none;cursor:pointer;z-index:2;" onclick="event.stopPropagation();removeFavourite(${idx})"><span style='font-size:1.5em;vertical-align:middle;'>🗑️</span></button>
-        </div>
-      `).join('');
+        `;
+      }).join('');
     }
-    window.removeFavourite = function(idx) {
-      const favourites = JSON.parse(localStorage.getItem('favouriteFoods') || '[]');
-      favourites.splice(idx, 1);
-      localStorage.setItem('favouriteFoods', JSON.stringify(favourites));
-      renderFavouritesList();
-    }
-    window.addFavouriteToCart = function(id) {
-      // Find the item in favourites
-      const favourites = JSON.parse(localStorage.getItem('favouriteFoods') || '[]');
-      const item = favourites.find(f => encodeURIComponent(f.id) === id);
-      if (!item) return;
-      // Add to cart logic (same as MenuItem.html)
-      let cart = JSON.parse(localStorage.getItem('cart') || '[]');
-      const existing = cart.find(i => i.id === item.id);
-      if (existing) {
-        existing.qty += 1;
-      } else {
-        cart.push({
-          id: item.id,
-          name: item.name,
-          price: item.price,
-          image: item.image,
-          qty: 1
-        });
-      }
-      localStorage.setItem('cart', JSON.stringify(cart));
-      alert('Added to cart!');
-    }
-    if (favouriteBtn && favouritesModal && closeFavouritesModal) {
-      favouriteBtn.onclick = function() {
-        renderFavouritesList();
-        favouritesModal.classList.remove('hidden');
-      };
-      closeFavouritesModal.onclick = function() {
-        favouritesModal.classList.add('hidden');
-      };
-      favouritesModal.onclick = function(e) {
-        if (e.target === favouritesModal) favouritesModal.classList.add('hidden');
-      };
-    }
-    // Balance Modal Logic
-    const balanceBtn = document.getElementById('balanceBtn');
-    const balanceModal = document.getElementById('balance-modal');
-    const closeBalanceModal = document.getElementById('closeBalanceModal');
-    const modalBalanceAmount = document.getElementById('modal-balance-amount');
-    const modalTopupForm = document.getElementById('modal-topup-form');
-    const modalTopupInput = document.getElementById('modal-topup-input');
-    const modalTopupAmount = document.getElementById('modal-topup-amount');
-    function getBalance() {
-      return parseFloat(localStorage.getItem('userBalance') || '0');
-    }
-    function setBalance(val) {
-      localStorage.setItem('userBalance', val.toFixed(2));
-    }
-    function updateBalanceDisplay() {
-      const bal = getBalance();
-      modalBalanceAmount.textContent = bal.toFixed(2);
-    }
-    if (balanceBtn && balanceModal && closeBalanceModal) {
-      balanceBtn.onclick = function() {
-        updateBalanceDisplay();
-        modalTopupInput.value = 0;
-        modalTopupAmount.textContent = '0.00';
-        balanceModal.classList.remove('hidden');
-      };
-      closeBalanceModal.onclick = function() {
-        balanceModal.classList.add('hidden');
-      };
-      balanceModal.onclick = function(e) {
-        if (e.target === balanceModal) balanceModal.classList.add('hidden');
-      };
-    }
-    // Top-up quick buttons
-    document.querySelectorAll('.modal-topup-btn').forEach(btn => {
-      btn.onclick = function(e) {
-        e.preventDefault();
-        modalTopupInput.value = btn.dataset.amount;
-        modalTopupAmount.textContent = parseFloat(btn.dataset.amount).toFixed(2);
-      };
+
+    // Show/hide modal
+    favouriteBtn.addEventListener('click', () => {
+      renderFavouritesModal();
+      favouritesModal.classList.remove('hidden');
     });
-    // Top-up input sync
-    modalTopupInput.oninput = function() {
-      let val = parseFloat(modalTopupInput.value) || 0;
-      modalTopupAmount.textContent = val.toFixed(2);
-    };
-    // Top-up form submit
-    modalTopupForm.onsubmit = function(e) {
-      e.preventDefault();
-      let val = parseFloat(modalTopupInput.value) || 0;
-      if (val < 10 || val > 500) {
-        alert('Please enter a valid top-up amount between RM10 and RM500.');
-        return;
+    closeFavouritesModal.addEventListener('click', () => {
+      favouritesModal.classList.add('hidden');
+    });
+
+    // Toggle favourite on heart button click
+    favouritesModalList.addEventListener('click', (e) => {
+      if (e.target.classList.contains('heart-btn')) {
+        const foodId = e.target.getAttribute('data-id');
+        let favs = getFavourites();
+        if (favs.includes(foodId)) {
+          favs = favs.filter(id => id !== foodId);
+        } else {
+          favs.push(foodId);
+        }
+        setFavourites(favs);
+        renderFavouritesModal();
       }
-      let bal = getBalance();
-      setBalance(bal + val);
-      updateBalanceDisplay();
-      alert('Top-up successful!');
-      modalTopupInput.value = 0;
-      modalTopupAmount.textContent = '0.00';
-      // Add notification to localStorage
-      const notifications = JSON.parse(localStorage.getItem('notifications') || '[]');
-      const now = new Date();
-      notifications.unshift({
-        title: 'Top-Up Successful',
-        message: `RM ${val.toFixed(2)} has been successfully topped-up.`,
-        date: now.toLocaleDateString(),
-        time: now.toLocaleTimeString()
-      });
-      localStorage.setItem('notifications', JSON.stringify(notifications));
-      // Update notification badge
-      if (typeof updateNotificationBadge === 'function') {
-        updateNotificationBadge();
-      }
-      // Show notification panel
-      if (typeof showNotificationModal === 'function') {
-        showNotificationModal();
-      } else {
-        alert('Top-Up notification: RM ' + val.toFixed(2) + ' has been successfully topped-up.');
-      }
-    };
-    // Settings Modal Logic
-    const settingBtn = document.getElementById('settingBtn');
-    const settingsModal = document.getElementById('settings-modal');
-    const closeSettingsModal = document.getElementById('closeSettingsModal');
-    if (settingBtn && settingsModal && closeSettingsModal) {
-      settingBtn.onclick = function() {
-        settingsModal.classList.remove('hidden');
-      };
-      closeSettingsModal.onclick = function() {
-        settingsModal.classList.add('hidden');
-      };
-      settingsModal.onclick = function(e) {
-        if (e.target === settingsModal) settingsModal.classList.add('hidden');
-      };
-    }
+    });
   </script>
 </body>
 </html>

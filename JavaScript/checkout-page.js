@@ -1,13 +1,33 @@
-import { getCart, getCartTotal, getCartCount, saveCart } from './cart.js';
+// Assumes cart.js, add-points.js, and Database.js are loaded before this script
 
-// Import add-points functionality
-import { addPointsToCurrentUser } from './add-points.js';
-
-function getUserBalance() {
-  return parseFloat(localStorage.getItem('userBalance') || '0');
+// Fetch the current user's wallet balance from Firestore
+async function getUserWalletBalance() {
+  if (window.firebase && firebase.auth && firebase.auth().currentUser) {
+    try {
+      const user = firebase.auth().currentUser;
+      const balance = await window.UserService.getUserBalance(user.uid);
+      return balance || 0;
+    } catch (error) {
+      console.error('Error getting user wallet balance:', error);
+      return 0;
+    }
+  }
+  return 0;
 }
-function setUserBalance(val) {
-  localStorage.setItem('userBalance', val.toFixed(2));
+
+// Deduct from the current user's wallet balance in Firestore
+async function deductUserWalletBalance(amount) {
+  if (window.firebase && firebase.auth && firebase.auth().currentUser) {
+    try {
+      const user = firebase.auth().currentUser;
+      // Use negative amount to deduct from balance
+      return await window.UserService.updateUserBalance(user.uid, -amount);
+    } catch (error) {
+      console.error('Error deducting user wallet balance:', error);
+      return false;
+    }
+  }
+  return false;
 }
 
 // Global function to refresh points display from Firestore
@@ -37,9 +57,35 @@ async function refreshPointsDisplay() {
 // Make the function globally available
 window.refreshPointsDisplay = refreshPointsDisplay;
 
+// Check if user has sufficient balance
+function hasSufficientBalance(balance, total) {
+  return balance >= total;
+}
+
+// Update balance warning display
+function updateBalanceWarning(balance, total) {
+  const warningElement = document.getElementById('checkout-balance-warning');
+  const confirmBtn = document.getElementById('checkout-confirm-btn');
+  
+  if (!hasSufficientBalance(balance, total)) {
+    warningElement.classList.remove('hidden');
+    confirmBtn.disabled = true;
+    confirmBtn.style.opacity = '0.5';
+    confirmBtn.style.cursor = 'not-allowed';
+  } else {
+    warningElement.classList.add('hidden');
+    confirmBtn.disabled = false;
+    confirmBtn.style.opacity = '1';
+    confirmBtn.style.cursor = 'pointer';
+  }
+}
+
 function renderCheckout() {
-  const cart = getCart();
+  const cart = window.getCart ? window.getCart() : [];
   const itemsDiv = document.getElementById('checkout-items');
+  const total = window.getCartTotal ? window.getCartTotal() : 0;
+  
+  // Clear and render cart items
   itemsDiv.innerHTML = '';
   cart.forEach(item => {
     const div = document.createElement('div');
@@ -54,84 +100,138 @@ function renderCheckout() {
     `;
     itemsDiv.appendChild(div);
   });
-  document.getElementById('checkout-total').textContent = 'RM ' + getCartTotal().toFixed(2);
-  document.getElementById('checkout-item-count').textContent = getCartCount();
-  document.getElementById('checkout-points').textContent = Math.floor(getCartTotal() * 10);
-  // Update balance display
-  document.getElementById('checkout-balance').textContent = 'Current Balance: RM ' + getUserBalance().toFixed(2);
+  
+  // Update order details
+  document.getElementById('checkout-total').textContent = 'RM ' + total.toFixed(2);
+  document.getElementById('checkout-item-count').textContent = window.getCartCount ? window.getCartCount() : 0;
+  document.getElementById('checkout-points').textContent = Math.floor(total * 10);
+  
+  // Load and display wallet balance
+  loadAndDisplayBalance(total);
 }
 
+// Load and display wallet balance with validation
+async function loadAndDisplayBalance(total) {
+  try {
+    const balance = await getUserWalletBalance();
+    const balanceElement = document.getElementById('checkout-balance');
+    
+    if (balanceElement) {
+      balanceElement.textContent = `RM ${balance.toFixed(2)}`;
+      
+      // Add visual indication for insufficient balance
+      if (balance < total) {
+        balanceElement.style.color = '#e74c3c';
+        balanceElement.style.fontWeight = 'bold';
+      } else {
+        balanceElement.style.color = '#27ae60';
+        balanceElement.style.fontWeight = 'bold';
+      }
+    }
+    
+    // Update balance warning and button state
+    updateBalanceWarning(balance, total);
+    
+  } catch (error) {
+    console.error('Error loading wallet balance:', error);
+    document.getElementById('checkout-balance').textContent = 'RM 0.00';
+    updateBalanceWarning(0, total);
+  }
+}
+
+// Initialize checkout page
 document.addEventListener('DOMContentLoaded', () => {
-  renderCheckout();
+  // Check if user is authenticated
+  firebase.auth().onAuthStateChanged(user => {
+    if (!user) {
+      // Redirect to login if not authenticated
+      window.location.href = 'Login.html';
+      return;
+    }
+    
+    // Render checkout with authenticated user
+    renderCheckout();
+  });
 });
 
+// Handle checkout confirmation
 document.getElementById('checkout-confirm-btn').onclick = async () => {
-  const total = getCartTotal();
-  let balance = getUserBalance();
-  if (balance < total) {
-    alert('Insufficient balance to complete this order. Please top up your balance.');
+  const total = window.getCartTotal ? window.getCartTotal() : 0;
+  
+  if (total <= 0) {
+    alert('Your cart is empty. Please add items before checkout.');
     return;
   }
-  setUserBalance(balance - total);
   
-  // Award points: 10 points per RM1 spent
-  let points = Math.floor(total * 10);
-  let currentPoints = parseInt(localStorage.getItem('userPoints') || '0', 10);
-  localStorage.setItem('userPoints', currentPoints + points);
-
-  console.log(`Checkout completed: Total: RM${total.toFixed(2)}, Points earned: ${points}`);
-
-  // Add notification for order
-  const notifications = JSON.parse(localStorage.getItem('notifications') || '[]');
-  const now = new Date();
-  notifications.unshift({
-    title: 'Payment Successful',
-    message: `RM ${total.toFixed(2)} has been successfully paid`,
-    date: now.toLocaleDateString(),
-    time: now.toLocaleTimeString(),
-    read: false
-  });
-  notifications.unshift({
-    title: 'Points Earned',
-    message: `You earned ${points} points for this order`,
-    date: now.toLocaleDateString(),
-    time: now.toLocaleTimeString(),
-    read: false
-  });
-  localStorage.setItem('notifications', JSON.stringify(notifications));
-  if (typeof updateNotificationBadge === 'function') updateNotificationBadge();
-  if (typeof showNotificationModal === 'function') showNotificationModal();
-
-  // Update Firestore if user is logged in using the add-points function
-  if (window.firebase && firebase.auth && firebase.auth().currentUser) {
-    try {
-      console.log('User is logged in, updating points in Firestore...');
-      // Use the add-points function to add points to the user
-      const pointsAdded = await addPointsToCurrentUser(points);
-      
-      if (pointsAdded) {
-        console.log(`Successfully added ${points} points to user account`);
-        // Refresh points display immediately after updating Firestore
-        await refreshPointsDisplay();
-      } else {
-        console.error('Failed to add points to user account');
-        // Still proceed with the order even if points update fails
-      }
-      
-      saveCart([]);
-      alert('Order confirmed! Thank you for your purchase.');
-      window.location.href = 'Menu.html';
-    } catch (error) {
-      console.error('Error updating points in Firestore:', error);
-      // Still proceed with the order even if points update fails
-      saveCart([]);
-      alert('Order confirmed! Thank you for your purchase.');
-      window.location.href = 'Menu.html';
+  // Get current balance and validate
+  const balance = await getUserWalletBalance();
+  
+  if (!hasSufficientBalance(balance, total)) {
+    alert(`Insufficient balance. You have RM ${balance.toFixed(2)} but need RM ${total.toFixed(2)}. Please top up your wallet.`);
+    return;
+  }
+  
+  // Confirm with user
+  const confirmed = confirm(`Confirm order for RM ${total.toFixed(2)}? This will deduct RM ${total.toFixed(2)} from your wallet balance.`);
+  
+  if (!confirmed) {
+    return;
+  }
+  
+  try {
+    // Deduct balance from wallet
+    const deductionSuccess = await deductUserWalletBalance(total);
+    
+    if (!deductionSuccess) {
+      alert('Failed to process payment. Please try again.');
+      return;
     }
-  } else {
-    console.log('User not logged in, points will be stored locally only');
-    saveCart([]);
-    alert('Order confirmed! Thank you for your purchase.');
+    
+    // Award points: 10 points per RM1 spent
+    const points = Math.floor(total * 10);
+    
+    // Update points in Firestore for logged-in user
+    if (window.firebase && firebase.auth && firebase.auth().currentUser) {
+      try {
+        const user = firebase.auth().currentUser;
+        await window.UserService.updateUserRewardsPoints(user.uid, points);
+        
+        // Create notifications
+        await window.NotificationsService.createNotification(
+          user.uid, 
+          `Payment of RM ${total.toFixed(2)} successful`, 
+          'Payment Successful'
+        );
+        await window.NotificationsService.createNotification(
+          user.uid, 
+          `You earned ${points} points for this order`, 
+          'Points Earned'
+        );
+        
+        // Update notification badge if function exists
+        if (typeof updateNotificationBadge === 'function') {
+          updateNotificationBadge();
+        }
+        
+        console.log(`Checkout completed: Total: RM${total.toFixed(2)}, Points earned: ${points}`);
+        
+      } catch (error) {
+        console.error('Error updating points or notifications:', error);
+        // Continue with order even if points/notifications fail
+      }
+    }
+    
+    // Clear cart
+    if (window.saveCart) {
+      window.saveCart([]);
+    }
+    
+    // Show success message and redirect
+    alert(`Order confirmed! RM ${total.toFixed(2)} has been deducted from your wallet. You earned ${points} points.`);
     window.location.href = 'Menu.html';
+    
+  } catch (error) {
+    console.error('Error during checkout:', error);
+    alert('An error occurred during checkout. Please try again.');
   }
 }; 

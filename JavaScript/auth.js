@@ -1,5 +1,4 @@
-import { auth, db } from './firebase-init.js';
-import { UserService } from './Database.js';
+// Assumes firebase-init.js is loaded before this script
 
 const form = document.getElementById('auth-form');
 const emailInput = document.getElementById('email');
@@ -33,19 +32,24 @@ form.onsubmit = async (e) => {
   const email = emailInput.value.trim();
   const password = passwordInput.value;
   try {
+    if (!window.auth) {
+      throw new Error('Firebase not initialized');
+    }
     if (isLogin) {
-      await firebase.auth().signInWithEmailAndPassword(auth, email, password);
+      await window.auth.signInWithEmailAndPassword(email, password);
     } else {
-      const userCred = await firebase.auth().createUserWithEmailAndPassword(auth, email, password);
+      const userCred = await window.auth.createUserWithEmailAndPassword(email, password);
       // Create user profile in Firestore using the new schema
-      await UserService.createUser(userCred.user.uid, {
-        name: '',
-        email: email,
-        password: password, // In production, this should be encrypted
-        address: '',
-        phone: '',
-        rewardsPoints: 0
-      });
+      if (window.UserService) {
+        await window.UserService.createUser(userCred.user.uid, {
+          name: '',
+          email: email,
+          password: password,
+          address: '',
+          phone: '',
+          rewardsPoints: 0
+        });
+      }
     }
     window.location.href = 'Home.html';
   } catch (err) {

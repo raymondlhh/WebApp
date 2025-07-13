@@ -4,6 +4,16 @@ body, html {
     height: 100%;
     font-family: 'InknutAntiqua', Arial, sans-serif;
     background: #FDF3E7;
+    min-height: 100vh;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1 0 auto;
 }
 .welcome-bg {
     min-height: 100vh;
@@ -69,16 +79,6 @@ body, html {
 }
 .login-btn:hover {
     background: #333;
-}
-.welcome-forgot {
-    margin-top: 7vw;
-    text-align: center;
-}
-.welcome-forgot a {
-    color: #222;
-    text-decoration: underline;
-    font-size: 1rem;
-    cursor: pointer;
 }
 @media (max-width: 600px) {
     .welcome-logo, .welcome-subtitle, .welcome-btns {

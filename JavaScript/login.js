@@ -3,13 +3,27 @@
 
 class LoginHandler {
   constructor() {
-    this.auth = window.auth;
-    this.initializeEventListeners();
-    this.checkAuthState();
+    this.auth = null;
+    this.initializeFirebase();
+  }
+
+  initializeFirebase() {
+    // Wait for Firebase to be initialized
+    const checkFirebase = () => {
+      if (window.auth && window.firebase) {
+        this.auth = window.auth;
+        this.initializeEventListeners();
+        this.checkAuthState();
+      } else {
+        // Retry after a short delay if Firebase is not yet available
+        setTimeout(checkFirebase, 100);
+      }
+    };
+    checkFirebase();
   }
 
   checkAuthState() {
-    if (this.auth.currentUser) {
+    if (this.auth && this.auth.currentUser) {
       window.location.href = 'Home.html';
     }
   }
@@ -37,6 +51,11 @@ class LoginHandler {
   }
 
   async handleLogin() {
+    if (!this.auth) {
+      this.showError('Firebase is not initialized. Please refresh the page.');
+      return;
+    }
+
     const email = document.getElementById('email').value.trim();
     const password = document.getElementById('password').value;
     const errorMsg = document.getElementById('error-msg');

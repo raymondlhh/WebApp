@@ -8,6 +8,13 @@
     <link rel="stylesheet" href="../CSS/Profile.css">
     <link rel="stylesheet" href="../CSS/Navbar.css">
     <link rel="stylesheet" href="../CSS/Menu.css">
+    <link rel="stylesheet" href="../CSS/Footer.css">
+    <!-- Firebase CDN scripts -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <!-- Firebase initialization -->
+    <script src="../JavaScript/firebase-init.js"></script>
 </head>
 <body>
     <div class="body-bg">
@@ -67,7 +74,7 @@ import { menuItems } from '../JavaScript/menu-data.js';
 
 const categories = [
   { key: 'party_set', name: 'Party Set', icon: '../assets/images/icons/menu_sidebar/party_set.png', items: [
-    'party_set_b', 'maki_set', 'party_set_a', 'gunkan_set', 'party_set_c', 'nigiri_set'] },
+    'party_set_a', 'party_set_b', 'party_set_c', 'maki_set', 'gunkan_set', 'nigiri_set'] },
   { key: 'appetizers', name: 'Appetizers', icon: '../assets/images/icons/menu_sidebar/appetizers.png', items: [
     'chuka_hotate', 'chuka_idako', 'chuka_kurage', 'chuka_wakame', 'mochi'] },
   { key: 'moriawase_makimono', name: 'Moriawase Makimono', icon: '../assets/images/icons/menu_sidebar/moriawase_makimono.png', items: [
@@ -118,5 +125,18 @@ categories.forEach(cat => {
 });
 </script>
 <script src="../JavaScript/menu-cart-badge.js"></script>
+
+<div id="footer-container"></div>
+<script>
+    // Load the footer component
+    fetch('Footer.html')
+        .then(response => response.text())
+        .then(html => {
+            document.getElementById('footer-container').innerHTML = html;
+        })
+        .catch(error => {
+            console.error('Error loading footer:', error);
+        });
+</script>
 </body>
 </html>

@@ -21,8 +21,5 @@ window.auth = auth;
 window.db = db;
 window.firebase = firebase;
 
-// Export for ES6 modules (module usage)
-export { auth, db };
-
 // If you need Storage, you can also initialize it here
 // const storage = firebase.storage(); 

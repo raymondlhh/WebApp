@@ -264,6 +264,10 @@ async function handleRedeemReward(rewardId, rewardPoints, rewardName) {
     }
     
     alert('Reward redeemed successfully!');
+    
+    // Redirect to main rewards page after successful redemption
+    window.location.href = 'rewards.html';
+    
     return true;
   } catch (error) {
     console.error('Error redeeming reward:', error);
@@ -278,21 +282,23 @@ async function renderRewards(showAvailable = true) {
   
   try {
     if (showAvailable) {
-      // Show available rewards (existing logic)
+      // Show all available rewards (not filtered by redemption limit)
       const rewards = await getRewards();
       grid.innerHTML = '';
       
-      let filtered = rewards.filter(r => (userRedemptions[r.id] || 0) < r.maxRedemptions);
-      
-      if (filtered.length === 0) {
+      if (rewards.length === 0) {
         grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;color:#888;">No available rewards to display.</div>`;
         return;
       }
       
-      filtered.forEach(r => {
+      rewards.forEach(r => {
         const card = document.createElement('div');
-        card.className = 'reward-card';
         const userRedemptionCount = userRedemptions[r.id] || 0;
+        const hasReachedLimit = userRedemptionCount >= r.maxRedemptions;
+        
+        // Add CSS class for grey styling when redemption limit is reached
+        card.className = hasReachedLimit ? 'reward-card limit-reached' : 'reward-card';
+        
         card.innerHTML = `
           <img src="${r.imagePath}" alt="${r.name}">
           <div class="reward-title">${r.name}</div>
@@ -300,6 +306,7 @@ async function renderRewards(showAvailable = true) {
           <div class="reward-points">${r.points} points</div>
           <div class="reward-validity">Validity: ${r.validity} months</div>
           <div class="redemption-info">Redeemed: ${userRedemptionCount}/${r.maxRedemptions}</div>
+          ${hasReachedLimit ? '<div class="limit-reached-text">Redemption limit reached</div>' : ''}
         `;
         
         card.onclick = e => {

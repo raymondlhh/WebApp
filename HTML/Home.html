@@ -7,7 +7,12 @@
     <link rel="stylesheet" href="../CSS/Home.css">
     <link rel="stylesheet" href="../CSS/Profile.css">
     <link rel="stylesheet" href="../CSS/Navbar.css">
-    <script type="module" src="../JavaScript/firebase-init.js"></script>
+    <link rel="stylesheet" href="../CSS/Footer.css">
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
+    <script src="../JavaScript/firebase-init.js"></script>
 </head>
 <body>
     <div class="body-bg">
@@ -19,19 +24,22 @@
       const leftNum = Math.floor(Math.random() * 5) + 1;
       let rightNum = leftNum;
       while(rightNum === leftNum) rightNum = Math.floor(Math.random() * 5) + 1;
-      document.querySelector('.bg-left').style.backgroundImage = `url('../assets/images/Background/${leftNum}.png')`;
+      
+      // 左侧用jpg格式的5，否则用png
+      const leftExt = leftNum === 5 ? 'jpg' : 'png';
+      document.querySelector('.bg-left').style.backgroundImage = `url('../assets/images/Background/${leftNum}.${leftExt}')`;
+      
       // 右侧用jpg格式的5，否则用png
       const rightExt = rightNum === 5 ? 'jpg' : 'png';
       document.querySelector('.bg-right').style.backgroundImage = `url('../assets/images/Background/${rightNum}.${rightExt}')`;
     </script>
+    <!-- Include the navbar -->
     <div id="navbar-container"></div>
     <script>
-        // Load the navbar component
         fetch('Navbar.html')
             .then(response => response.text())
             .then(html => {
                 document.getElementById('navbar-container').innerHTML = html;
-                // Dynamically load the JS file
                 const script = document.createElement('script');
                 script.src = '../JavaScript/navbar.js';
                 script.onload = function() {
@@ -237,7 +245,7 @@
     </div>
     <!-- Notification script -->
     <script src="../JavaScript/Notification.js"></script>
-    <script src="../JavaScript/Smoke.js"></script>
+    <script src="../JavaScript/Database.js"></script>
     <script src="../JavaScript/ProfileSPA.js"></script>
     <script>
       // Modal logic
@@ -299,15 +307,21 @@
           picSelector.classList.add('hidden');
         }
       };
-      // Notification modal logic
-      const notificationBtn = document.getElementById('notificationBtn');
       
-      notificationBtn.onclick = () => {
-        // Call the notification function from Notification.html
-        if (typeof showNotificationModal === 'function') {
-          showNotificationModal();
+      // Notification modal logic - moved here to ensure navbar is loaded first
+      function setupNotificationButton() {
+        const notificationBtn = document.getElementById('notificationBtn');
+        if (notificationBtn) {
+          notificationBtn.onclick = () => {
+            // Call the notification function from Notification.html
+            if (typeof showNotificationModal === 'function') {
+              showNotificationModal();
+            }
+          };
         }
-      };
+      }
+      
+      // Setup notification button after navbar loads
     </script>
     
     <!-- Video Module - Auto Loop Player -->
@@ -415,6 +429,19 @@
                 video.play();
             });
         });
+    </script>
+    
+    <div id="footer-container"></div>
+    <script>
+        // Load the footer component
+        fetch('Footer.html')
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('footer-container').innerHTML = html;
+            })
+            .catch(error => {
+                console.error('Error loading footer:', error);
+            });
     </script>
 </body>
 </html>

@@ -3,11 +3,20 @@ body {
   font-family: 'Inter', Arial, sans-serif;
   margin: 0;
   padding: 0;
+  min-height: 100vh;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
+
+main {
+  flex: 1 0 auto;
+}
+
 .item-detail-container {
   max-width: 420px;
-  margin: 0 auto 80px auto;
-  padding: 18px 12px 0 12px;
+  margin: 0 auto;
+  padding: 18px 12px 100px 12px; /* Increased bottom padding for item-footer */
 }
 .item-image-wrapper {
   display: flex;
@@ -90,7 +99,7 @@ body {
   position: fixed;
   left: 0;
   right: 0;
-  bottom: 0;
+  bottom: 60px; /* Adjust to leave space for footer */
   background: #fff8e1;
   box-shadow: 0 -2px 8px rgba(0,0,0,0.06);
   display: flex;
@@ -150,7 +159,7 @@ body {
 }
 .back-button {
   position: fixed;
-  top: 18px;
+  top: 80px; /* Adjust for navbar height */
   left: 16px;
   z-index: 200;
   background: #fff;
