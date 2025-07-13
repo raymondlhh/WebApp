@@ -109,6 +109,13 @@
           </div>
         </div>
       </div>
+      <div id="favourites-modal" class="profile-modal hidden">
+        <div class="profile-modal-content" style="max-width: 400px; background: #fff; border-radius: 24px; box-shadow: 0 4px 24px #0002; padding: 32px 24px 24px 24px; position: relative;">
+          <button class="close-modal" id="closeFavouritesModal">&times;</button>
+          <h2 style="text-align:center;">FAVOURITES</h2>
+          <div id="favourites-list-modal"></div>
+        </div>
+      </div>
       <button class="logout-btn">Log Out</button>
     </section>
     <section id="favourites-section" class="spa-section hidden">
@@ -140,24 +147,77 @@
   <script type="module" src="../JavaScript/ProfileSPA.js"></script>
   <script>
     // Ensure the edit profile modal shows the current profile picture
-    function updateModalProfilePic() {
+    function updateProfilePics(newSrc) {
+      const profilePicImg = document.getElementById('profile-pic-img');
       const modalProfilePic = document.getElementById('modal-profile-pic');
-      const savedPic = localStorage.getItem('profilePic');
-      if (modalProfilePic && savedPic) {
-        modalProfilePic.src = savedPic;
-      }
+      if (profilePicImg) profilePicImg.src = newSrc;
+      if (modalProfilePic) modalProfilePic.src = newSrc;
     }
+    // On page load, set both images to saved profile pic
+    const savedPic = localStorage.getItem('profilePic');
+    if (savedPic) updateProfilePics(savedPic);
+    else updateProfilePics('../assets/images/others/Profile.png');
     // Show modal and update pic when Edit Profile is clicked
     const editProfileBtn = document.getElementById('editProfileBtn');
     const profileEditModal = document.getElementById('profile-edit-modal');
     if (editProfileBtn && profileEditModal) {
       editProfileBtn.addEventListener('click', function() {
-        updateModalProfilePic();
+        const savedPic = localStorage.getItem('profilePic');
+        if (savedPic) updateProfilePics(savedPic);
         profileEditModal.classList.remove('hidden');
       });
     }
-    // Also update when modal is opened by other means (optional)
-    // You can call updateModalProfilePic() wherever the modal is shown
+    // When user selects a new profile picture in the modal
+    document.querySelectorAll('#profile-pic-panel .pic-option').forEach(img => {
+      img.onclick = () => {
+        const newPic = img.getAttribute('data-pic');
+        localStorage.setItem('profilePic', newPic);
+        updateProfilePics(newPic);
+        document.getElementById('profile-pic-panel').classList.add('hidden');
+      };
+    });
+    // Favourites Modal Logic
+    const favouriteBtn = document.getElementById('favouriteBtn');
+    const favouritesModal = document.getElementById('favourites-modal');
+    const closeFavouritesModal = document.getElementById('closeFavouritesModal');
+    const favouritesListModal = document.getElementById('favourites-list-modal');
+    function renderFavouritesList() {
+      const favourites = JSON.parse(localStorage.getItem('favouriteFoods') || '[]');
+      if (favourites.length === 0) {
+        favouritesListModal.innerHTML = '<p class="empty-msg">No favourites yet</p>';
+        return;
+      }
+      favouritesListModal.innerHTML = favourites.map((item, idx) => `
+        <div style="display:flex;align-items:center;justify-content:space-between;background:#8AB98F55;padding:10px 12px;margin:10px 0;border-radius:10px;">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <img src="${item.image}" alt="${item.name}" style="width:48px;height:48px;border-radius:8px;object-fit:cover;">
+            <div>
+              <div style="font-weight:bold;">${item.name}</div>
+              <div style="font-size:0.95em;">RM ${item.price}</div>
+            </div>
+          </div>
+          <button style="background:none;border:none;cursor:pointer;" onclick="removeFavourite(${idx})"><img src='../assets/images/icons/menu_sidebar/condiments.png' alt='Delete' style='width:24px;height:24px;'></button>
+        </div>
+      `).join('');
+    }
+    window.removeFavourite = function(idx) {
+      const favourites = JSON.parse(localStorage.getItem('favouriteFoods') || '[]');
+      favourites.splice(idx, 1);
+      localStorage.setItem('favouriteFoods', JSON.stringify(favourites));
+      renderFavouritesList();
+    }
+    if (favouriteBtn && favouritesModal && closeFavouritesModal) {
+      favouriteBtn.onclick = function() {
+        renderFavouritesList();
+        favouritesModal.classList.remove('hidden');
+      };
+      closeFavouritesModal.onclick = function() {
+        favouritesModal.classList.add('hidden');
+      };
+      favouritesModal.onclick = function(e) {
+        if (e.target === favouritesModal) favouritesModal.classList.add('hidden');
+      };
+    }
   </script>
 </body>
 </html>
