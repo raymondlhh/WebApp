@@ -236,8 +236,13 @@ async function handleRedeemReward(rewardId, rewardPoints, rewardName) {
       userPointsElement.textContent = userRewardsPoints;
     }
     
-    // Refresh redemption details
+    // Refresh redemption details and points from Firestore
     await loadUserData();
+    
+    // Also refresh points display using global function if available
+    if (typeof window.refreshPointsDisplay === 'function') {
+      await window.refreshPointsDisplay();
+    }
     
     alert('Reward redeemed successfully!');
     return true;
@@ -381,10 +386,46 @@ async function renderRewardDetail() {
   }
 }
 
+function updateUserPointsDisplay() {
+  // This function now uses the global refresh function instead of localStorage
+  if (typeof window.refreshPointsDisplay === 'function') {
+    window.refreshPointsDisplay();
+  } else {
+    // Fallback to localStorage if global function not available
+    const userPointsElement = document.getElementById('userPoints');
+    if (userPointsElement) {
+      let points = parseInt(localStorage.getItem('userPoints') || '0', 10);
+      userPointsElement.textContent = points;
+    }
+  }
+}
+
+async function refreshUserPointsFromFirestore() {
+  if (!(window.firebase && firebase.auth && firebase.auth().currentUser)) return;
+  const user = firebase.auth().currentUser;
+  const db = firebase.firestore();
+  const userDoc = await db.collection('users').doc(user.uid).get();
+  if (userDoc.exists) {
+    const points = userDoc.data().rewardsPoints || 0;
+    const userPointsElement = document.getElementById('userPoints');
+    if (userPointsElement) userPointsElement.textContent = points;
+  }
+}
+
 // Initialize rewards immediately when script loads
 document.addEventListener('DOMContentLoaded', async () => {
   console.log('Rewards script loaded, initializing...');
   await initializeRewards();
+  // Always fetch latest points from Firestore instead of localStorage
+  if (typeof window.refreshPointsDisplay === 'function') {
+    await window.refreshPointsDisplay();
+  } else {
+    await refreshUserPointsFromFirestore();
+  }
+});
+
+window.addEventListener('storage', function(e) {
+  if (e.key === 'userPoints') updateUserPointsDisplay();
 });
 
 // Handle user authentication state changes

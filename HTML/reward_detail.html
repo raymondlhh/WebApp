@@ -14,6 +14,34 @@
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
     <!-- Firebase initialization -->
     <script src="../JavaScript/firebase-init.js"></script>
+    <!-- Global points refresh function -->
+    <script>
+        // Global function to refresh points display from Firestore
+        async function refreshPointsDisplay() {
+            if (window.firebase && firebase.auth && firebase.auth().currentUser) {
+                try {
+                    const user = firebase.auth().currentUser;
+                    const db = firebase.firestore();
+                    const userDoc = await db.collection('users').doc(user.uid).get();
+                    if (userDoc.exists) {
+                        const points = userDoc.data().rewardsPoints || 0;
+                        // Update all userPoints elements on the page
+                        const userPointsElements = document.querySelectorAll('#userPoints');
+                        userPointsElements.forEach(element => {
+                            element.textContent = points;
+                        });
+                        // Also update localStorage for consistency
+                        localStorage.setItem('userPoints', points.toString());
+                        console.log('Points display refreshed:', points);
+                    }
+                } catch (error) {
+                    console.error('Error refreshing points display:', error);
+                }
+            }
+        }
+        // Make the function globally available
+        window.refreshPointsDisplay = refreshPointsDisplay;
+    </script>
     <!-- Rewards logic -->
     <script src="../JavaScript/rewards.js"></script>
 </head>
@@ -33,6 +61,7 @@
                 script.src = '../JavaScript/navbar.js';
                 script.onload = function() {
                     if (window.initHamburgerMenu) window.initHamburgerMenu();
+                    if (window.initNotificationSidebar) window.initNotificationSidebar();
                 };
                 document.body.appendChild(script);
             })

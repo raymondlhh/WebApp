@@ -14,6 +14,34 @@
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
   <script type="module" src="../JavaScript/firebase-init.js"></script>
+  <!-- Global points refresh function -->
+  <script>
+    // Global function to refresh points display from Firestore
+    async function refreshPointsDisplay() {
+      if (window.firebase && firebase.auth && firebase.auth().currentUser) {
+        try {
+          const user = firebase.auth().currentUser;
+          const db = firebase.firestore();
+          const userDoc = await db.collection('users').doc(user.uid).get();
+          if (userDoc.exists) {
+            const points = userDoc.data().rewardsPoints || 0;
+            // Update all userPoints elements on the page
+            const userPointsElements = document.querySelectorAll('#userPoints');
+            userPointsElements.forEach(element => {
+              element.textContent = points;
+            });
+            // Also update localStorage for consistency
+            localStorage.setItem('userPoints', points.toString());
+            console.log('Points display refreshed:', points);
+          }
+        } catch (error) {
+          console.error('Error refreshing points display:', error);
+        }
+      }
+    }
+    // Make the function globally available
+    window.refreshPointsDisplay = refreshPointsDisplay;
+  </script>
 </head>
 <body>
   <!-- Reusable Navbar -->
@@ -27,6 +55,7 @@
         script.src = '../JavaScript/navbar.js';
         script.onload = function() {
           if (window.initHamburgerMenu) window.initHamburgerMenu();
+          if (window.initNotificationSidebar) window.initNotificationSidebar();
         };
         document.body.appendChild(script);
       })
@@ -109,6 +138,58 @@
           </div>
         </div>
       </div>
+      <div id="favourites-modal" class="profile-modal hidden">
+        <div class="profile-modal-panel" style="max-width:340px;width:95vw;padding:24px 14px 18px 14px;overflow-y:auto;max-height:420px;">
+          <button class="close-modal" id="closeFavouritesModal" style="position:absolute;top:12px;left:12px;font-size:1.5em;background:none;border:none;cursor:pointer;z-index:2;">&times;</button>
+          <h2 style="text-align:center;">FAVOURITES</h2>
+          <div id="favourites-list-modal"></div>
+        </div>
+      </div>
+      <div id="balance-modal" class="profile-modal hidden">
+        <div class="profile-modal-panel" style="max-width:340px;width:95vw;padding:24px 14px 18px 14px;overflow-y:auto;max-height:420px;">
+          <button class="close-modal" id="closeBalanceModal" style="position:absolute;top:12px;left:12px;font-size:1.5em;background:none;border:none;cursor:pointer;z-index:2;">&times;</button>
+          <h2 style="text-align:center;margin-top:0.5em;">BALANCE</h2>
+          <div style="text-align:center;margin:1.5em 0 1em 0;">
+            <span style="font-size:1.2em;vertical-align:middle;">RM</span>
+            <span id="modal-balance-amount" style="font-size:3em;font-weight:bold;vertical-align:middle;">0.00</span>
+          </div>
+          <form id="modal-topup-form" style="margin:0 0 1em 0;">
+            <label style="font-weight:bold;display:block;margin-bottom:0.5em;">Enter your top-up amount* (RM)</label>
+            <div style="font-size:1.1em;font-weight:bold;margin-bottom:0.3em;">RM<span id="modal-topup-amount">0.00</span></div>
+            <input type="number" id="modal-topup-input" min="10" max="500" step="10" value="0" style="max-width:320px;width:100%;display:block;margin:0 auto 0.5em auto;padding:0.5em 0.7em;border-radius:8px;border:1px solid #ccc;font-size:1.1em;">
+            <div style="font-size:0.9em;color:#888;margin-bottom:0.5em;">*Whole amount between RM10 and RM500</div>
+            <div style="display:flex;gap:0.5em;flex-wrap:wrap;justify-content:center;margin-bottom:1em;">
+              <button type="button" class="modal-topup-btn" data-amount="10">10</button>
+              <button type="button" class="modal-topup-btn" data-amount="50">50</button>
+              <button type="button" class="modal-topup-btn" data-amount="100">100</button>
+              <button type="button" class="modal-topup-btn" data-amount="200">200</button>
+              <button type="button" class="modal-topup-btn" data-amount="350">350</button>
+              <button type="button" class="modal-topup-btn" data-amount="500">500</button>
+            </div>
+            <button type="submit" style="width:100%;background:#b94a2c;color:#fff;border:none;border-radius:10px;padding:0.8em 0;font-size:1.2em;font-weight:bold;cursor:pointer;">Top Up</button>
+          </form>
+        </div>
+      </div>
+      <div id="settings-modal" class="profile-modal hidden">
+        <div class="profile-modal-panel" style="max-width:340px;width:95vw;padding:24px 14px 18px 14px;overflow-y:auto;max-height:420px;">
+          <button class="close-modal" id="closeSettingsModal" style="position:absolute;top:12px;left:12px;font-size:1.5em;background:none;border:none;cursor:pointer;z-index:2;">&times;</button>
+          <h2 style="text-align:center;margin-top:0.5em;">HELP CENTRE</h2>
+          <div style="margin-top:2em;font-size:1em;line-height:1.7;color:#222;">
+            <span style='font-weight:bold'>Q1: How do I place an order?</span><br>
+            A: Browse the menu, tap your desired items, and proceed to checkout from the cart.<br><br>
+            <span style='font-weight:bold'>Q2: Can I cancel or change my order after payment?</span><br>
+            A: You can cancel within 5 minutes of placing the order. Changes are not allowed after payment is completed.<br><br>
+            <span style='font-weight:bold'>Q3: What payment methods are supported?</span><br>
+            A: We currently support Touch 'n Go eWallet (TNG) only.<br><br>
+            <span style='font-weight:bold'>Q4: My top-up failed. What should I do?</span><br>
+            A: Check your internet connection and make sure your TNG account has sufficient balance.<br><br>
+            <span style='font-weight:bold'>Q5: How do I earn points?</span><br>
+            A: You earn 10 points for every RM 1 spent.<br><br>
+            <span style='font-weight:bold'>Q6: How do I redeem my points?</span><br>
+            A: Points can be redeemed at My Rewards for free foods.
+          </div>
+        </div>
+      </div>
       <button class="logout-btn">Log Out</button>
     </section>
     <section id="favourites-section" class="spa-section hidden">
@@ -140,24 +221,194 @@
   <script type="module" src="../JavaScript/ProfileSPA.js"></script>
   <script>
     // Ensure the edit profile modal shows the current profile picture
-    function updateModalProfilePic() {
+    function updateProfilePics(newSrc) {
+      const profilePicImg = document.getElementById('profile-pic-img');
       const modalProfilePic = document.getElementById('modal-profile-pic');
-      const savedPic = localStorage.getItem('profilePic');
-      if (modalProfilePic && savedPic) {
-        modalProfilePic.src = savedPic;
-      }
+      if (profilePicImg) profilePicImg.src = newSrc;
+      if (modalProfilePic) modalProfilePic.src = newSrc;
     }
+    // On page load, set both images to saved profile pic
+    const savedPic = localStorage.getItem('profilePic');
+    if (savedPic) updateProfilePics(savedPic);
+    else updateProfilePics('../assets/images/others/Profile.png');
     // Show modal and update pic when Edit Profile is clicked
     const editProfileBtn = document.getElementById('editProfileBtn');
     const profileEditModal = document.getElementById('profile-edit-modal');
     if (editProfileBtn && profileEditModal) {
       editProfileBtn.addEventListener('click', function() {
-        updateModalProfilePic();
+        const savedPic = localStorage.getItem('profilePic');
+        if (savedPic) updateProfilePics(savedPic);
         profileEditModal.classList.remove('hidden');
       });
     }
-    // Also update when modal is opened by other means (optional)
-    // You can call updateModalProfilePic() wherever the modal is shown
+    // When user selects a new profile picture in the modal
+    document.querySelectorAll('#profile-pic-panel .pic-option').forEach(img => {
+      img.onclick = () => {
+        const newPic = img.getAttribute('data-pic');
+        localStorage.setItem('profilePic', newPic);
+        updateProfilePics(newPic);
+        document.getElementById('profile-pic-panel').classList.add('hidden');
+      };
+    });
+    // Favourites Modal Logic
+    const favouriteBtn = document.getElementById('favouriteBtn');
+    const favouritesModal = document.getElementById('favourites-modal');
+    const closeFavouritesModal = document.getElementById('closeFavouritesModal');
+    const favouritesListModal = document.getElementById('favourites-list-modal');
+    function renderFavouritesList() {
+      const favourites = JSON.parse(localStorage.getItem('favouriteFoods') || '[]');
+      if (favourites.length === 0) {
+        favouritesListModal.innerHTML = '<p class="empty-msg">No favourites yet</p>';
+        return;
+      }
+      favouritesListModal.innerHTML = favourites.map((item, idx) => `
+        <div style="display:flex;align-items:center;justify-content:space-between;background:#8AB98F55;padding:10px 12px;margin:10px 0;border-radius:10px;cursor:pointer;" onclick="addFavouriteToCart('${encodeURIComponent(item.id)}')">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <img src="${item.image}" alt="${item.name}" style="width:48px;height:48px;border-radius:8px;object-fit:cover;">
+            <div>
+              <div style="font-weight:bold;">${item.name}</div>
+              <div style="font-size:0.95em;">RM ${item.price}</div>
+            </div>
+          </div>
+          <button style="background:none;border:none;cursor:pointer;z-index:2;" onclick="event.stopPropagation();removeFavourite(${idx})"><span style='font-size:1.5em;vertical-align:middle;'>🗑️</span></button>
+        </div>
+      `).join('');
+    }
+    window.removeFavourite = function(idx) {
+      const favourites = JSON.parse(localStorage.getItem('favouriteFoods') || '[]');
+      favourites.splice(idx, 1);
+      localStorage.setItem('favouriteFoods', JSON.stringify(favourites));
+      renderFavouritesList();
+    }
+    window.addFavouriteToCart = function(id) {
+      // Find the item in favourites
+      const favourites = JSON.parse(localStorage.getItem('favouriteFoods') || '[]');
+      const item = favourites.find(f => encodeURIComponent(f.id) === id);
+      if (!item) return;
+      // Add to cart logic (same as MenuItem.html)
+      let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+      const existing = cart.find(i => i.id === item.id);
+      if (existing) {
+        existing.qty += 1;
+      } else {
+        cart.push({
+          id: item.id,
+          name: item.name,
+          price: item.price,
+          image: item.image,
+          qty: 1
+        });
+      }
+      localStorage.setItem('cart', JSON.stringify(cart));
+      alert('Added to cart!');
+    }
+    if (favouriteBtn && favouritesModal && closeFavouritesModal) {
+      favouriteBtn.onclick = function() {
+        renderFavouritesList();
+        favouritesModal.classList.remove('hidden');
+      };
+      closeFavouritesModal.onclick = function() {
+        favouritesModal.classList.add('hidden');
+      };
+      favouritesModal.onclick = function(e) {
+        if (e.target === favouritesModal) favouritesModal.classList.add('hidden');
+      };
+    }
+    // Balance Modal Logic
+    const balanceBtn = document.getElementById('balanceBtn');
+    const balanceModal = document.getElementById('balance-modal');
+    const closeBalanceModal = document.getElementById('closeBalanceModal');
+    const modalBalanceAmount = document.getElementById('modal-balance-amount');
+    const modalTopupForm = document.getElementById('modal-topup-form');
+    const modalTopupInput = document.getElementById('modal-topup-input');
+    const modalTopupAmount = document.getElementById('modal-topup-amount');
+    function getBalance() {
+      return parseFloat(localStorage.getItem('userBalance') || '0');
+    }
+    function setBalance(val) {
+      localStorage.setItem('userBalance', val.toFixed(2));
+    }
+    function updateBalanceDisplay() {
+      const bal = getBalance();
+      modalBalanceAmount.textContent = bal.toFixed(2);
+    }
+    if (balanceBtn && balanceModal && closeBalanceModal) {
+      balanceBtn.onclick = function() {
+        updateBalanceDisplay();
+        modalTopupInput.value = 0;
+        modalTopupAmount.textContent = '0.00';
+        balanceModal.classList.remove('hidden');
+      };
+      closeBalanceModal.onclick = function() {
+        balanceModal.classList.add('hidden');
+      };
+      balanceModal.onclick = function(e) {
+        if (e.target === balanceModal) balanceModal.classList.add('hidden');
+      };
+    }
+    // Top-up quick buttons
+    document.querySelectorAll('.modal-topup-btn').forEach(btn => {
+      btn.onclick = function(e) {
+        e.preventDefault();
+        modalTopupInput.value = btn.dataset.amount;
+        modalTopupAmount.textContent = parseFloat(btn.dataset.amount).toFixed(2);
+      };
+    });
+    // Top-up input sync
+    modalTopupInput.oninput = function() {
+      let val = parseFloat(modalTopupInput.value) || 0;
+      modalTopupAmount.textContent = val.toFixed(2);
+    };
+    // Top-up form submit
+    modalTopupForm.onsubmit = function(e) {
+      e.preventDefault();
+      let val = parseFloat(modalTopupInput.value) || 0;
+      if (val < 10 || val > 500) {
+        alert('Please enter a valid top-up amount between RM10 and RM500.');
+        return;
+      }
+      let bal = getBalance();
+      setBalance(bal + val);
+      updateBalanceDisplay();
+      alert('Top-up successful!');
+      modalTopupInput.value = 0;
+      modalTopupAmount.textContent = '0.00';
+      // Add notification to localStorage
+      const notifications = JSON.parse(localStorage.getItem('notifications') || '[]');
+      const now = new Date();
+      notifications.unshift({
+        title: 'Top-Up Successful',
+        message: `RM ${val.toFixed(2)} has been successfully topped-up.`,
+        date: now.toLocaleDateString(),
+        time: now.toLocaleTimeString()
+      });
+      localStorage.setItem('notifications', JSON.stringify(notifications));
+      // Update notification badge
+      if (typeof updateNotificationBadge === 'function') {
+        updateNotificationBadge();
+      }
+      // Show notification panel
+      if (typeof showNotificationModal === 'function') {
+        showNotificationModal();
+      } else {
+        alert('Top-Up notification: RM ' + val.toFixed(2) + ' has been successfully topped-up.');
+      }
+    };
+    // Settings Modal Logic
+    const settingBtn = document.getElementById('settingBtn');
+    const settingsModal = document.getElementById('settings-modal');
+    const closeSettingsModal = document.getElementById('closeSettingsModal');
+    if (settingBtn && settingsModal && closeSettingsModal) {
+      settingBtn.onclick = function() {
+        settingsModal.classList.remove('hidden');
+      };
+      closeSettingsModal.onclick = function() {
+        settingsModal.classList.add('hidden');
+      };
+      settingsModal.onclick = function(e) {
+        if (e.target === settingsModal) settingsModal.classList.add('hidden');
+      };
+    }
   </script>
 </body>
 </html>
