@@ -149,6 +149,63 @@ main {
     font-size: 14px;
 }
 
+/* Limit reached reward card styles */
+.reward-card.limit-reached {
+    background: #f5f5f5;
+    border: 2px solid #ccc;
+    opacity: 0.7;
+    position: relative;
+}
+
+.reward-card.limit-reached::before {
+    content: "⚠";
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: #999;
+    color: white;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.reward-card.limit-reached img {
+    filter: grayscale(100%);
+}
+
+.reward-card.limit-reached .reward-title {
+    color: #666;
+}
+
+.reward-card.limit-reached .reward-desc {
+    color: #888;
+}
+
+.reward-card.limit-reached .reward-points {
+    color: #999;
+}
+
+.reward-card.limit-reached .reward-validity {
+    color: #aaa;
+}
+
+.reward-card.limit-reached .redemption-info {
+    color: #999;
+}
+
+.reward-card .limit-reached-text {
+    color: #999;
+    font-size: 0.85em;
+    font-weight: bold;
+    margin-top: 0.3em;
+    text-align: center;
+}
+
 .reward-card .redemption-count {
     color: #8AB98F;
     font-weight: bold;
