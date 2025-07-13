@@ -368,6 +368,8 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
     await window.UserService.updateUserBalance(user.uid, amt);
+    // Add notification for top-up
+    await window.NotificationsService.createNotification(user.uid, `RM ${amt.toFixed(2)} has been successfully topped-up`, 'Top-Up Successful');
     loadBalance();
     topupAmount.value = 0;
   };
@@ -540,6 +542,8 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
       await window.UserService.updateUserBalance(user.uid, amt);
+      // Add notification for top-up
+      await window.NotificationsService.createNotification(user.uid, `RM ${amt.toFixed(2)} has been successfully topped-up`, 'Top-Up Successful');
       // Update both modal and main balance displays
       if (typeof loadBalance === 'function') loadBalance();
       const modalBalanceAmount = document.getElementById('modal-balance-amount');

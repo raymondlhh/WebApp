@@ -108,6 +108,11 @@ main {
   font-size: 1.5rem;
   color: #d44d2c;
 }
+.checkout-balance-amount {
+  font-weight: bold;
+  font-size: 1.1rem;
+  margin-left: auto;
+}
 .checkout-order-details {
   background: #fff;
   border-radius: 12px;
@@ -130,6 +135,20 @@ main {
 .checkout-total-amount {
   color: #d44d2c;
 }
+.checkout-warning {
+  background: #fff3cd;
+  border: 1px solid #ffeaa7;
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-bottom: 16px;
+  color: #856404;
+  font-size: 0.95rem;
+  text-align: center;
+  font-weight: 500;
+}
+.checkout-warning.hidden {
+  display: none;
+}
 .checkout-confirm-btn {
   width: 100%;
   background: #d44d2c;
@@ -145,4 +164,8 @@ main {
 }
 .checkout-confirm-btn:hover {
   background: #b93c1a;
+}
+.checkout-confirm-btn:disabled {
+  background: #ccc;
+  cursor: not-allowed;
 } 
