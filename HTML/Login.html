@@ -19,26 +19,6 @@
 </head>
 
 <body>
-    <div id="navbar-container"></div>
-    <script>
-        // Load the navbar component
-        fetch('Navbar.html')
-            .then(response => response.text())
-            .then(html => {
-                document.getElementById('navbar-container').innerHTML = html;
-                // Dynamically load the JS file
-                const script = document.createElement('script');
-                script.src = '../JavaScript/navbar.js';
-                script.onload = function() {
-                    if (window.initHamburgerMenu) window.initHamburgerMenu();
-                    if (window.initNotificationSidebar) window.initNotificationSidebar();
-                };
-                document.body.appendChild(script);
-            })
-            .catch(error => {
-                console.error('Error loading navbar:', error);
-            });
-    </script>
     
     <div class="container">
         <img src="../assets/images/icons/welcome_screen/Logo.png" alt="Logo" class="logo">

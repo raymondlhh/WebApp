@@ -381,4 +381,55 @@ document.addEventListener('DOMContentLoaded', () => {
       firebase.auth().signOut();
     };
   }
+
+  // Modal logic for Favourites and Balance
+  const favouriteBtn = document.getElementById('favouriteBtn');
+  const favouritesModal = document.getElementById('favourites-modal');
+  const closeFavouritesModal = document.getElementById('closeFavouritesModal');
+
+  if (favouriteBtn && favouritesModal && closeFavouritesModal) {
+    favouriteBtn.onclick = function() {
+      favouritesModal.classList.remove('hidden');
+      loadFavourites(); // Show the user's favourite foods
+    };
+    closeFavouritesModal.onclick = function() {
+      favouritesModal.classList.add('hidden');
+    };
+    favouritesModal.onclick = function(e) {
+      if (e.target === favouritesModal) favouritesModal.classList.add('hidden');
+    };
+  }
+
+  // Modal logic for Settings
+  const settingBtn = document.getElementById('settingBtn');
+  const settingsModal = document.getElementById('settings-modal');
+  const closeSettingsModal = document.getElementById('closeSettingsModal');
+
+  if (settingBtn && settingsModal && closeSettingsModal) {
+    settingBtn.onclick = function() {
+      settingsModal.classList.remove('hidden');
+    };
+    closeSettingsModal.onclick = function() {
+      settingsModal.classList.add('hidden');
+    };
+    settingsModal.onclick = function(e) {
+      if (e.target === settingsModal) settingsModal.classList.add('hidden');
+    };
+  }
+
+  const balanceBtn = document.getElementById('balanceBtn');
+  const balanceModal = document.getElementById('balance-modal');
+  const closeBalanceModal = document.getElementById('closeBalanceModal');
+
+  if (balanceBtn && balanceModal && closeBalanceModal) {
+    balanceBtn.onclick = function() {
+      balanceModal.classList.remove('hidden');
+    };
+    closeBalanceModal.onclick = function() {
+      balanceModal.classList.add('hidden');
+    };
+    balanceModal.onclick = function(e) {
+      if (e.target === balanceModal) balanceModal.classList.add('hidden');
+    };
+  }
 }); 
