@@ -66,7 +66,7 @@ async function initializeRewards() {
 
 // Load user data from Firestore
 async function loadUserData() {
-  const user = auth.currentUser;
+  const user = window.auth.currentUser;
   if (!user) return;
   
   const userData = await getUser(user.uid);
@@ -203,7 +203,7 @@ async function redeemReward(userId, rewardId, rewardName, pointsSpent) {
 
 // Redeem a reward
 async function handleRedeemReward(rewardId, rewardPoints, rewardName) {
-  const user = auth.currentUser;
+  const user = window.auth.currentUser;
   if (!user) {
     alert('Please log in to redeem rewards.');
     return false;
@@ -429,7 +429,7 @@ window.addEventListener('storage', function(e) {
 });
 
 // Handle user authentication state changes
-auth.onAuthStateChanged(async (user) => {
+window.auth.onAuthStateChanged(async (user) => {
   if (user) {
     console.log('User authenticated:', user.email);
     await loadUserData();

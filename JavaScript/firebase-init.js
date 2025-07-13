@@ -12,5 +12,10 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
+
+// Make variables globally available for other scripts
+window.auth = auth;
+window.db = db;
+
 // If you need Storage, you can also initialize it here
 // const storage = firebase.storage(); 
