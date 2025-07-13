@@ -15,29 +15,12 @@
   <script src="../JavaScript/firebase-init.js"></script>
 </head>
 <body>
-  <div id="navbar-container"></div>
-  <script>
-      // Load the navbar component
-      fetch('Navbar.html')
-          .then(response => response.text())
-          .then(html => {
-              document.getElementById('navbar-container').innerHTML = html;
-              // Dynamically load the JS file
-              const script = document.createElement('script');
-              script.src = '../JavaScript/navbar.js';
-              script.onload = function() {
-                  if (window.initHamburgerMenu) window.initHamburgerMenu();
-                  if (window.initNotificationSidebar) window.initNotificationSidebar();
-              };
-              document.body.appendChild(script);
-          })
-          .catch(error => {
-              console.error('Error loading navbar:', error);
-          });
-  </script>
+  <div class="cart-header">
+    <button class="cart-close-btn" onclick="window.location.href='Menu.html'" aria-label="Back to menu">&#10005;</button>
+    <span class="cart-title">CART</span>
+  </div>
   
   <main>
-    <button class="cart-close-btn" onclick="window.location.href='Menu.html'" aria-label="Back to menu">&#10005;</button>
     <div class="cart-container">
       <h3>Selected Branch</h3>
       <div class="branch-card" id="branch-card"></div>
@@ -100,6 +83,33 @@
       height: 350px;
       border: none;
       border-radius: 8px;
+    }
+    .cart-header {
+      position: relative;
+      height: 48px;
+      margin-bottom: 8px;
+    }
+    .cart-close-btn {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      font-size: 2em;
+      background: none;
+      border: none;
+      color: #b94a2c;
+      cursor: pointer;
+      z-index: 10;
+    }
+    .cart-title {
+      position: absolute;
+      top: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 1.3em;
+      font-weight: bold;
+      color: #222;
+      text-align: center;
+      width: max-content;
     }
   </style>
   
