@@ -43,7 +43,8 @@
         // Make the function globally available
         window.refreshPointsDisplay = refreshPointsDisplay;
     </script>
-    <!-- Rewards logic -->
+    <!-- Database and Rewards logic -->
+    <script src="../JavaScript/Database.js"></script>
     <script src="../JavaScript/rewards.js"></script>
 </head>
 <body>
@@ -72,6 +73,14 @@
     </script>
     <main class="reward-detail-main">
         <section class="reward-detail-card">
+            <!-- Latest Notification Display -->
+            <div id="latestNotification" style="display:none;margin-bottom:1.2em;padding:1em;border-radius:8px;background:#f9f9f9;border:1px solid #e0e0e0;">
+                <div style="display:flex;justify-content:space-between;align-items:center;">
+                    <span id="latestNotificationTitle" style="font-weight:bold;color:#b93a1c;"></span>
+                    <span id="latestNotificationDate" style="color:#999;font-size:0.9em;"></span>
+                </div>
+                <div id="latestNotificationMessage" style="color:#333;margin-top:0.3em;"></div>
+            </div>
             <img id="rewardImage" src="../assets/images/foods/appetizers/chuka_wakame.png" alt="Reward Image">
             <h2 id="rewardName">Chuka Wakame</h2>
             <p id="rewardDesc">Seaweed salad with a subtly sweet and savory flavor.</p>
@@ -105,6 +114,44 @@
             .catch(error => {
                 console.error('Error loading footer:', error);
             });
+
+        // Fetch and display the latest notification for the logged-in user
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Wait for Firebase and Database.js to be loaded
+            function waitForFirebaseAndDB() {
+                return new Promise(resolve => {
+                    function check() {
+                        if (window.firebase && window.NotificationsService && firebase.auth) {
+                            resolve();
+                        } else {
+                            setTimeout(check, 50);
+                        }
+                    }
+                    check();
+                });
+            }
+            await waitForFirebaseAndDB();
+            firebase.auth().onAuthStateChanged(async function(user) {
+                if (!user) return;
+                const notifs = await window.NotificationsService.getUserNotifications(user.uid);
+                if (notifs && notifs.length > 0) {
+                    const latest = notifs[0];
+                    document.getElementById('latestNotificationTitle').textContent = latest.title || 'Notification';
+                    document.getElementById('latestNotificationMessage').textContent = latest.message || '';
+                    let dateStr = '';
+                    if (latest.date) {
+                        let d = latest.date;
+                        if (d.toDate) d = d.toDate();
+                        else d = new Date(d);
+                        dateStr = d.toLocaleDateString('en-GB') + ' ' + d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+                    }
+                    document.getElementById('latestNotificationDate').textContent = dateStr;
+                    document.getElementById('latestNotification').style.display = 'block';
+                } else {
+                    document.getElementById('latestNotification').style.display = 'none';
+                }
+            });
+        });
     </script>
 </body>
 </html> 
