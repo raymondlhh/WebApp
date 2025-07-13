@@ -1,5 +1,18 @@
 body, html {
     background: #FFF8E5;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1 0 auto;
 }
 .rewards-main, .reward-detail-main, .faq-main {
     max-width: 900px;

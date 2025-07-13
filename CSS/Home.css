@@ -4,6 +4,16 @@ body, html {
     background: #FFF8E5;
     font-family: 'Noto Serif JP', 'Inter', Arial, sans-serif;
     min-height: 100vh;
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1 0 auto;
 }
 .navbar {
     width: 100%;

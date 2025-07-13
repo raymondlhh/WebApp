@@ -1,5 +1,23 @@
 /* Footer.css - Consistent styles for the reusable Footer component */
 
+/* Ensure the page takes full height and uses flexbox */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* Main content area should grow to fill available space */
+main {
+    flex: 1 0 auto;
+}
+
 .footer {
     width: 100%;
     background: #b93a1c;
@@ -7,7 +25,8 @@
     position: relative;
     z-index: 1000;
     box-shadow: 0 -2px 8px rgba(0,0,0,0.04);
-    margin-top: auto;
+    flex-shrink: 0; /* Prevent footer from shrinking */
+    margin-top: auto; /* Push footer to bottom if content is short */
 }
 
 .footer-content {

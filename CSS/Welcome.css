@@ -4,6 +4,16 @@ body, html {
     height: 100%;
     font-family: 'InknutAntiqua', Arial, sans-serif;
     background: #FDF3E7;
+    min-height: 100vh;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1 0 auto;
 }
 .welcome-bg {
     min-height: 100vh;

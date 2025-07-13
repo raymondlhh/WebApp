@@ -15,24 +15,48 @@
   <script src="../JavaScript/firebase-init.js"></script>
 </head>
 <body>
-  <button class="cart-close-btn" onclick="window.location.href='Menu.html'" aria-label="Back to menu">&#10005;</button>
-  <div class="cart-container">
-    <h3>Selected Branch</h3>
-    <div class="branch-card" id="branch-card"></div>
-    <h3>Order Summary</h3>
-    <div id="cart-items"></div>
-    <h3>Remarks</h3>
-    <div class="cart-remarks-wrapper">
-      <textarea id="cart-remarks" placeholder="Add any notes or instructions for your order..."></textarea>
+  <div id="navbar-container"></div>
+  <script>
+      // Load the navbar component
+      fetch('Navbar.html')
+          .then(response => response.text())
+          .then(html => {
+              document.getElementById('navbar-container').innerHTML = html;
+              // Dynamically load the JS file
+              const script = document.createElement('script');
+              script.src = '../JavaScript/navbar.js';
+              script.onload = function() {
+                  if (window.initHamburgerMenu) window.initHamburgerMenu();
+                  if (window.initNotificationSidebar) window.initNotificationSidebar();
+              };
+              document.body.appendChild(script);
+          })
+          .catch(error => {
+              console.error('Error loading navbar:', error);
+          });
+  </script>
+  
+  <main>
+    <button class="cart-close-btn" onclick="window.location.href='Menu.html'" aria-label="Back to menu">&#10005;</button>
+    <div class="cart-container">
+      <h3>Selected Branch</h3>
+      <div class="branch-card" id="branch-card"></div>
+      <h3>Order Summary</h3>
+      <div id="cart-items"></div>
+      <h3>Remarks</h3>
+      <div class="cart-remarks-wrapper">
+        <textarea id="cart-remarks" placeholder="Add any notes or instructions for your order..."></textarea>
+      </div>
+      <div class="cart-footer">
+        <span>Grand Total</span>
+        <span id="cart-grand-total"></span>
+      </div>
+      <a href="Checkout.html">
+        <button class="checkout-btn" id="checkout-btn">Proceed to Checkout</button>
+      </a>
     </div>
-    <div class="cart-footer">
-      <span>Grand Total</span>
-      <span id="cart-grand-total"></span>
-    </div>
-    <a href="Checkout.html">
-      <button class="checkout-btn" id="checkout-btn">Proceed to Checkout</button>
-    </a>
-  </div>
+  </main>
+  
   <script src="../JavaScript/cart.js"></script>
   <script type="module" src="../JavaScript/cart-page.js"></script>
   

@@ -15,36 +15,60 @@
   <script src="../JavaScript/firebase-init.js"></script>
 </head>
 <body>
-  <button id="save-favourite-btn" style="position:absolute;top:16px;right:16px;background:none;border:none;cursor:pointer;z-index:10;" title="Save to Favourites">
-    <span id="heart-grey" style="font-size:2em;color:#bbb;position:absolute;top:0;right:0;">&#10084;</span>
-    <span id="heart-red" style="font-size:2em;color:#b94a2c;position:absolute;top:0;right:0;display:none;">&#10084;</span>
-  </button>
-  <button class="back-button" onclick="window.location.href='Menu.html'" aria-label="Back to menu">&#8592;</button>
-  <div class="item-detail-container">
-    <div class="item-image-wrapper">
-      <img id="item-image" src="" alt="Menu Item" />
+  <div id="navbar-container"></div>
+  <script>
+      // Load the navbar component
+      fetch('Navbar.html')
+          .then(response => response.text())
+          .then(html => {
+              document.getElementById('navbar-container').innerHTML = html;
+              // Dynamically load the JS file
+              const script = document.createElement('script');
+              script.src = '../JavaScript/navbar.js';
+              script.onload = function() {
+                  if (window.initHamburgerMenu) window.initHamburgerMenu();
+                  if (window.initNotificationSidebar) window.initNotificationSidebar();
+              };
+              document.body.appendChild(script);
+          })
+          .catch(error => {
+              console.error('Error loading navbar:', error);
+          });
+  </script>
+  
+  <main>
+    <button id="save-favourite-btn" style="position:absolute;top:80px;right:16px;background:none;border:none;cursor:pointer;z-index:10;" title="Save to Favourites">
+      <span id="heart-grey" style="font-size:2em;color:#bbb;position:absolute;top:0;right:0;">&#10084;</span>
+      <span id="heart-red" style="font-size:2em;color:#b94a2c;position:absolute;top:0;right:0;display:none;">&#10084;</span>
+    </button>
+    <button class="back-button" onclick="window.location.href='Menu.html'" aria-label="Back to menu">&#8592;</button>
+    <div class="item-detail-container">
+      <div class="item-image-wrapper">
+        <img id="item-image" src="" alt="Menu Item" />
+      </div>
+      <h1 id="item-title"></h1>
+      <div class="item-rating">
+        <span id="item-stars"></span>
+        <span id="item-rating-value"></span>
+      </div>
+      <div class="item-review-count" id="item-review-count"></div>
+      <div class="item-reviews" id="item-reviews"></div>
+      <div class="item-included">
+        <h3>What's Included</h3>
+        <div id="item-included-list"></div>
+      </div>
     </div>
-    <h1 id="item-title"></h1>
-    <div class="item-rating">
-      <span id="item-stars"></span>
-      <span id="item-rating-value"></span>
+    <div class="item-footer">
+      <span class="item-price" id="item-price"></span>
+      <div class="quantity-selector">
+        <button id="decrease-qty">-</button>
+        <span id="item-qty">1</span>
+        <button id="increase-qty">+</button>
+      </div>
+      <button class="add-to-cart" id="add-to-cart">ADD TO CART</button>
     </div>
-    <div class="item-review-count" id="item-review-count"></div>
-    <div class="item-reviews" id="item-reviews"></div>
-    <div class="item-included">
-      <h3>What's Included</h3>
-      <div id="item-included-list"></div>
-    </div>
-  </div>
-  <div class="item-footer">
-    <span class="item-price" id="item-price"></span>
-    <div class="quantity-selector">
-      <button id="decrease-qty">-</button>
-      <span id="item-qty">1</span>
-      <button id="increase-qty">+</button>
-    </div>
-    <button class="add-to-cart" id="add-to-cart">ADD TO CART</button>
-  </div>
+  </main>
+  
   <script src="../JavaScript/menu-item.js"></script>
   <script>
     // Save Favourite Button Logic
