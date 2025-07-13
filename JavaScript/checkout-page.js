@@ -1,7 +1,4 @@
-import { getCart, getCartTotal, getCartCount, saveCart } from './cart.js';
-
-// Import add-points functionality
-import { addPointsToCurrentUser } from './add-points.js';
+// Assumes cart.js and add-points.js are loaded before this script
 
 function getUserBalance() {
   return parseFloat(localStorage.getItem('userBalance') || '0');
@@ -38,7 +35,7 @@ async function refreshPointsDisplay() {
 window.refreshPointsDisplay = refreshPointsDisplay;
 
 function renderCheckout() {
-  const cart = getCart();
+  const cart = window.getCart ? window.getCart() : [];
   const itemsDiv = document.getElementById('checkout-items');
   itemsDiv.innerHTML = '';
   cart.forEach(item => {
@@ -54,9 +51,9 @@ function renderCheckout() {
     `;
     itemsDiv.appendChild(div);
   });
-  document.getElementById('checkout-total').textContent = 'RM ' + getCartTotal().toFixed(2);
-  document.getElementById('checkout-item-count').textContent = getCartCount();
-  document.getElementById('checkout-points').textContent = Math.floor(getCartTotal() * 10);
+  document.getElementById('checkout-total').textContent = 'RM ' + (window.getCartTotal ? window.getCartTotal() : 0).toFixed(2);
+  document.getElementById('checkout-item-count').textContent = window.getCartCount ? window.getCartCount() : 0;
+  document.getElementById('checkout-points').textContent = Math.floor((window.getCartTotal ? window.getCartTotal() : 0) * 10);
   // Update balance display
   document.getElementById('checkout-balance').textContent = 'Current Balance: RM ' + getUserBalance().toFixed(2);
 }
@@ -66,7 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 document.getElementById('checkout-confirm-btn').onclick = async () => {
-  const total = getCartTotal();
+  const total = window.getCartTotal ? window.getCartTotal() : 0;
   let balance = getUserBalance();
   if (balance < total) {
     alert('Insufficient balance to complete this order. Please top up your balance.');
@@ -107,7 +104,7 @@ document.getElementById('checkout-confirm-btn').onclick = async () => {
     try {
       console.log('User is logged in, updating points in Firestore...');
       // Use the add-points function to add points to the user
-      const pointsAdded = await addPointsToCurrentUser(points);
+      const pointsAdded = window.addPointsToCurrentUser ? await window.addPointsToCurrentUser(points) : false;
       
       if (pointsAdded) {
         console.log(`Successfully added ${points} points to user account`);
@@ -118,19 +115,19 @@ document.getElementById('checkout-confirm-btn').onclick = async () => {
         // Still proceed with the order even if points update fails
       }
       
-      saveCart([]);
+      if (window.saveCart) window.saveCart([]);
       alert('Order confirmed! Thank you for your purchase.');
       window.location.href = 'Menu.html';
     } catch (error) {
       console.error('Error updating points in Firestore:', error);
       // Still proceed with the order even if points update fails
-      saveCart([]);
+      if (window.saveCart) window.saveCart([]);
       alert('Order confirmed! Thank you for your purchase.');
       window.location.href = 'Menu.html';
     }
   } else {
     console.log('User not logged in, points will be stored locally only');
-    saveCart([]);
+    if (window.saveCart) window.saveCart([]);
     alert('Order confirmed! Thank you for your purchase.');
     window.location.href = 'Menu.html';
   }

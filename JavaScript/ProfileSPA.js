@@ -1,4 +1,4 @@
-import { UserService, FavouritesService, NotificationsService } from './Database.js';
+// Assumes firebase-init.js and Database.js are loaded before this script
 
 document.addEventListener('DOMContentLoaded', () => {
   // Hamburger menu logic
@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
   async function loadProfile() {
     const user = firebase.auth().currentUser;
     if (!user) return;
-    const userData = await UserService.getUser(user.uid);
+    const userData = await window.UserService.getUser(user.uid);
     if (userData) {
       // Update main profile picture
       const mainProfilePic = document.querySelector('.profile-pic-container .profile-pic');
@@ -112,7 +112,7 @@ document.addEventListener('DOMContentLoaded', () => {
       e.preventDefault();
       const user = firebase.auth().currentUser;
       if (!user) return;
-      await UserService.updateUser(user.uid, {
+      await window.UserService.updateUser(user.uid, {
         name: document.getElementById('edit-name').value,
         email: document.getElementById('edit-email').value,
         phone: document.getElementById('edit-phone').value,
@@ -190,7 +190,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Update profile picture in the database
         const user = firebase.auth().currentUser;
         if (user) {
-          await UserService.updateUser(user.uid, { profilePic: img.dataset.pic });
+          await window.UserService.updateUser(user.uid, { profilePic: img.dataset.pic });
         }
       });
     });
@@ -209,7 +209,7 @@ document.addEventListener('DOMContentLoaded', () => {
       console.log('Edit Profile button clicked'); // Debug log
       const user = firebase.auth().currentUser;
       if (user) {
-        const userData = await UserService.getUser(user.uid);
+        const userData = await window.UserService.getUser(user.uid);
         document.getElementById('modal-edit-name').value = userData?.name || '';
         // document.getElementById('modal-edit-email').value = userData?.email || user.email;
         // Leave password field blank
@@ -261,7 +261,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       */
       // Update user profile fields in Firestore
-      await UserService.updateUser(user.uid, {
+      await window.UserService.updateUser(user.uid, {
         name: document.getElementById('modal-edit-name').value,
         // email: document.getElementById('modal-edit-email').value, // removed because email field is gone
         phone: document.getElementById('modal-edit-phone').value,
@@ -282,33 +282,32 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Favourites logic
-  const favList = document.getElementById('favourites-list');
   async function loadFavourites() {
     const user = firebase.auth().currentUser;
     if (!user) return;
-    const favourites = await FavouritesService.getUserFavourites(user.uid);
-    favList.innerHTML = '';
-    if (favourites.length === 0) {
-      favList.innerHTML = '<p class="empty-msg">No favourites yet</p>';
-      return;
+    const favourites = await window.FavouritesService.getUserFavourites(user.uid);
+    const favouritesContainer = document.getElementById('favourites-container');
+    if (favouritesContainer) {
+      favouritesContainer.innerHTML = '';
+      favourites.forEach(fav => {
+        const favEl = document.createElement('div');
+        favEl.className = 'favourite-item';
+        favEl.innerHTML = `
+          <img src="${fav.imagePath}" alt="${fav.name}">
+          <div class="favourite-info">
+            <h3>${fav.name}</h3>
+            <p>$${fav.price}</p>
+          </div>
+          <button onclick="removeFavourite('${fav.id}')" class="remove-fav">Remove</button>
+        `;
+        favouritesContainer.appendChild(favEl);
+      });
     }
-    favourites.forEach(fav => {
-      const div = document.createElement('div');
-      div.className = 'fav-item';
-      div.innerHTML = `
-        <img src="${fav.img || '../assets/images/menu/default.jpg'}" alt="${fav.title || 'Menu Item'}">
-        <div class="fav-info">
-          <div class="fav-title">${fav.title || 'Menu Item'}</div>
-          <div class="fav-price">RM ${fav.price || '0.00'}</div>
-        </div>
-        <button class="fav-remove" title="Remove">🗑️</button>
-      `;
-      div.querySelector('.fav-remove').onclick = async () => {
-        await FavouritesService.removeFromFavourites(fav.id);
-        loadFavourites();
-      };
-      favList.appendChild(div);
-    });
+  }
+
+  async function removeFavourite(favId) {
+    await window.FavouritesService.removeFromFavourites(favId);
+    loadFavourites();
   }
 
   // Balance logic (using rewardsPoints instead of balance)
@@ -319,7 +318,7 @@ document.addEventListener('DOMContentLoaded', () => {
   async function loadBalance() {
     const user = firebase.auth().currentUser;
     if (!user) return;
-    const userData = await UserService.getUser(user.uid);
+    const userData = await window.UserService.getUser(user.uid);
     if (userData) {
       balanceAmount.textContent = (userData.rewardsPoints || 0).toFixed(2);
     }
@@ -338,7 +337,7 @@ document.addEventListener('DOMContentLoaded', () => {
       alert('Please enter a valid amount between RM10 and RM500.');
       return;
     }
-    await UserService.updateUserRewardsPoints(user.uid, amt);
+    await window.UserService.updateUserRewardsPoints(user.uid, amt);
     loadBalance();
     topupAmount.value = 0;
   };

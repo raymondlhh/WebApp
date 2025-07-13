@@ -1,19 +1,23 @@
 // Logout Handler
-import { auth } from './firebase-init.js';
-import { authUtils } from './auth-utils.js';
+// Assumes firebase-init.js is loaded before this script
 
 export class LogoutHandler {
   constructor() {
-    this.auth = auth;
+    this.auth = window.auth;
   }
 
   async logout() {
     try {
-      await firebase.auth().signOut();
+      if (!this.auth) {
+        throw new Error('Firebase not initialized');
+      }
+      await this.auth.signOut();
       console.log('User logged out successfully');
       
       // Clear stored user data
-      authUtils.clearStoredUserData();
+      if (window.authUtils) {
+        window.authUtils.clearStoredUserData();
+      }
       
       // Redirect to login page
       window.location.href = 'Login.html';

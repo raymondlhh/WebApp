@@ -1,24 +1,26 @@
 // Authentication Utilities
-import { auth } from './firebase-init.js';
+// Assumes firebase-init.js is loaded before this script
 
 export class AuthUtils {
   constructor() {
-    this.auth = auth;
+    this.auth = window.auth;
     this.currentUser = null;
     this.authStateListeners = [];
     this.initializeAuthStateListener();
   }
 
   initializeAuthStateListener() {
-    firebase.auth().onAuthStateChanged((user) => {
-      this.currentUser = user;
-      console.log('Auth state changed:', user ? user.email : 'No user');
-      
-      // Notify all listeners
-      this.authStateListeners.forEach(listener => {
-        listener(user);
+    if (window.firebase && window.firebase.auth) {
+      window.firebase.auth().onAuthStateChanged((user) => {
+        this.currentUser = user;
+        console.log('Auth state changed:', user ? user.email : 'No user');
+        
+        // Notify all listeners
+        this.authStateListeners.forEach(listener => {
+          listener(user);
+        });
       });
-    });
+    }
   }
 
   // Add listener for auth state changes
@@ -103,4 +105,5 @@ export class AuthUtils {
 }
 
 // Create global instance
-export const authUtils = new AuthUtils(); 
+const authUtils = new AuthUtils();
+window.authUtils = authUtils; 

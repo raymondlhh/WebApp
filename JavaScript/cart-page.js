@@ -1,4 +1,4 @@
-import { getCart, saveCart, getCartCount, getCartTotal, updateCartItem, removeCartItem } from './cart.js';
+// Assumes cart.js is loaded before this script
 
 function renderBranch() {
   const branch = localStorage.getItem('selectedBranch') || 'AEON Nilai, Negeri Sembilan';
@@ -24,7 +24,7 @@ function renderBranch() {
 }
 
 function renderCart() {
-  const cart = getCart();
+  const cart = window.getCart ? window.getCart() : [];
   const cartItemsDiv = document.getElementById('cart-items');
   cartItemsDiv.innerHTML = '';
   cart.forEach(item => {
@@ -45,32 +45,32 @@ function renderCart() {
     `;
     cartItemsDiv.appendChild(div);
   });
-  document.getElementById('cart-grand-total').textContent = 'RM ' + getCartTotal().toFixed(2);
+  document.getElementById('cart-grand-total').textContent = 'RM ' + (window.getCartTotal ? window.getCartTotal() : 0).toFixed(2);
 }
 
 function updateCartCountBadge() {
   const badge = document.querySelector('.cart-badge');
-  if (badge) badge.textContent = getCartCount();
+  if (badge) badge.textContent = window.getCartCount ? window.getCartCount() : 0;
 }
 
 document.addEventListener('click', e => {
   if (e.target.classList.contains('cart-qty-btn')) {
     const id = e.target.getAttribute('data-id');
     const action = e.target.getAttribute('data-action');
-    const cart = getCart();
+    const cart = window.getCart ? window.getCart() : [];
     const item = cart.find(i => i.id === id);
     if (!item) return;
     if (action === 'increase') {
-      updateCartItem(id, item.qty + 1);
+      if (window.updateCartItem) window.updateCartItem(id, item.qty + 1);
     } else if (action === 'decrease') {
-      updateCartItem(id, item.qty - 1);
+      if (window.updateCartItem) window.updateCartItem(id, item.qty - 1);
     }
     renderCart();
     updateCartCountBadge();
   }
   if (e.target.classList.contains('cart-remove-btn')) {
     const id = e.target.getAttribute('data-id');
-    removeCartItem(id);
+    if (window.removeCartItem) window.removeCartItem(id);
     renderCart();
     updateCartCountBadge();
   }

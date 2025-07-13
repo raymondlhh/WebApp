@@ -1,5 +1,5 @@
 // Authentication Guard
-import { authUtils } from './auth-utils.js';
+// Assumes auth-utils.js is loaded before this script
 
 export class AuthGuard {
   constructor(redirectUrl = 'Login.html') {
@@ -9,34 +9,34 @@ export class AuthGuard {
 
   checkAuth() {
     // Check if user is logged in
-    if (!authUtils.isLoggedIn()) {
+    if (!window.authUtils || !window.authUtils.isLoggedIn()) {
       console.log('User not authenticated, redirecting to login');
       window.location.href = this.redirectUrl;
       return false;
     }
     
-    console.log('User authenticated:', authUtils.getUserEmail());
+    console.log('User authenticated:', window.authUtils.getUserEmail());
     return true;
   }
 
   // Get current user info
   getCurrentUser() {
-    return authUtils.getCurrentUser();
+    return window.authUtils ? window.authUtils.getCurrentUser() : null;
   }
 
   // Get user email
   getUserEmail() {
-    return authUtils.getUserEmail();
+    return window.authUtils ? window.authUtils.getUserEmail() : null;
   }
 
   // Get user UID
   getUserUID() {
-    return authUtils.getUserUID();
+    return window.authUtils ? window.authUtils.getUserUID() : null;
   }
 
   // Check if email is verified
   isEmailVerified() {
-    return authUtils.isEmailVerified();
+    return window.authUtils ? window.authUtils.isEmailVerified() : false;
   }
 }
 

@@ -180,6 +180,38 @@ body, html {
     color: #666;
     margin-bottom: 0.5em;
 }
+
+/* FAQ Bar Styles */
+.faq-bar {
+    background: #8AB98F;
+    color: white;
+    padding: 1em;
+    text-align: center;
+    margin-top: 2em;
+    border-radius: 0 0 18px 18px;
+}
+
+.faq-link {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1.1em;
+    transition: opacity 0.2s ease;
+}
+
+.faq-link:hover {
+    opacity: 0.8;
+}
+
+/* Remove the fixed positioning styles and adjust margins */
+.rewards-main {
+    margin-bottom: 0;
+}
+
+.reward-detail-main {
+    margin-bottom: 0;
+}
+
 .reward-detail-card {
     background: #F8F3E7;
     border-radius: 16px;
@@ -282,5 +314,15 @@ body, html {
     }
     .reward-detail-card {
         padding: 1em;
+    }
+    
+    /* Mobile FAQ Bar Styles */
+    .faq-bar {
+        border-radius: 0 0 8px 8px;
+        padding: 0.8em;
+    }
+    
+    .faq-link {
+        font-size: 1em;
     }
 } 

@@ -22,7 +22,7 @@
 // } from 'firebase/storage';
 
 // User Management - matches the Users entity schema
-export class UserService {
+class UserService {
   static async createUser(userId, userData) {
     try {
       await firebase.firestore().collection('users').doc(userId).set({
@@ -106,7 +106,7 @@ export class UserService {
 }
 
 // Rewards Management - matches the Rewards entity schema
-export class RewardsService {
+class RewardsService {
   static async getRewards() {
     try {
       const rewardsRef = firebase.firestore().collection('rewards');
@@ -179,7 +179,7 @@ export class RewardsService {
 }
 
 // User Reward Redemptions Management - matches the userRewardRedemptions entity schema
-export class UserRewardRedemptionsService {
+class UserRewardRedemptionsService {
   static async getUserRedemptions(userId) {
     try {
       const redemptionsRef = firebase.firestore().collection('userRewardRedemptions');
@@ -245,7 +245,7 @@ export class UserRewardRedemptionsService {
 }
 
 // Notifications Management - matches the Notifications entity schema
-export class NotificationsService {
+class NotificationsService {
   static async getUserNotifications(userId) {
     try {
       const notificationsRef = firebase.firestore().collection('notifications');
@@ -304,7 +304,7 @@ export class NotificationsService {
 }
 
 // Favourites Management - matches the Favorites entity schema
-export class FavouritesService {
+class FavouritesService {
   static async getUserFavourites(userId) {
     try {
       const favouritesRef = firebase.firestore().collection('favourites');
@@ -360,7 +360,7 @@ export class FavouritesService {
 }
 
 // File Storage Management
-export class StorageService {
+class StorageService {
   static async uploadFile(file, path) {
     try {
       const storageRef = firebase.storage().ref(path);
@@ -386,7 +386,7 @@ export class StorageService {
 }
 
 // Real-time listeners
-export class RealtimeService {
+class RealtimeService {
   static onUserChange(userId, callback) {
     return firebase.firestore().collection('users').doc(userId).onSnapshot((doc) => {
       if (doc.exists) {
@@ -420,3 +420,12 @@ export class RealtimeService {
     });
   }
 }
+
+// Make all services globally available
+window.UserService = UserService;
+window.RewardsService = RewardsService;
+window.UserRewardRedemptionsService = UserRewardRedemptionsService;
+window.NotificationsService = NotificationsService;
+window.FavouritesService = FavouritesService;
+window.StorageService = StorageService;
+window.RealtimeService = RealtimeService;
