@@ -28,14 +28,16 @@ window.initHamburgerMenu = initHamburgerMenu;
 function updateNotificationBadge() {
     const badge = document.getElementById('notificationBadge');
     if (!badge) return;
-    const notifs = JSON.parse(localStorage.getItem('notifications') || '[]');
-    const unreadCount = notifs.filter(n => !n.read).length;
-    if (unreadCount > 0) {
-        badge.textContent = unreadCount > 99 ? '99+' : unreadCount;
-        badge.style.display = 'flex';
-    } else {
-        badge.style.display = 'none';
-    }
+    const user = firebase.auth().currentUser;
+    if (!user) { badge.style.display = 'none'; return; }
+    window.NotificationsService.getUnreadNotificationsCount(user.uid).then(unreadCount => {
+        if (unreadCount > 0) {
+            badge.textContent = unreadCount > 99 ? '99+' : unreadCount;
+            badge.style.display = 'flex';
+        } else {
+            badge.style.display = 'none';
+        }
+    });
 }
 
 window.updateNotificationBadge = updateNotificationBadge;
@@ -48,34 +50,34 @@ function initNotificationSidebar() {
     const notificationList = document.getElementById('notificationList');
     const markAllReadBtn = document.getElementById('markAllReadBtn');
 
-    function getNotifications() {
-        let notifs = JSON.parse(localStorage.getItem('notifications') || '[]');
-        // Do not auto-populate with demo data
-        return notifs;
+    async function getNotifications() {
+        const user = firebase.auth().currentUser;
+        if (!user) return [];
+        return await window.NotificationsService.getUserNotifications(user.uid);
     }
 
-    function renderNotifications() {
-        const notifs = getNotifications();
+    async function renderNotifications() {
+        const notifs = await getNotifications();
         if (!notifs.length) {
             notificationList.innerHTML = '<p style="text-align:center;color:#888;">No notifications yet.</p>';
             return;
         }
         notificationList.innerHTML = notifs.map(n => `
-            <div class="notification-item${n.read ? ' notification-read' : ''}">
+            <div class="notification-item${n.isRead ? ' notification-read' : ''}">
                 <div class="notification-header-row" style="display:flex;justify-content:space-between;align-items:center;">
-                    <div class="notification-title" style="font-weight:bold;text-align:left;">${n.title}</div>
-                    <div class="notification-date">${n.date}</div>
+                    <div class="notification-title" style="font-weight:bold;text-align:left;">${n.title || ''}</div>
+                    <div class="notification-date">${n.date ? (n.date.toDate ? n.date.toDate().toLocaleDateString('en-GB') : new Date(n.date).toLocaleDateString('en-GB')) : ''}</div>
                 </div>
                 <div class="notification-message">${n.message}</div>
-                <div class="notification-time">${n.time}</div>
+                <div class="notification-time">${n.date ? (n.date.toDate ? n.date.toDate().toLocaleTimeString('en-GB') : new Date(n.date).toLocaleTimeString('en-GB')) : ''}</div>
             </div>
         `).join('');
     }
 
-    function openNotificationSidebar() {
+    async function openNotificationSidebar() {
         notificationSidebar.classList.add('open');
         notificationSidebarOverlay.style.display = 'block';
-        renderNotifications();
+        await renderNotifications();
         updateNotificationBadge();
     }
     function closeNotificationSidebarFn() {
@@ -88,11 +90,12 @@ function initNotificationSidebar() {
         notificationSidebarOverlay.onclick = closeNotificationSidebarFn;
     }
     if (markAllReadBtn) {
-        markAllReadBtn.onclick = function() {
-            let notifs = getNotifications();
-            notifs = notifs.map(n => ({ ...n, read: true }));
-            localStorage.setItem('notifications', JSON.stringify(notifs));
-            renderNotifications();
+        markAllReadBtn.onclick = async function() {
+            const user = firebase.auth().currentUser;
+            if (!user) return;
+            const notifs = await window.NotificationsService.getUserNotifications(user.uid);
+            await Promise.all(notifs.filter(n => !n.isRead).map(n => window.NotificationsService.markNotificationAsRead(n.id)));
+            await renderNotifications();
             updateNotificationBadge();
         };
     }

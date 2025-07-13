@@ -78,25 +78,14 @@ document.getElementById('checkout-confirm-btn').onclick = async () => {
 
   console.log(`Checkout completed: Total: RM${total.toFixed(2)}, Points earned: ${points}`);
 
-  // Add notification for order
-  const notifications = JSON.parse(localStorage.getItem('notifications') || '[]');
-  const now = new Date();
-  notifications.unshift({
-    title: 'Payment Successful',
-    message: `RM ${total.toFixed(2)} has been successfully paid`,
-    date: now.toLocaleDateString(),
-    time: now.toLocaleTimeString(),
-    read: false
-  });
-  notifications.unshift({
-    title: 'Points Earned',
-    message: `You earned ${points} points for this order`,
-    date: now.toLocaleDateString(),
-    time: now.toLocaleTimeString(),
-    read: false
-  });
-  localStorage.setItem('notifications', JSON.stringify(notifications));
-  if (typeof updateNotificationBadge === 'function') updateNotificationBadge();
+  // Add notification for order (Firestore for logged-in user only)
+  if (window.firebase && firebase.auth && firebase.auth().currentUser) {
+    const user = firebase.auth().currentUser;
+    await window.NotificationsService.createNotification(user.uid, `RM ${total.toFixed(2)} has been successfully paid`, 'Payment Successful');
+    await window.NotificationsService.createNotification(user.uid, `You earned ${points} points for this order`, 'Points Earned');
+    if (typeof updateNotificationBadge === 'function') updateNotificationBadge();
+  }
+  // No notifications for guests
 
   // Update Firestore if user is logged in using the add-points function
   if (window.firebase && firebase.auth && firebase.auth().currentUser) {
