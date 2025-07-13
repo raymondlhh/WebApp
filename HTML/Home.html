@@ -81,12 +81,12 @@
             <div class="carousel-indicator" id="carousel-indicator"></div>
             <script>
             const salesData = [
-              { img: "assets/images/foods/party_set/party_set_a.png", title: "PARTY SET A (81 PCS)", rating: "4.9" },
-              { img: "assets/images/foods/party_set/party_set_b.png", title: "PARTY SET B (74 PCS)", rating: "4.8" },
-              { img: "assets/images/foods/party_set/party_set_c.png", title: "PARTY SET C (65 PCS)", rating: "4.7" },
-              { img: "assets/images/foods/party_set/maki_set.png", title: "MAKI SET (30 PCS)", rating: "4.6" },
-              { img: "assets/images/foods/party_set/gunkan_set.png", title: "GUNKAN SET (20 PCS)", rating: "4.5" },
-              { img: "assets/images/foods/party_set/nigiri_set.png", title: "NIGIRI SET (25 PCS)", rating: "4.6" }
+              { img: "assets/images/foods/party_set/party_set_a.png", title: "PARTY SET A (81 PCS)", rating: "4.9", price: "120.00" },
+              { img: "assets/images/foods/party_set/party_set_b.png", title: "PARTY SET B (74 PCS)", rating: "4.8", price: "105.00" },
+              { img: "assets/images/foods/party_set/party_set_c.png", title: "PARTY SET C (65 PCS)", rating: "4.7", price: "90.00" },
+              { img: "assets/images/foods/party_set/maki_set.png", title: "MAKI SET (30 PCS)", rating: "4.6", price: "50.00" },
+              { img: "assets/images/foods/party_set/gunkan_set.png", title: "GUNKAN SET (20 PCS)", rating: "4.5", price: "35.00" },
+              { img: "assets/images/foods/party_set/nigiri_set.png", title: "NIGIRI SET (25 PCS)", rating: "4.6", price: "45.00" }
             ];
             const cardsPerPage = 3;
             let currentPage = 0;
@@ -106,7 +106,7 @@
                     <img src="${card.img}" alt="${card.title}">
                     <div class="card-title">${card.title}</div>
                     <div class="card-rating">★★★★★ ${card.rating}</div>
-                    <button class="add-cart">Add To Cart</button>
+                    <div class="card-price" style="font-size:1.2em;font-weight:bold;margin-top:0.5em;">RM ${card.price || ''}</div>
                   </div>
                 `;
               });
