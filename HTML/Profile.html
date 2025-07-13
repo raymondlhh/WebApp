@@ -42,6 +42,51 @@
     // Make the function globally available
     window.refreshPointsDisplay = refreshPointsDisplay;
   </script>
+  <style>
+    .favourite-card {
+      display: flex;
+      align-items: center;
+      background: #7bb47b;
+      border-radius: 16px;
+      padding: 12px 16px;
+      margin-bottom: 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      gap: 14px;
+    }
+    .favourite-img {
+      width: 56px;
+      height: 56px;
+      border-radius: 10px;
+      object-fit: cover;
+      background: #fff;
+    }
+    .favourite-info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .favourite-title {
+      font-weight: bold;
+      font-size: 1.1em;
+    }
+    .favourite-price {
+      font-size: 0.98em;
+      color: #222;
+      opacity: 0.85;
+    }
+    .favourite-delete-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0 4px;
+      display: flex;
+      align-items: center;
+    }
+    .favourite-delete-btn svg {
+      display: block;
+    }
+  </style>
 </head>
 <body>
   <!-- Reusable Navbar -->
@@ -183,6 +228,14 @@
           </div>
         </div>
       </div>
+      <!-- Favourites Modal -->
+      <div id="favourites-modal" class="profile-modal hidden">
+        <div class="profile-modal-panel" style="max-width:340px;width:95vw;padding:24px 14px 18px 14px;overflow-y:auto;max-height:420px;">
+          <button class="close-modal" id="closeFavouritesModal" style="position:absolute;top:12px;left:12px;font-size:1.5em;background:none;border:none;cursor:pointer;z-index:2;">&times;</button>
+          <h2 style="text-align:center;margin-top:0.5em;">FAVOURITES</h2>
+          <div id="favourites-modal-list" style="margin-top:1.5em;"></div>
+        </div>
+      </div>
       <button class="logout-btn">Log Out</button>
     </section>
     <section id="favourites-section" class="spa-section hidden">
@@ -214,5 +267,76 @@
   <script src="../JavaScript/Database.js"></script>
   <script src="../JavaScript/ProfileSPA.js"></script>
   <!-- Old localStorage-based profile logic removed. Now handled by ProfileSPA.js and Database.js. -->
+  <script>
+    // --- Favourites Modal Logic ---
+    const favouriteBtn = document.getElementById('favouriteBtn');
+    const favouritesModal = document.getElementById('favourites-modal');
+    const closeFavouritesModal = document.getElementById('closeFavouritesModal');
+    const favouritesModalList = document.getElementById('favourites-modal-list');
+
+    // Example food data (replace with your actual menu data source)
+    const allFoods = [
+      { id: 'party_set_b', name: 'Party Set B (74 PCS)', img: '../assets/images/foods/party_set/gunkan_set.png' },
+      { id: 'salmon_moriawase', name: 'Salmon Moriawase', img: '../assets/images/foods/moriawase_makimono_set/salmon_moriawase.png' },
+      { id: 'ebi_nigiri', name: 'Ebi Nigiri', img: '../assets/images/foods/nigiri/ebi_nigiri.png' },
+      { id: 'chicken_katsu_curry_don', name: 'Chicken Katsu Curry Don', img: '../assets/images/foods/curry_sets/chicken_katsu_curry_don.png' }
+      // Add more food items as needed
+    ];
+
+    // Get favourites from localStorage
+    function getFavourites() {
+      return JSON.parse(localStorage.getItem('favouriteFoods') || '[]');
+    }
+
+    // Save favourites to localStorage
+    function setFavourites(favs) {
+      localStorage.setItem('favouriteFoods', JSON.stringify(favs));
+    }
+
+    // Render the favourites list in the modal
+    function renderFavouritesModal() {
+      const favs = getFavourites();
+      if (allFoods.length === 0) {
+        favouritesModalList.innerHTML = '<p>No foods available.</p>';
+        return;
+      }
+      favouritesModalList.innerHTML = allFoods.map(food => {
+        const isFav = favs.includes(food.id);
+        return `
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+            <img src="${food.img}" alt="${food.name}" style="width:48px;height:48px;border-radius:8px;object-fit:cover;">
+            <span style="flex:1;font-weight:bold;">${food.name}</span>
+            <button class="heart-btn" data-id="${food.id}" style="background:none;border:none;font-size:1.7em;cursor:pointer;color:${isFav ? '#e74c3c' : '#bbb'};">
+              ${isFav ? '♥' : '♡'}
+            </button>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Show/hide modal
+    favouriteBtn.addEventListener('click', () => {
+      renderFavouritesModal();
+      favouritesModal.classList.remove('hidden');
+    });
+    closeFavouritesModal.addEventListener('click', () => {
+      favouritesModal.classList.add('hidden');
+    });
+
+    // Toggle favourite on heart button click
+    favouritesModalList.addEventListener('click', (e) => {
+      if (e.target.classList.contains('heart-btn')) {
+        const foodId = e.target.getAttribute('data-id');
+        let favs = getFavourites();
+        if (favs.includes(foodId)) {
+          favs = favs.filter(id => id !== foodId);
+        } else {
+          favs.push(foodId);
+        }
+        setFavourites(favs);
+        renderFavouritesModal();
+      }
+    });
+  </script>
 </body>
 </html>

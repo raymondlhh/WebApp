@@ -282,32 +282,48 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Favourites logic
+  // Favourites Modal Logic (Firestore version)
   async function loadFavourites() {
     const user = firebase.auth().currentUser;
     if (!user) return;
     const favourites = await window.FavouritesService.getUserFavourites(user.uid);
-    const favouritesContainer = document.getElementById('favourites-container');
-    if (favouritesContainer) {
-      favouritesContainer.innerHTML = '';
-      favourites.forEach(fav => {
-        const favEl = document.createElement('div');
-        favEl.className = 'favourite-item';
-        favEl.innerHTML = `
-          <img src="${fav.imagePath}" alt="${fav.name}">
-          <div class="favourite-info">
-            <h3>${fav.name}</h3>
-            <p>$${fav.price}</p>
-          </div>
-          <button onclick="removeFavourite('${fav.id}')" class="remove-fav">Remove</button>
-        `;
-        favouritesContainer.appendChild(favEl);
-      });
+    const favouritesModalList = document.getElementById('favourites-modal-list');
+    if (!favouritesModalList) return;
+
+    if (favourites.length === 0) {
+      favouritesModalList.innerHTML = '<p style="text-align:center;">No favourites yet</p>';
+      return;
     }
+
+    favouritesModalList.innerHTML = favourites.map(fav => {
+      const food = window.menuItems && window.menuItems[fav.itemId];
+      if (!food) return '';
+      return `
+        <div class="favourite-card">
+          <img src="${food.image}" alt="${food.name}" class="favourite-img">
+          <div class="favourite-info">
+            <div class="favourite-title">${food.name}</div>
+            <div class="favourite-price">${food.price}</div>
+          </div>
+          <button class="favourite-delete-btn" data-favid="${fav.id}" title="Remove">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M3 6h18M8 6v12a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2V6m-6 0V4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2" stroke="#e74c3c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M10 11v6M14 11v6" stroke="#e74c3c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+      `;
+    }).join('');
   }
 
-  async function removeFavourite(favId) {
-    await window.FavouritesService.removeFromFavourites(favId);
-    loadFavourites();
+  // Remove favourite on trash button click
+  const favouritesModalList = document.getElementById('favourites-modal-list');
+  if (favouritesModalList) {
+    favouritesModalList.onclick = async function(e) {
+      const btn = e.target.closest('.favourite-delete-btn');
+      if (btn) {
+        const favId = btn.getAttribute('data-favid');
+        await window.FavouritesService.removeFromFavourites(favId);
+        loadFavourites();
+      }
+    };
   }
 
   // Balance logic (using rewardsPoints instead of balance)
