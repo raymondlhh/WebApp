@@ -741,3 +741,6 @@ body, html {
   margin-left: auto;
   margin-right: 0.5em;
 }
+.sashimi-desc-list .sashimi-desc-item:nth-child(2) {
+    margin-top: 48px;
+}
