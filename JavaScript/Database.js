@@ -88,6 +88,39 @@ class UserService {
     }
   }
 
+  static async updateUserBalance(userId, amount) {
+    try {
+      const userRef = firebase.firestore().collection('users').doc(userId);
+      const userSnap = await userRef.get();
+      if (userSnap.exists) {
+        const currentBalance = userSnap.data().balance || 0;
+        await userRef.update({
+          balance: currentBalance + amount,
+          updatedAt: new Date()
+        });
+        return true;
+      }
+      return false;
+    } catch (error) {
+      console.error('Error updating user balance:', error);
+      return false;
+    }
+  }
+
+  static async getUserBalance(userId) {
+    try {
+      const userRef = firebase.firestore().collection('users').doc(userId);
+      const userSnap = await userRef.get();
+      if (userSnap.exists) {
+        return userSnap.data().balance || 0;
+      }
+      return 0;
+    } catch (error) {
+      console.error('Error getting user balance:', error);
+      return 0;
+    }
+  }
+
   static async getUserByEmail(email) {
     try {
       const usersRef = firebase.firestore().collection('users');

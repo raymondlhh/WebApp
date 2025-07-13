@@ -326,7 +326,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
   }
 
-  // Balance logic (using rewardsPoints instead of balance)
+  // Balance logic (using balance field instead of rewardsPoints)
   const balanceAmount = document.getElementById('balance-amount');
   const topupForm = document.getElementById('topup-form');
   const topupAmount = document.getElementById('topup-amount');
@@ -334,9 +334,9 @@ document.addEventListener('DOMContentLoaded', () => {
   async function loadBalance() {
     const user = firebase.auth().currentUser;
     if (!user) return;
-    const userData = await window.UserService.getUser(user.uid);
-    if (userData) {
-      balanceAmount.textContent = (userData.rewardsPoints || 0).toFixed(2);
+    const balance = await window.UserService.getUserBalance(user.uid);
+    if (balanceAmount) {
+      balanceAmount.textContent = parseFloat(balance).toFixed(2);
     }
   }
   topupBtns.forEach(btn => {
@@ -353,7 +353,7 @@ document.addEventListener('DOMContentLoaded', () => {
       alert('Please enter a valid amount between RM10 and RM500.');
       return;
     }
-    await window.UserService.updateUserRewardsPoints(user.uid, amt);
+    await window.UserService.updateUserBalance(user.uid, amt);
     loadBalance();
     topupAmount.value = 0;
   };
@@ -443,10 +443,10 @@ document.addEventListener('DOMContentLoaded', () => {
       // Always show the latest balance when opening the modal
       const user = firebase.auth().currentUser;
       if (user) {
-        const userData = await window.UserService.getUser(user.uid);
+        const balance = await window.UserService.getUserBalance(user.uid);
         const modalBalanceAmount = document.getElementById('modal-balance-amount');
         if (modalBalanceAmount) {
-          modalBalanceAmount.textContent = (userData.rewardsPoints || 0).toFixed(2);
+          modalBalanceAmount.textContent = parseFloat(balance).toFixed(2);
         }
       }
     };
@@ -488,13 +488,13 @@ document.addEventListener('DOMContentLoaded', () => {
         alert('Please enter a valid amount between RM10 and RM500.');
         return;
       }
-      await window.UserService.updateUserRewardsPoints(user.uid, amt);
+      await window.UserService.updateUserBalance(user.uid, amt);
       // Update both modal and main balance displays
       if (typeof loadBalance === 'function') loadBalance();
       const modalBalanceAmount = document.getElementById('modal-balance-amount');
       if (modalBalanceAmount) {
-        const userData = await window.UserService.getUser(user.uid);
-        modalBalanceAmount.textContent = (userData.rewardsPoints || 0).toFixed(2);
+        const balance = await window.UserService.getUserBalance(user.uid);
+        modalBalanceAmount.textContent = parseFloat(balance).toFixed(2);
       }
       modalTopupInput.value = 0;
       modalTopupAmount.textContent = '0.00';
