@@ -188,7 +188,9 @@ body, html {
     padding: 1em;
     text-align: center;
     margin-top: 2em;
-    border-radius: 0 0 18px 18px;
+    margin-bottom: 2em; /* Add bottom margin to create space from footer */
+    border-radius: 18px; /* Change to full border radius since it's not attached to main content */
+    box-shadow: 0 4px 24px #0001; /* Add shadow for better visual separation */
 }
 
 .faq-link {
@@ -318,8 +320,9 @@ body, html {
     
     /* Mobile FAQ Bar Styles */
     .faq-bar {
-        border-radius: 0 0 8px 8px;
+        border-radius: 8px; /* Change to full border radius for mobile */
         padding: 0.8em;
+        margin-bottom: 1.5em; /* Add bottom margin for mobile */
     }
     
     .faq-link {

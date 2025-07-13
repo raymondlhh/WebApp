@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <link rel="stylesheet" href="../CSS/Login.css">
-    <link rel="stylesheet" href="../CSS/plainHeader.css">
     <link rel="stylesheet" href="../CSS/Footer.css">
     <!-- Firebase CDN scripts -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
@@ -19,19 +18,6 @@
 </head>
 
 <body>
-    <div id="plain-header-container"></div>
-    <script>
-        // Load the plain header component
-        fetch('plainHeader.html')
-            .then(response => response.text())
-            .then(html => {
-                document.getElementById('plain-header-container').innerHTML = html;
-            })
-            .catch(error => {
-                console.error('Error loading plain header:', error);
-            });
-    </script>
-    
     <div class="container">
         <img src="../assets/images/icons/welcome_screen/subtitle.png" alt="Subtitle" class="subtitle">
         
@@ -62,13 +48,6 @@
             .then(response => response.text())
             .then(html => {
                 document.getElementById('footer-container').innerHTML = html;
-                // Dynamically load the JS file
-                const script = document.createElement('script');
-                script.src = '../JavaScript/footer.js';
-                script.onload = function() {
-                    if (window.initFooter) window.initFooter();
-                };
-                document.body.appendChild(script);
             })
             .catch(error => {
                 console.error('Error loading footer:', error);
