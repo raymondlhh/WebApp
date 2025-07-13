@@ -225,7 +225,45 @@ document.getElementById('checkout-confirm-btn').onclick = async () => {
     if (window.saveCart) {
       window.saveCart([]);
     }
-    
+
+    // --- Create order in Firestore ---
+    try {
+      const user = firebase.auth().currentUser;
+      // Capture cart BEFORE clearing it
+      const cartSnapshot = window.getCart ? window.getCart() : [];
+      const orderDetails = cartSnapshot.map(item => ({
+        imagePath: item.image,
+        name: item.name,
+        price: item.price,
+        quantity: item.qty
+      }));
+      const orderData = {
+        details: orderDetails,
+        timestamp: new Date().toISOString(),
+        total: total,
+        userAddress: (window.currentUserProfile && window.currentUserProfile.address) || '',
+        userEmail: user ? user.email : '',
+        userName: (window.currentUserProfile && window.currentUserProfile.name) || '',
+        userPhone: (window.currentUserProfile && window.currentUserProfile.phone) || ''
+      };
+      // Try to get user profile from Firestore if not already loaded
+      if ((!orderData.userName || !orderData.userPhone || !orderData.userAddress) && user) {
+        try {
+          const userDoc = await firebase.firestore().collection('users').doc(user.uid).get();
+          if (userDoc.exists) {
+            const data = userDoc.data();
+            orderData.userName = data.name || orderData.userName;
+            orderData.userPhone = data.phone || orderData.userPhone;
+            orderData.userAddress = data.address || orderData.userAddress;
+          }
+        } catch (e) { /* ignore */ }
+      }
+      await window.OrderService.createOrder(orderData);
+    } catch (error) {
+      console.error('Error creating order in Firestore:', error);
+    }
+    // --- End order creation ---
+
     // Show success message and redirect
     alert(`Order confirmed! RM ${total.toFixed(2)} has been deducted from your wallet. You earned ${points} points.`);
     window.location.href = 'Menu.html';
