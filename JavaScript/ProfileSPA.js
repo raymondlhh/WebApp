@@ -296,8 +296,19 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     favouritesModalList.innerHTML = favourites.map(fav => {
-      const food = window.menuItems && window.menuItems[fav.itemId];
-      if (!food) return '';
+      if (!fav.itemId) {
+        console.error('Favourite missing itemId:', fav);
+        return '';
+      }
+      if (!window.menuItems) {
+        console.error('menuItems not loaded');
+        return '';
+      }
+      const food = window.menuItems[fav.itemId];
+      if (!food) {
+        console.error('No menu item found for itemId:', fav.itemId);
+        return '';
+      }
       return `
         <div class="favourite-card">
           <img src="${food.image}" alt="${food.name}" class="favourite-img">
@@ -401,15 +412,52 @@ document.addEventListener('DOMContentLoaded', () => {
     };
   }
 
-  // Modal logic for Favourites and Balance
+  // Robust async renderFavouritesModal that waits for menuItems
+  async function renderFavouritesModal() {
+    const user = firebase.auth().currentUser;
+    const favouritesModalList = document.getElementById('favourites-modal-list');
+    if (!favouritesModalList) return;
+
+    // Show loading state
+    favouritesModalList.innerHTML = '<p style="text-align:center;">Loading...</p>';
+
+    if (!user) {
+      favouritesModalList.innerHTML = '<p style="text-align:center;">Please log in to see your favourites.</p>';
+      return;
+    }
+
+    const favourites = await window.FavouritesService.getUserFavourites(user.uid);
+
+    if (!Array.isArray(favourites) || favourites.length === 0) {
+      favouritesModalList.innerHTML = '<p style="text-align:center;">No favourites yet</p>';
+      return;
+    }
+
+    favouritesModalList.innerHTML = favourites.map(fav => {
+      return `
+        <div class="favourite-card">
+          <img src="${fav.image || ''}" alt="${fav.name || ''}" class="favourite-img">
+          <div class="favourite-info">
+            <div class="favourite-title">${fav.name || fav.itemId}</div>
+            <div class="favourite-price">${fav.price || ''}</div>
+          </div>
+          <button class="favourite-delete-btn" data-itemid="${fav.itemId}" title="Remove">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M3 6h18M8 6v12a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2V6m-6 0V4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2" stroke="#e74c3c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M10 11v6M14 11v6" stroke="#e74c3c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+      `;
+    }).join('');
+  }
+
+  // Modal open logic (ensure async)
   const favouriteBtn = document.getElementById('favouriteBtn');
   const favouritesModal = document.getElementById('favourites-modal');
   const closeFavouritesModal = document.getElementById('closeFavouritesModal');
 
   if (favouriteBtn && favouritesModal && closeFavouritesModal) {
-    favouriteBtn.onclick = function() {
+    favouriteBtn.onclick = async function() {
       favouritesModal.classList.remove('hidden');
-      loadFavourites(); // Show the user's favourite foods
+      await renderFavouritesModal();
     };
     closeFavouritesModal.onclick = function() {
       favouritesModal.classList.add('hidden');

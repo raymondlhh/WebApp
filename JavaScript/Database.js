@@ -358,12 +358,16 @@ class FavouritesService {
   // Add a food to user's favourites
   static async addToFavourites(userId, itemId) {
     try {
-      // Use itemId as the document id for uniqueness
+      // Save full food info for display
+      const food = window.menuItems ? window.menuItems[itemId] : null;
       await firebase.firestore()
         .collection('users').doc(userId)
         .collection('favourites').doc(itemId)
         .set({
           itemId: itemId,
+          name: food ? food.name : itemId,
+          image: food ? food.image : '',
+          price: food ? food.price : '',
           addedAt: new Date()
         });
       return true;
