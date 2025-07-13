@@ -97,7 +97,6 @@ document.getElementById('checkout-confirm-btn').onclick = async () => {
   });
   localStorage.setItem('notifications', JSON.stringify(notifications));
   if (typeof updateNotificationBadge === 'function') updateNotificationBadge();
-  if (typeof showNotificationModal === 'function') showNotificationModal();
 
   // Update Firestore if user is logged in using the add-points function
   if (window.firebase && firebase.auth && firebase.auth().currentUser) {
