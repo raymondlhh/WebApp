@@ -389,12 +389,25 @@ function updateUserPointsDisplay() {
   }
 }
 
+async function refreshUserPointsFromFirestore() {
+  if (!(window.firebase && firebase.auth && firebase.auth().currentUser)) return;
+  const user = firebase.auth().currentUser;
+  const db = firebase.firestore();
+  const userDoc = await db.collection('users').doc(user.uid).get();
+  if (userDoc.exists) {
+    const points = userDoc.data().rewardsPoints || 0;
+    const userPointsElement = document.getElementById('userPoints');
+    if (userPointsElement) userPointsElement.textContent = points;
+  }
+}
+
 // Initialize rewards immediately when script loads
 document.addEventListener('DOMContentLoaded', async () => {
   console.log('Rewards script loaded, initializing...');
   await initializeRewards();
   // Show user points from localStorage
   updateUserPointsDisplay();
+  refreshUserPointsFromFirestore();
 });
 
 window.addEventListener('storage', function(e) {
