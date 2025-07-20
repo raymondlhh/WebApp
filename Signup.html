@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+    <link rel="stylesheet" href="CSS/Signup.css">
+    <link rel="stylesheet" href="CSS/Footer.css">
+    <!-- Firebase CDN scripts -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <!-- Firebase initialization -->
+    <script src="JavaScript/firebase-init.js"></script>
+    <!-- Signup logic -->
+    <script src="JavaScript/signup.js"></script>
+</head>
+<body>
+    <div class="container">
+        <img src="assets/images/icons/welcome_screen/subtitle.png" alt="Subtitle" class="subtitle">
+        
+        <div class="error-message" id="error-msg"></div>
+        
+        <input type="text" id="name" placeholder="Full Name" class="input-field name-input" required>
+        <input type="email" id="email" placeholder="Email" class="input-field email-input" required>
+        
+        <div class="password-container">
+            <input type="password" id="password" placeholder="Password" class="password-field" required>
+            <button type="button" class="password-toggle" id="password-toggle">👁</button>
+        </div>
+        
+        <input type="text" id="phone" placeholder="Phone Number" class="input-field phone-input" required>
+        
+        <button type="button" id="signup-btn" class="signup-button">
+            <span id="signup-text">Sign Up</span>
+            <span id="signup-loading" class="loading" style="display:none;"></span>
+        </button>
+        
+        <div class="login-link">
+            Already have an account? <a href="Login.html">Login</a>
+        </div>
+    </div>
+    
+    <div id="footer-container"></div>
+    <script>
+        // Load the footer component
+        fetch('Footer.html')
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('footer-container').innerHTML = html;
+            })
+            .catch(error => {
+                console.error('Error loading footer:', error);
+            });
+    </script>
+</body>
+</html> 

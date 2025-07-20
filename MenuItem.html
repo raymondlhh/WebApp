@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Menu Item</title>
+  <link rel="stylesheet" href="CSS/MenuItem.css">
+  <link rel="stylesheet" href="CSS/Navbar.css">
+  <link rel="stylesheet" href="CSS/Footer.css">
+  <!-- Firebase CDN scripts -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <!-- Firebase initialization -->
+  <script src="JavaScript/firebase-init.js"></script>
+</head>
+<body>
+  
+  <main>
+    <button id="save-favourite-btn" style="position:absolute;top:24px;right:16px;background:none;border:none;cursor:pointer;z-index:10;" title="Save to Favourites">
+      <span id="heart-grey" style="font-size:2em;color:#bbb;position:absolute;top:0;right:0;">&#10084;</span>
+      <span id="heart-red" style="font-size:2em;color:#b94a2c;position:absolute;top:0;right:0;display:none;">&#10084;</span>
+    </button>
+    <button class="back-button" style="position:absolute;top:24px;left:16px;z-index:10;" onclick="window.location.href='Menu.html'" aria-label="Back to menu">&#8592;</button>
+    <div class="item-detail-container">
+      <div class="item-image-wrapper">
+        <img id="item-image" src="" alt="Menu Item" />
+      </div>
+      <h1 id="item-title"></h1>
+      <div class="item-rating">
+        <span id="item-stars"></span>
+        <span id="item-rating-value"></span>
+      </div>
+      <div class="item-review-count" id="item-review-count"></div>
+      <div class="item-reviews" id="item-reviews"></div>
+      <div class="item-included">
+        <h3>What's Included</h3>
+        <div id="item-included-list"></div>
+      </div>
+    </div>
+    <div class="item-footer">
+      <span class="item-price" id="item-price"></span>
+      <div class="quantity-selector">
+        <button id="decrease-qty">-</button>
+        <span id="item-qty">1</span>
+        <button id="increase-qty">+</button>
+      </div>
+      <button class="add-to-cart" id="add-to-cart">ADD TO CART</button>
+    </div>
+  </main>
+  
+  <script src="JavaScript/menu-item.js"></script>
+  <script src="JavaScript/menu-data.js"></script>
+  <script src="JavaScript/Database.js"></script>
+  <script>
+    // Save Favourite Button Logic (Firestore version)
+    const saveFavBtn = document.getElementById('save-favourite-btn');
+    const heartGrey = document.getElementById('heart-grey');
+    const heartRed = document.getElementById('heart-red');
+
+    // Get itemId from URL or fallback
+    function getCurrentItemId() {
+      const params = new URLSearchParams(window.location.search);
+      let id = params.get('id');
+      if (!id) {
+        id = 'party_set_b'; // fallback to a known id
+      }
+      return id;
+    }
+
+    // Check if current item is in user's Firestore favourites
+    async function isCurrentInFavourites() {
+      const user = firebase.auth().currentUser;
+      if (!user) return false;
+      const itemId = getCurrentItemId();
+      const favs = await window.FavouritesService.getUserFavourites(user.uid);
+      return favs.some(f => f.itemId === itemId);
+    }
+
+    // Update heart icon based on Firestore
+    async function updateHeartIcon() {
+      if (await isCurrentInFavourites()) {
+        heartGrey.style.display = 'none';
+        heartRed.style.display = 'block';
+      } else {
+        heartGrey.style.display = 'block';
+        heartRed.style.display = 'none';
+      }
+    }
+
+    // On page load and after auth state change, update icon
+    firebase.auth().onAuthStateChanged(updateHeartIcon);
+    window.addEventListener('DOMContentLoaded', updateHeartIcon);
+
+    saveFavBtn.onclick = async function() {
+      const user = firebase.auth().currentUser;
+      if (!user) {
+        alert('Please log in to save favourites.');
+        return;
+      }
+      const itemId = getCurrentItemId();
+      const favs = await window.FavouritesService.getUserFavourites(user.uid);
+      const existing = favs.find(f => f.itemId === itemId);
+      if (!existing) {
+        // Add to Firestore
+        await window.FavouritesService.addToFavourites(user.uid, itemId);
+        alert('Added to favourites!');
+      } else {
+        // Remove from Firestore
+        await window.FavouritesService.removeFromFavourites(user.uid, itemId);
+        alert('Removed from favourites!');
+      }
+      updateHeartIcon();
+    };
+  </script>
+  
+  <div id="footer-container"></div>
+  <script>
+      // Load the footer component
+      fetch('Footer.html')
+          .then(response => response.text())
+          .then(html => {
+              document.getElementById('footer-container').innerHTML = html;
+          })
+          .catch(error => {
+              console.error('Error loading footer:', error);
+          });
+  </script>
+</body>
+</html> 

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reward Detail</title>
+    <link rel="stylesheet" href="CSS/Home.css">
+    <link rel="stylesheet" href="CSS/Profile.css">
+    <link rel="stylesheet" href="CSS/Navbar.css">
+    <link rel="stylesheet" href="CSS/Footer.css">
+    <link rel="stylesheet" href="CSS/rewards.css">
+    <!-- Firebase CDN scripts -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <!-- Firebase initialization -->
+    <script src="JavaScript/firebase-init.js"></script>
+    <!-- Global points refresh function -->
+    <script>
+        // Global function to refresh points display from Firestore
+        async function refreshPointsDisplay() {
+            if (window.firebase && firebase.auth && firebase.auth().currentUser) {
+                try {
+                    const user = firebase.auth().currentUser;
+                    const db = firebase.firestore();
+                    const userDoc = await db.collection('users').doc(user.uid).get();
+                    if (userDoc.exists) {
+                        const points = userDoc.data().rewardsPoints || 0;
+                        // Update all userPoints elements on the page
+                        const userPointsElements = document.querySelectorAll('#userPoints');
+                        userPointsElements.forEach(element => {
+                            element.textContent = points;
+                        });
+                        // Also update localStorage for consistency
+                        localStorage.setItem('userPoints', points.toString());
+                        console.log('Points display refreshed:', points);
+                    }
+                } catch (error) {
+                    console.error('Error refreshing points display:', error);
+                }
+            }
+        }
+        // Make the function globally available
+        window.refreshPointsDisplay = refreshPointsDisplay;
+    </script>
+    <!-- Database and Rewards logic -->
+    <script src="JavaScript/Database.js"></script>
+    <script src="JavaScript/rewards.js"></script>
+</head>
+<body>
+    <div class="body-bg">
+      <div class="bg-side bg-left"></div>
+      <div class="bg-side bg-right"></div>
+    </div>
+    <!-- Include the navbar -->
+    <div id="navbar-container"></div>
+    <script>
+        fetch('Navbar.html')
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('navbar-container').innerHTML = html;
+                const script = document.createElement('script');
+                script.src = 'JavaScript/navbar.js';
+                script.onload = function() {
+                    if (window.initHamburgerMenu) window.initHamburgerMenu();
+                    if (window.initNotificationSidebar) window.initNotificationSidebar();
+                };
+                document.body.appendChild(script);
+            })
+            .catch(error => {
+                console.error('Error loading navbar:', error);
+            });
+    </script>
+    <main class="reward-detail-main">
+        <section class="reward-detail-card">
+            <!-- Latest Notification Display -->
+            <div id="latestNotification" style="display:none;margin-bottom:1.2em;padding:1em;border-radius:8px;background:#f9f9f9;border:1px solid #e0e0e0;">
+                <div style="display:flex;justify-content:space-between;align-items:center;">
+                    <span id="latestNotificationTitle" style="font-weight:bold;color:#b93a1c;"></span>
+                    <span id="latestNotificationDate" style="color:#999;font-size:0.9em;"></span>
+                </div>
+                <div id="latestNotificationMessage" style="color:#333;margin-top:0.3em;"></div>
+            </div>
+            <img id="rewardImage" src="assets/images/foods/appetizers/chuka_wakame.png" alt="Reward Image">
+            <h2 id="rewardName">Chuka Wakame</h2>
+            <p id="rewardDesc">Seaweed salad with a subtly sweet and savory flavor.</p>
+            <div class="reward-info">
+                <div>Points Required: <span id="rewardPoints">1500</span></div>
+                <div>Your Points: <span id="userPoints">0</span></div>
+                <div>Validity: <span id="rewardValidity">8</span> months</div>
+                <div>Redemptions: <span id="userRedemptions">0</span>/<span id="maxRedemptions">3</span></div>
+            </div>
+            <button id="redeemBtn" class="redeem-btn">Redeem</button>
+            <div class="terms">
+                <h3>Terms & Conditions</h3>
+                <ul>
+                    <li>Reward is valid for dine-in only.</li>
+                    <li>Cannot be combined with other offers.</li>
+                    <li>Redemption is subject to availability.</li>
+                    <li>Points will be deducted upon redemption.</li>
+                </ul>
+            </div>
+        </section>
+    </main>
+    
+    <div id="footer-container"></div>
+    <script>
+        // Load the footer component
+        fetch('Footer.html')
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('footer-container').innerHTML = html;
+            })
+            .catch(error => {
+                console.error('Error loading footer:', error);
+            });
+
+        // Fetch and display the latest notification for the logged-in user
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Wait for Firebase and Database.js to be loaded
+            function waitForFirebaseAndDB() {
+                return new Promise(resolve => {
+                    function check() {
+                        if (window.firebase && window.NotificationsService && firebase.auth) {
+                            resolve();
+                        } else {
+                            setTimeout(check, 50);
+                        }
+                    }
+                    check();
+                });
+            }
+            await waitForFirebaseAndDB();
+            firebase.auth().onAuthStateChanged(async function(user) {
+                if (!user) return;
+                const notifs = await window.NotificationsService.getUserNotifications(user.uid);
+                if (notifs && notifs.length > 0) {
+                    const latest = notifs[0];
+                    document.getElementById('latestNotificationTitle').textContent = latest.title || 'Notification';
+                    document.getElementById('latestNotificationMessage').textContent = latest.message || '';
+                    let dateStr = '';
+                    if (latest.date) {
+                        let d = latest.date;
+                        if (d.toDate) d = d.toDate();
+                        else d = new Date(d);
+                        dateStr = d.toLocaleDateString('en-GB') + ' ' + d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+                    }
+                    document.getElementById('latestNotificationDate').textContent = dateStr;
+                    document.getElementById('latestNotification').style.display = 'block';
+                } else {
+                    document.getElementById('latestNotification').style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html> 
