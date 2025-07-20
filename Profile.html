@@ -92,12 +92,12 @@
   <!-- Reusable Navbar -->
   <div id="navbar-container"></div>
   <script>
-    fetch('navbar.html')
+    fetch('/WebApp/Navbar.html')
       .then(response => response.text())
       .then(html => {
         document.getElementById('navbar-container').innerHTML = html;
         const script = document.createElement('script');
-        script.src = 'navbar.js';
+        script.src = '/WebApp/navbar.js';
         script.onload = function() {
           if (window.initHamburgerMenu) window.initHamburgerMenu();
           if (window.initNotificationSidebar) window.initNotificationSidebar();
