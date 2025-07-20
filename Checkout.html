@@ -4,9 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Checkout</title>
-  <link rel="stylesheet" href="Checkout.css">
-  <link rel="stylesheet" href="Navbar.css">
-  <link rel="stylesheet" href="Footer.css">
+  <link rel="stylesheet" href="checkout.css">
+  <link rel="stylesheet" href="navbar.css">
+  <link rel="stylesheet" href="footer.css">
   <!-- Firebase CDN scripts -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
@@ -17,11 +17,11 @@
   <script src="Database.js"></script>
   <!-- Notification scripts -->
   <script src="navbar.js"></script>
-  <script src="Notification.js"></script>
+  <script src="notification.js"></script>
 </head>
 <body>
   <div class="checkout-header">
-    <button class="checkout-back-btn" onclick="window.location.href='Cart.html'" aria-label="Back to cart">&#8592;</button>
+    <button class="checkout-back-btn" onclick="window.location.href='cart.html'" aria-label="Back to cart">&#8592;</button>
     <span class="checkout-title">CHECKOUT</span>
   </div>
   <div class="checkout-container">
@@ -54,7 +54,7 @@
   <div id="footer-container"></div>
   <script>
       // Load the footer component
-      fetch('Footer.html')
+      fetch('footer.html')
           .then(response => response.text())
           .then(html => {
               document.getElementById('footer-container').innerHTML = html;

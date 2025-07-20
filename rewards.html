@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rewards</title>
-    <link rel="stylesheet" href="Home.css">
+    <link rel="stylesheet" href="home.css">
     <link rel="stylesheet" href="rewards.css">
-    <link rel="stylesheet" href="Navbar.css">
-    <link rel="stylesheet" href="Footer.css">
+    <link rel="stylesheet" href="navbar.css">
+    <link rel="stylesheet" href="footer.css">
     <!-- Firebase CDN scripts -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
@@ -47,11 +47,11 @@
 </head>
 <body>
     <!-- Include the reusable navbar component -->
-    <script src="Database.js"></script>
+    <script src="database.js"></script>
     <div id="navbar-container"></div>
     <script>
         // Load the navbar component
-        fetch('Navbar.html')
+        fetch('navbar.html')
             .then(response => response.text())
             .then(html => {
                 document.getElementById('navbar-container').innerHTML = html;
@@ -88,7 +88,7 @@
     <div id="footer-container"></div>
     <script>
         // Load the footer component
-        fetch('Footer.html')
+        fetch('footer.html')
             .then(response => response.text())
             .then(html => {
                 document.getElementById('footer-container').innerHTML = html;
