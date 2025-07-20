@@ -4,15 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sushi Home</title>
-    <link rel="stylesheet" href="../CSS/Home.css">
-    <link rel="stylesheet" href="../CSS/Profile.css">
-    <link rel="stylesheet" href="../CSS/Navbar.css">
-    <link rel="stylesheet" href="../CSS/Footer.css">
+    <link rel="stylesheet" href="Home.css">
+    <link rel="stylesheet" href="Profile.css">
+    <link rel="stylesheet" href="Navbar.css">
+    <link rel="stylesheet" href="Footer.css">
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
-    <script src="../JavaScript/firebase-init.js"></script>
+    <script src="firebase-init.js"></script>
 </head>
 <body>
     <script>
@@ -23,11 +23,11 @@
       
       // 左侧用jpg格式的5，否则用png
       const leftExt = leftNum === 5 ? 'jpg' : 'png';
-      document.querySelector('.bg-left').style.backgroundImage = `url('../assets/images/Background/${leftNum}.${leftExt}')`;
+      document.querySelector('.bg-left').style.backgroundImage = `url('assets/images/Background/${leftNum}.${leftExt}')`;
       
       // 右侧用jpg格式的5，否则用png
       const rightExt = rightNum === 5 ? 'jpg' : 'png';
-      document.querySelector('.bg-right').style.backgroundImage = `url('../assets/images/Background/${rightNum}.${rightExt}')`;
+      document.querySelector('.bg-right').style.backgroundImage = `url('assets/images/Background/${rightNum}.${rightExt}')`;
     </script>
     <!-- Include the navbar -->
     <div id="navbar-container"></div>
@@ -37,7 +37,7 @@
             .then(html => {
                 document.getElementById('navbar-container').innerHTML = html;
                 const script = document.createElement('script');
-                script.src = '../JavaScript/navbar.js';
+                script.src = 'navbar.js';
                 script.onload = function() {
                     if (window.initHamburgerMenu) window.initHamburgerMenu();
                     if (window.initNotificationSidebar) window.initNotificationSidebar();
@@ -56,7 +56,7 @@
                 <div class="hero-jp hero-jp-left">
                     <span>伝</span><span>統</span><span>的</span><span>な</span>
                 </div>
-                <img src="../assets/images/icons/welcome_screen/Logo.png" class="hero-logo" alt="sushi logo">
+                <img src="assets/images/icons/welcome_screen/Logo.png" class="hero-logo" alt="sushi logo">
                 <div class="hero-jp hero-jp-right">
                     <span>寿</span><span>司</span>
                 </div>
@@ -65,14 +65,14 @@
         <section class="menu-icons">
             <h2>OUR MENU</h2>
             <div class="menu-icon-list">
-                <a href="Menu.html"><div><img src="../assets/images/icons/menu_sidebar/party_set.png"><span>Party Set</span></div></a>
-                <a href="Menu.html"><div><img src="../assets/images/icons/menu_sidebar/appetizers.png"><span>Appetizers</span></div></a>
-                <a href="Menu.html"><div><img src="../assets/images/icons/menu_sidebar/maki_roll.png"><span>Maki Roll</span></div></a>
-                <a href="Menu.html"><div><img src="../assets/images/icons/menu_sidebar/nigiri.png"><span>Nigiri</span></div></a>
-                <a href="Menu.html"><div><img src="../assets/images/icons/menu_sidebar/gunkan.png"><span>Gunkan</span></div></a>
-                <a href="Menu.html"><div><img src="../assets/images/icons/menu_sidebar/curry_set.png"><span>Curry Set</span></div></a>
-                <a href="Menu.html"><div><img src="../assets/images/icons/menu_sidebar/condiments.png"><span>Condiments</span></div></a>
-                <a href="Menu.html"><div><img src="../assets/images/icons/menu_sidebar/drinks.png"><span>Drinks</span></div></a>
+                <a href="Menu.html"><div><img src="assets/images/icons/menu_sidebar/party_set.png"><span>Party Set</span></div></a>
+                <a href="Menu.html"><div><img src="assets/images/icons/menu_sidebar/appetizers.png"><span>Appetizers</span></div></a>
+                <a href="Menu.html"><div><img src="assets/images/icons/menu_sidebar/maki_roll.png"><span>Maki Roll</span></div></a>
+                <a href="Menu.html"><div><img src="assets/images/icons/menu_sidebar/nigiri.png"><span>Nigiri</span></div></a>
+                <a href="Menu.html"><div><img src="assets/images/icons/menu_sidebar/gunkan.png"><span>Gunkan</span></div></a>
+                <a href="Menu.html"><div><img src="assets/images/icons/menu_sidebar/curry_set.png"><span>Curry Set</span></div></a>
+                <a href="Menu.html"><div><img src="assets/images/icons/menu_sidebar/condiments.png"><span>Condiments</span></div></a>
+                <a href="Menu.html"><div><img src="assets/images/icons/menu_sidebar/drinks.png"><span>Drinks</span></div></a>
             </div>
         </section>
         <section class="sales-hits">
@@ -181,9 +181,9 @@
           <section id="profile-section" class="spa-section">
             <div class="profile-header">
               <div class="profile-pic-wrapper">
-                <img src="../assets/images/others/Profile.png" alt="Profile Picture" class="profile-pic" id="profile-pic-img">
+                <img src="assets/images/others/Profile.png" alt="Profile Picture" class="profile-pic" id="profile-pic-img">
                 <button class="camera-btn" id="cameraBtn" title="Change Profile Picture">
-                  <img src="../assets/images/icons/Profile.png" alt="Camera Icon" style="width:28px;height:28px;">
+                  <img src="assets/images/icons/Profile.png" alt="Camera Icon" style="width:28px;height:28px;">
                 </button>
               </div>
               <div class="profile-info">
@@ -234,15 +234,15 @@
     <!-- Add profile picture selector modal -->
     <div id="profile-pic-selector" class="profile-pic-selector hidden">
       <div class="profile-pic-options">
-        <img src="../assets/images/others/Profile.png" alt="Profile 1" class="pic-option" data-img="../assets/images/others/Profile.png">
-        <img src="../assets/images/others/Profile2.png" alt="Profile 2" class="pic-option" data-img="../assets/images/others/Profile2.png">
-        <img src="../assets/images/others/Profile3.png" alt="Profile 3" class="pic-option" data-img="../assets/images/others/Profile3.png">
+        <img src="assets/images/others/Profile.png" alt="Profile 1" class="pic-option" data-img="assets/images/others/Profile.png">
+        <img src="assets/images/others/Profile2.png" alt="Profile 2" class="pic-option" data-img="assets/images/others/Profile2.png">
+        <img src="assets/images/others/Profile3.png" alt="Profile 3" class="pic-option" data-img="assets/images/others/Profile3.png">
       </div>
     </div>
     <!-- Notification script -->
-    <script src="../JavaScript/Notification.js"></script>
-    <script src="../JavaScript/Database.js"></script>
-    <script src="../JavaScript/ProfileSPA.js"></script>
+    <script src="Notification.js"></script>
+    <script src="Database.js"></script>
+    <script src="ProfileSPA.js"></script>
     <script>
       // Modal logic
       const profileModal = document.getElementById('profile-modal');

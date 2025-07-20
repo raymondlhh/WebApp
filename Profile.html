@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>My Profile</title>
-  <link rel="stylesheet" href="../CSS/Profile.css">
-  <link rel="stylesheet" href="../CSS/Navbar.css">
+  <link rel="stylesheet" href="Profile.css">
+  <link rel="stylesheet" href="Navbar.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Noto+Serif+JP:wght@700&display=swap" rel="stylesheet">
@@ -13,7 +13,7 @@
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-  <script src="../JavaScript/firebase-init.js"></script>
+  <script src="firebase-init.js"></script>
   <!-- Global points refresh function -->
   <script>
     // Global function to refresh points display from Firestore
@@ -97,7 +97,7 @@
       .then(html => {
         document.getElementById('navbar-container').innerHTML = html;
         const script = document.createElement('script');
-        script.src = '../JavaScript/navbar.js';
+        script.src = 'navbar.js';
         script.onload = function() {
           if (window.initHamburgerMenu) window.initHamburgerMenu();
           if (window.initNotificationSidebar) window.initNotificationSidebar();
@@ -114,7 +114,7 @@
       <!-- Profile content (view/edit) -->
       <div class="profile-header">
         <div class="profile-pic-container">
-          <img src="../assets/images/others/Profile.png" alt="Profile Picture" class="profile-pic" id="profile-pic-img">
+          <img src="assets/images/others/Profile.png" alt="Profile Picture" class="profile-pic" id="profile-pic-img">
         </div>
         <div class="profile-info">
           <h2 id="profile-name">Tone</h2>
@@ -123,13 +123,13 @@
         </div>
         <div class="profile-actions">
           <button class="profile-action-btn" id="favouriteBtn">
-            <img src="../assets/images/buttons/FavouriteButton.png" alt="Favourite">
+            <img src="assets/images/buttons/FavouriteButton.png" alt="Favourite">
           </button>
           <button class="profile-action-btn" id="balanceBtn">
-            <img src="../assets/images/buttons/BalanceButton.png" alt="Balance">
+            <img src="assets/images/buttons/BalanceButton.png" alt="Balance">
           </button>
           <button class="profile-action-btn" id="settingBtn">
-            <img src="../assets/images/buttons/SettingButton.png" alt="Setting">
+            <img src="assets/images/buttons/SettingButton.png" alt="Setting">
           </button>
         </div>
       </div>
@@ -152,12 +152,12 @@
           </div>
           <div class="profile-edit-body">
             <div class="profile-pic-wrapper">
-              <img id="modal-profile-pic" src="../assets/images/others/Profile.png" alt="Profile Picture" class="profile-pic">
+              <img id="modal-profile-pic" src="assets/images/others/Profile.png" alt="Profile Picture" class="profile-pic">
               <button class="camera-btn" id="switchProfilePicBtn"><span class="camera-icon">&#128247;</span></button>
               <div id="profile-pic-panel" class="profile-pic-panel hidden">
-                <img src="../assets/images/others/Profile.png" class="pic-option" data-pic="../assets/images/others/Profile.png" alt="Profile 1">
-                <img src="../assets/images/others/Profile2.png" class="pic-option" data-pic="../assets/images/others/Profile2.png" alt="Profile 2">
-                <img src="../assets/images/others/Profile3.png" class="pic-option" data-pic="../assets/images/others/Profile3.png" alt="Profile 3">
+                <img src="assets/images/others/Profile.png" class="pic-option" data-pic="assets/images/others/Profile.png" alt="Profile 1">
+                <img src="assets/images/others/Profile2.png" class="pic-option" data-pic="assets/images/others/Profile2.png" alt="Profile 2">
+                <img src="assets/images/others/Profile3.png" class="pic-option" data-pic="assets/images/others/Profile3.png" alt="Profile 3">
               </div>
             </div>
             <form id="modal-edit-profile-form" class="profile-edit-form">
@@ -264,9 +264,9 @@
       </form>
     </section>
   </main>
-  <script src="../JavaScript/menu-data.js"></script>
-  <script src="../JavaScript/Database.js"></script>
-  <script src="../JavaScript/ProfileSPA.js"></script>
+  <script src="menu-data.js"></script>
+  <script src="Database.js"></script>
+  <script src="ProfileSPA.js"></script>
   <!-- Old localStorage-based profile logic removed. Now handled by ProfileSPA.js and Database.js. -->
   <script>
     // --- Favourites Modal Logic ---

@@ -4,28 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Menu</title>
-    <link rel="stylesheet" href="../CSS/Home.css">
-    <link rel="stylesheet" href="../CSS/Profile.css">
-    <link rel="stylesheet" href="../CSS/Navbar.css">
-    <link rel="stylesheet" href="../CSS/Menu.css">
-    <link rel="stylesheet" href="../CSS/Footer.css">
+    <link rel="stylesheet" href="Home.css">
+    <link rel="stylesheet" href="Profile.css">
+    <link rel="stylesheet" href="Navbar.css">
+    <link rel="stylesheet" href="Menu.css">
+    <link rel="stylesheet" href="Footer.css">
     <!-- Firebase CDN scripts -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
     <!-- Firebase initialization -->
-    <script src="../JavaScript/firebase-init.js"></script>
+    <script src="firebase-init.js"></script>
 </head>
 <body>
     <!-- Include the navbar -->
-    <script src="../JavaScript/Database.js"></script>
+    <script src="Database.js"></script>
     <div id="navbar-container"></div>
     
     <!-- Menu content will go here -->
     <div class="menu-sticky-bar">
       <div class="top-bar">
         <div class="location-select">
-          <img src="../assets/images/icons/menu/location.png" alt="Location" class="icon-location">
+          <img src="assets/images/icons/menu/location.png" alt="Location" class="icon-location">
           <select class="location-dropdown">
             <option>AEON Nilai, Negeri Sembilan</option>
             <option>AEON Seremban 2, Negeri Sembilan</option>
@@ -34,13 +34,13 @@
         </div>
         <div class="cart-container">
           <a href="Cart.html">
-            <img src="../assets/images/icons/menu/cart.png" alt="Cart" class="icon-cart">
+            <img src="assets/images/icons/menu/cart.png" alt="Cart" class="icon-cart">
             <span class="cart-badge">1</span>
           </a>
         </div>
       </div>
       <div class="search-bar">
-        <img src="../assets/images/icons/menu/search.png" alt="Search" class="icon-search">
+        <img src="assets/images/icons/menu/search.png" alt="Search" class="icon-search">
         <input type="text" placeholder="Find your favourite sushi!" class="search-input">
       </div>
     </div>
@@ -55,7 +55,7 @@
             .then(html => {
                 document.getElementById('navbar-container').innerHTML = html;
                 const script = document.createElement('script');
-                script.src = '../JavaScript/navbar.js';
+                script.src = 'navbar.js';
                 script.onload = function() {
                     if (window.initHamburgerMenu) window.initHamburgerMenu();
                     if (window.initNotificationSidebar) window.initNotificationSidebar();
@@ -67,28 +67,28 @@
             });
     </script>
     <script type="module">
-import { menuItems } from '../JavaScript/menu-data.js';
+import { menuItems } from './menu-data.js';
 
 const categories = [
-  { key: 'party_set', name: 'Party Set', icon: '../assets/images/icons/menu_sidebar/party_set.png', items: [
+  { key: 'party_set', name: 'Party Set', icon: 'assets/images/icons/menu_sidebar/party_set.png', items: [
     'party_set_a', 'party_set_b', 'party_set_c', 'maki_set', 'gunkan_set', 'nigiri_set'] },
-  { key: 'appetizers', name: 'Appetizers', icon: '../assets/images/icons/menu_sidebar/appetizers.png', items: [
+  { key: 'appetizers', name: 'Appetizers', icon: 'assets/images/icons/menu_sidebar/appetizers.png', items: [
     'chuka_hotate', 'chuka_idako', 'chuka_kurage', 'chuka_wakame', 'mochi'] },
-  { key: 'moriawase_makimono', name: 'Moriawase Makimono', icon: '../assets/images/icons/menu_sidebar/moriawase_makimono.png', items: [
+  { key: 'moriawase_makimono', name: 'Moriawase Makimono', icon: 'assets/images/icons/menu_sidebar/moriawase_makimono.png', items: [
     'salmon_moriawase', 'moriawase_a', 'moriawase_b'] },
-  { key: 'maki_roll', name: 'Maki Roll', icon: '../assets/images/icons/menu_sidebar/maki_roll.png', items: [
+  { key: 'maki_roll', name: 'Maki Roll', icon: 'assets/images/icons/menu_sidebar/maki_roll.png', items: [
     'kani_maki', 'kappa_maki', 'sake_maki', 'tamago_maki'] },
-  { key: 'nigiri', name: 'Nigiri Sushi', icon: '../assets/images/icons/menu_sidebar/nigiri.png', items: [
+  { key: 'nigiri', name: 'Nigiri Sushi', icon: 'assets/images/icons/menu_sidebar/nigiri.png', items: [
     'ebi_nigiri', 'ika_nigiri', 'kani_mentai', 'sake_nigiri', 'tako_nigiri', 'tamago_mentai', 'unagi_nigiri'] },
-  { key: 'gunkan', name: 'Gunkan Sushi', icon: '../assets/images/icons/menu_sidebar/gunkan.png', items: [
+  { key: 'gunkan', name: 'Gunkan Sushi', icon: 'assets/images/icons/menu_sidebar/gunkan.png', items: [
     'ebiko', 'kani_mayo', 'lobster_salad_gunkan'] },
-  { key: 'curry_set', name: 'Curry Set', icon: '../assets/images/icons/menu_sidebar/curry_set.png', items: [
+  { key: 'curry_set', name: 'Curry Set', icon: 'assets/images/icons/menu_sidebar/curry_set.png', items: [
     'chicken_katsu_curry_don', 'chicken_katsu_curry_udon', 'ebi_curry_don', 'ebi_curry_udon'] },
-  { key: 'ramen', name: 'Ramen', icon: '../assets/images/icons/menu_sidebar/ramen.png', items: [
+  { key: 'ramen', name: 'Ramen', icon: 'assets/images/icons/menu_sidebar/ramen.png', items: [
     'chicken_teriyaki_ramen', 'chicken_katsu_ramen', 'smoke_duck_ramen', 'dori_fish_ramen'] },
-  { key: 'drinks', name: 'Drinks', icon: '../assets/images/icons/menu_sidebar/drinks.png', items: [
+  { key: 'drinks', name: 'Drinks', icon: 'assets/images/icons/menu_sidebar/drinks.png', items: [
     '_100plus', 'coke', 'oyoshi_green_tea', 'sprite'] },
-  { key: 'condiments', name: 'Condiments', icon: '../assets/images/icons/menu_sidebar/condiments.png', items: [
+  { key: 'condiments', name: 'Condiments', icon: 'assets/images/icons/menu_sidebar/condiments.png', items: [
     'ginger', 'soy_sauce', 'wasabi'] }
 ];
 
@@ -150,7 +150,7 @@ if (searchInput) {
   });
 }
 </script>
-<script src="../JavaScript/menu-cart-badge.js"></script>
+<script src="menu-cart-badge.js"></script>
 
 <script>
 // Synchronize branch selection with localStorage
