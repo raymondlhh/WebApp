@@ -1,1 +1,347 @@
+<<<<<<< HEAD
  
+=======
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Profile</title>
+  <link rel="stylesheet" href="Profile.css">
+  <link rel="stylesheet" href="Navbar.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Noto+Serif+JP:wght@700&display=swap" rel="stylesheet">
+  <!-- Firebase CDN scripts -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script src="firebase-init.js"></script>
+  <!-- Global points refresh function -->
+  <script>
+    // Global function to refresh points display from Firestore
+    async function refreshPointsDisplay() {
+      if (window.firebase && firebase.auth && firebase.auth().currentUser) {
+        try {
+          const user = firebase.auth().currentUser;
+          const db = firebase.firestore();
+          const userDoc = await db.collection('users').doc(user.uid).get();
+          if (userDoc.exists) {
+            const points = userDoc.data().rewardsPoints || 0;
+            // Update all userPoints elements on the page
+            const userPointsElements = document.querySelectorAll('#userPoints');
+            userPointsElements.forEach(element => {
+              element.textContent = points;
+            });
+            // Also update localStorage for consistency
+            localStorage.setItem('userPoints', points.toString());
+            console.log('Points display refreshed:', points);
+          }
+        } catch (error) {
+          console.error('Error refreshing points display:', error);
+        }
+      }
+    }
+    // Make the function globally available
+    window.refreshPointsDisplay = refreshPointsDisplay;
+  </script>
+  <style>
+    .favourite-card {
+      display: flex;
+      align-items: center;
+      background: #7bb47b;
+      border-radius: 16px;
+      padding: 12px 16px;
+      margin-bottom: 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      gap: 14px;
+    }
+    .favourite-img {
+      width: 56px;
+      height: 56px;
+      border-radius: 10px;
+      object-fit: cover;
+      background: #fff;
+    }
+    .favourite-info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .favourite-title {
+      font-weight: bold;
+      font-size: 1.1em;
+    }
+    .favourite-price {
+      font-size: 0.98em;
+      color: #222;
+      opacity: 0.85;
+    }
+    .favourite-delete-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0 4px;
+      display: flex;
+      align-items: center;
+    }
+    .favourite-delete-btn svg {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <!-- Reusable Navbar -->
+  <div id="navbar-container"></div>
+  <script>
+    fetch('Navbar.html')
+      .then(response => response.text())
+      .then(html => {
+        document.getElementById('navbar-container').innerHTML = html;
+        const script = document.createElement('script');
+        script.src = 'navbar.js';
+        script.onload = function() {
+          if (window.initHamburgerMenu) window.initHamburgerMenu();
+          if (window.initNotificationSidebar) window.initNotificationSidebar();
+        };
+        document.body.appendChild(script);
+      })
+      .catch(error => {
+        console.error('Error loading navbar:', error);
+      });
+  </script>
+  <div class="overlay" id="overlay"></div>
+  <main>
+    <section id="profile-section" class="spa-section">
+      <!-- Profile content (view/edit) -->
+      <div class="profile-header">
+        <div class="profile-pic-container">
+          <img src="assets/images/others/Profile.png" alt="Profile Picture" class="profile-pic" id="profile-pic-img">
+        </div>
+        <div class="profile-info">
+          <h2 id="profile-name">Tone</h2>
+          <p id="profile-email">Tone@gmail.com</p>
+          <button class="edit-btn" id="editProfileBtn">Edit Profile</button>
+        </div>
+        <div class="profile-actions">
+          <button class="profile-action-btn" id="favouriteBtn">
+            <img src="assets/images/buttons/FavouriteButton.png" alt="Favourite">
+          </button>
+          <button class="profile-action-btn" id="balanceBtn">
+            <img src="assets/images/buttons/BalanceButton.png" alt="Balance">
+          </button>
+          <button class="profile-action-btn" id="settingBtn">
+            <img src="assets/images/buttons/SettingButton.png" alt="Setting">
+          </button>
+        </div>
+      </div>
+      <form id="edit-profile-form" class="hidden">
+        <label>Name <input type="text" id="edit-name"></label>
+        <!-- <label>Email <input type="email" id="edit-email"></label> -->
+        <label>Password <input type="password" id="edit-password"></label>
+        <label>Phone <input type="text" id="edit-phone"></label>
+        <label>Delivery Address <input type="text" id="edit-address"></label>
+        <button type="submit">Save</button>
+        <button type="button" id="cancelEdit">Cancel</button>
+      </form>
+      <!-- Profile Edit Modal -->
+      <div id="profile-edit-modal" class="profile-modal hidden">
+        <div class="profile-modal-panel">
+          <div class="profile-edit-header">
+            <button class="back-btn" id="closeProfileEditModal">&#8592;</button>
+            <span class="edit-title">EDIT PROFILE</span>
+            <button class="save-btn" id="saveProfileEditModal">&#10003;</button>
+          </div>
+          <div class="profile-edit-body">
+            <div class="profile-pic-wrapper">
+              <img id="modal-profile-pic" src="assets/images/others/Profile.png" alt="Profile Picture" class="profile-pic">
+              <button class="camera-btn" id="switchProfilePicBtn"><span class="camera-icon">&#128247;</span></button>
+              <div id="profile-pic-panel" class="profile-pic-panel hidden">
+                <img src="assets/images/others/Profile.png" class="pic-option" data-pic="assets/images/others/Profile.png" alt="Profile 1">
+                <img src="assets/images/others/Profile2.png" class="pic-option" data-pic="assets/images/others/Profile2.png" alt="Profile 2">
+                <img src="assets/images/others/Profile3.png" class="pic-option" data-pic="assets/images/others/Profile3.png" alt="Profile 3">
+              </div>
+            </div>
+            <form id="modal-edit-profile-form" class="profile-edit-form">
+              <label>Name
+                <input type="text" id="modal-edit-name">
+              </label>
+              <!-- <label>Email
+                <input type="email" id="modal-edit-email">
+              </label> -->
+              <label>Password
+                <div class="password-wrapper">
+                  <input type="password" id="modal-edit-password">
+                  <button type="button" class="toggle-password" id="toggleModalPassword">&#128065;</button>
+                </div>
+              </label>
+              <label>Phone Number
+                <input type="text" id="modal-edit-phone">
+              </label>
+              <label>Delivery Address
+                <input type="text" id="modal-edit-address">
+              </label>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div id="balance-modal" class="profile-modal hidden">
+        <div class="profile-modal-panel" style="max-width:340px;width:95vw;padding:24px 14px 18px 14px;overflow-y:auto;max-height:420px;">
+          <button class="close-modal" id="closeBalanceModal" style="position:absolute;top:12px;left:12px;font-size:1.5em;background:none;border:none;cursor:pointer;z-index:2;">&times;</button>
+          <h2 style="text-align:center;margin-top:0.5em;">BALANCE</h2>
+          <div style="text-align:center;margin:1.5em 0 1em 0;">
+            <span style="font-size:1.2em;vertical-align:middle;">RM</span>
+            <span id="modal-balance-amount" style="font-size:3em;font-weight:bold;vertical-align:middle;">0.00</span>
+          </div>
+          <form id="modal-topup-form" style="margin:0 0 1em 0;">
+            <label style="font-weight:bold;display:block;margin-bottom:0.5em;">Enter your top-up amount* (RM)</label>
+            <div style="font-size:1.1em;font-weight:bold;margin-bottom:0.3em;">RM<span id="modal-topup-amount">0.00</span></div>
+            <input type="number" id="modal-topup-input" min="10" max="500" step="10" value="0" style="max-width:320px;width:100%;display:block;margin:0 auto 0.5em auto;padding:0.5em 0.7em;border-radius:8px;border:1px solid #ccc;font-size:1.1em;">
+            <div style="font-size:0.9em;color:#888;margin-bottom:0.5em;">*Whole amount between RM10 and RM500</div>
+            <div style="display:flex;gap:0.5em;flex-wrap:wrap;justify-content:center;margin-bottom:1em;">
+              <button type="button" class="modal-topup-btn" data-amount="10">10</button>
+              <button type="button" class="modal-topup-btn" data-amount="50">50</button>
+              <button type="button" class="modal-topup-btn" data-amount="100">100</button>
+              <button type="button" class="modal-topup-btn" data-amount="200">200</button>
+              <button type="button" class="modal-topup-btn" data-amount="350">350</button>
+              <button type="button" class="modal-topup-btn" data-amount="500">500</button>
+            </div>
+            <button type="submit" style="width:100%;background:#b94a2c;color:#fff;border:none;border-radius:10px;padding:0.8em 0;font-size:1.2em;font-weight:bold;cursor:pointer;">Top Up</button>
+          </form>
+        </div>
+      </div>
+      <div id="settings-modal" class="profile-modal hidden">
+        <div class="profile-modal-panel" style="max-width:340px;width:95vw;padding:24px 14px 18px 14px;overflow-y:auto;max-height:420px;">
+          <button class="close-modal" id="closeSettingsModal" style="position:absolute;top:12px;left:12px;font-size:1.5em;background:none;border:none;cursor:pointer;z-index:2;">&times;</button>
+          <h2 style="text-align:center;margin-top:0.5em;">HELP CENTRE</h2>
+          <div style="margin-top:2em;font-size:1em;line-height:1.7;color:#222;">
+            <span style='font-weight:bold'>Q1: How do I place an order?</span><br>
+            A: Browse the menu, tap your desired items, and proceed to checkout from the cart.<br><br>
+            <span style='font-weight:bold'>Q2: Can I cancel or change my order after payment?</span><br>
+            A: You can cancel within 5 minutes of placing the order. Changes are not allowed after payment is completed.<br><br>
+            <span style='font-weight:bold'>Q3: What payment methods are supported?</span><br>
+            A: We currently support Touch 'n Go eWallet (TNG) only.<br><br>
+            <span style='font-weight:bold'>Q4: My top-up failed. What should I do?</span><br>
+            A: Check your internet connection and make sure your TNG account has sufficient balance.<br><br>
+            <span style='font-weight:bold'>Q5: How do I earn points?</span><br>
+            A: You earn 10 points for every RM 1 spent.<br><br>
+            <span style='font-weight:bold'>Q6: How do I redeem my points?</span><br>
+            A: Points can be redeemed at My Rewards for free foods.
+          </div>
+        </div>
+      </div>
+      <!-- Favourites Modal -->
+      <div id="favourites-modal" class="profile-modal hidden">
+        <div class="profile-modal-panel" style="max-width:340px;width:95vw;padding:24px 14px 18px 14px;overflow-y:auto;max-height:420px;">
+          <button class="close-modal" id="closeFavouritesModal" style="position:absolute;top:12px;left:12px;font-size:1.5em;background:none;border:none;cursor:pointer;z-index:2;">&times;</button>
+          <h2 style="text-align:center;margin-top:0.5em;">FAVOURITES</h2>
+          <div id="favourites-modal-list" style="margin-top:1.5em;"></div>
+        </div>
+      </div>
+      <button class="logout-btn">Log Out</button>
+    </section>
+    <section id="favourites-section" class="spa-section hidden">
+      <h2>Favourites</h2>
+      <div id="favourites-list">
+        <p class="empty-msg">No favourites yet</p>
+      </div>
+    </section>
+    <section id="balance-section" class="spa-section hidden">
+      <h2>Balance</h2>
+      <div class="balance-display">
+        <span>RM</span><span id="balance-amount">0.00</span>
+      </div>
+      <form id="topup-form">
+        <label>Enter your top-up amount (RM)</label>
+        <input type="number" id="topup-amount" min="10" max="500" step="10" value="0">
+        <div class="topup-buttons">
+          <button type="button" class="topup-btn" data-amount="10">10</button>
+          <button type="button" class="topup-btn" data-amount="50">50</button>
+          <button type="button" class="topup-btn" data-amount="100">100</button>
+          <button type="button" class="topup-btn" data-amount="200">200</button>
+          <button type="button" class="topup-btn" data-amount="350">350</button>
+          <button type="button" class="topup-btn" data-amount="500">500</button>
+        </div>
+        <button type="submit" class="topup-submit">Top Up</button>
+      </form>
+    </section>
+  </main>
+  <script src="menu-data.js"></script>
+  <script src="Database.js"></script>
+  <script src="ProfileSPA.js"></script>
+  <!-- Old localStorage-based profile logic removed. Now handled by ProfileSPA.js and Database.js. -->
+  <script>
+    // --- Favourites Modal Logic ---
+    const favouriteBtn = document.getElementById('favouriteBtn');
+    const favouritesModal = document.getElementById('favourites-modal');
+    const closeFavouritesModal = document.getElementById('closeFavouritesModal');
+    const favouritesModalList = document.getElementById('favourites-modal-list');
+
+    // Example food data (replace with your actual menu data source)
+    const allFoods = [
+      { id: 'party_set_b', name: 'Party Set B (74 PCS)', img: '../assets/images/foods/party_set/gunkan_set.png' },
+      { id: 'salmon_moriawase', name: 'Salmon Moriawase', img: '../assets/images/foods/moriawase_makimono_set/salmon_moriawase.png' },
+      { id: 'ebi_nigiri', name: 'Ebi Nigiri', img: '../assets/images/foods/nigiri/ebi_nigiri.png' },
+      { id: 'chicken_katsu_curry_don', name: 'Chicken Katsu Curry Don', img: '../assets/images/foods/curry_sets/chicken_katsu_curry_don.png' }
+      // Add more food items as needed
+    ];
+
+    // Get favourites from localStorage
+    function getFavourites() {
+      return JSON.parse(localStorage.getItem('favouriteFoods') || '[]');
+    }
+
+    // Save favourites to localStorage
+    function setFavourites(favs) {
+      localStorage.setItem('favouriteFoods', JSON.stringify(favs));
+    }
+
+    // Render the favourites list in the modal
+    function renderFavouritesModal() {
+      const favs = getFavourites();
+      if (allFoods.length === 0) {
+        favouritesModalList.innerHTML = '<p>No foods available.</p>';
+        return;
+      }
+      favouritesModalList.innerHTML = allFoods.map(food => {
+        const isFav = favs.includes(food.id);
+        return `
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+            <img src="${food.img}" alt="${food.name}" style="width:48px;height:48px;border-radius:8px;object-fit:cover;">
+            <span style="flex:1;font-weight:bold;">${food.name}</span>
+            <button class="heart-btn" data-id="${food.id}" style="background:none;border:none;font-size:1.7em;cursor:pointer;color:${isFav ? '#e74c3c' : '#bbb'};">
+              ${isFav ? '♥' : '♡'}
+            </button>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Show/hide modal
+    favouriteBtn.addEventListener('click', () => {
+      renderFavouritesModal();
+      favouritesModal.classList.remove('hidden');
+    });
+    closeFavouritesModal.addEventListener('click', () => {
+      favouritesModal.classList.add('hidden');
+    });
+
+    // Toggle favourite on heart button click
+    favouritesModalList.addEventListener('click', (e) => {
+      if (e.target.classList.contains('heart-btn')) {
+        const foodId = e.target.getAttribute('data-id');
+        let favs = getFavourites();
+        if (favs.includes(foodId)) {
+          favs = favs.filter(id => id !== foodId);
+        } else {
+          favs.push(foodId);
+        }
+        setFavourites(favs);
+        renderFavouritesModal();
+      }
+    });
+  </script>
+</body>
+</html>
+>>>>>>> Deployment
