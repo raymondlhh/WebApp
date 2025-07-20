@@ -4,15 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sushi Home</title>
-    <link rel="stylesheet" href="CSS/Home.css">
-    <link rel="stylesheet" href="CSS/Profile.css">
-    <link rel="stylesheet" href="CSS/Navbar.css">
-    <link rel="stylesheet" href="CSS/Footer.css">
+    <link rel="stylesheet" href="Home.css">
+    <link rel="stylesheet" href="Profile.css">
+    <link rel="stylesheet" href="Navbar.css">
+    <link rel="stylesheet" href="Footer.css">
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
-    <script src="JavaScript/firebase-init.js"></script>
+    <script src="firebase-init.js"></script>
 </head>
 <body>
     <script>
@@ -35,7 +35,7 @@
             .then(html => {
                 document.getElementById('navbar-container').innerHTML = html;
                 const script = document.createElement('script');
-                script.src = 'JavaScript/navbar.js';
+                script.src = 'navbar.js';
                 script.onload = function() {
                     if (window.initHamburgerMenu) window.initHamburgerMenu();
                     if (window.initNotificationSidebar) window.initNotificationSidebar();
@@ -238,9 +238,9 @@
       </div>
     </div>
     <!-- Notification script -->
-    <script src="JavaScript/Notification.js"></script>
-    <script src="JavaScript/Database.js"></script>
-    <script src="JavaScript/ProfileSPA.js"></script>
+    <script src="Notification.js"></script>
+    <script src="Database.js"></script>
+    <script src="ProfileSPA.js"></script>
     <div id="footer-container"></div>
     <script>
         // Load the footer component

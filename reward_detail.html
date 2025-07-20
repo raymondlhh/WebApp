@@ -4,17 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reward Detail</title>
-    <link rel="stylesheet" href="CSS/Home.css">
-    <link rel="stylesheet" href="CSS/Profile.css">
-    <link rel="stylesheet" href="CSS/Navbar.css">
-    <link rel="stylesheet" href="CSS/Footer.css">
-    <link rel="stylesheet" href="CSS/rewards.css">
+    <link rel="stylesheet" href="Home.css">
+    <link rel="stylesheet" href="Profile.css">
+    <link rel="stylesheet" href="Navbar.css">
+    <link rel="stylesheet" href="Footer.css">
+    <link rel="stylesheet" href="rewards.css">
     <!-- Firebase CDN scripts -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
     <!-- Firebase initialization -->
-    <script src="JavaScript/firebase-init.js"></script>
+    <script src="firebase-init.js"></script>
     <!-- Global points refresh function -->
     <script>
         // Global function to refresh points display from Firestore
@@ -44,8 +44,8 @@
         window.refreshPointsDisplay = refreshPointsDisplay;
     </script>
     <!-- Database and Rewards logic -->
-    <script src="JavaScript/Database.js"></script>
-    <script src="JavaScript/rewards.js"></script>
+    <script src="Database.js"></script>
+    <script src="rewards.js"></script>
 </head>
 <body>
     <div class="body-bg">
@@ -60,7 +60,7 @@
             .then(html => {
                 document.getElementById('navbar-container').innerHTML = html;
                 const script = document.createElement('script');
-                script.src = 'JavaScript/navbar.js';
+                script.src = 'navbar.js';
                 script.onload = function() {
                     if (window.initHamburgerMenu) window.initHamburgerMenu();
                     if (window.initNotificationSidebar) window.initNotificationSidebar();
