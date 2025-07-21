@@ -4,9 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Cart</title>
-  <link rel="stylesheet" href="cart.css">
-  <link rel="stylesheet" href="navbar.css">
-  <link rel="stylesheet" href="footer.css">
+  <link rel="stylesheet" href="Cart.css">
+  <link rel="stylesheet" href="Navbar.css">
+  <link rel="stylesheet" href="Footer.css">
   <!-- Firebase CDN scripts -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
@@ -15,6 +15,7 @@
   <script src="firebase-init.js"></script>
 </head>
 <body>
+  <div id="navbar-container"></div>
   <div class="cart-header">
     <button class="cart-close-btn" onclick="window.location.href='Menu.html'" aria-label="Back to menu">&#8592;</button>
     <span class="cart-title">CART</span>
@@ -119,7 +120,7 @@
   <div id="footer-container"></div>
   <script>
       // Load the footer component
-      fetch('footer.html')
+      fetch('Footer.html')
           .then(response => response.text())
           .then(html => {
               document.getElementById('footer-container').innerHTML = html;
