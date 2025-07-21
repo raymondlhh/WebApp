@@ -1,7 +1,7 @@
 const menuItems = {
     party_set_b: {
       name: "PARTY SET B (74 PCS)",
-      image: "../assets/images/foods/party_set/party_set_b.png",
+      image: "assets/images/foods/party_set/party_set_b.png",
       price: "RM 99.90",
       rating: 4.8,
       reviews: [
@@ -16,7 +16,7 @@ const menuItems = {
     },
     maki_set: {
       name: "MAKI SET (30 PCS)",
-      image: "../assets/images/foods/party_set/maki_set.png",
+      image: "assets/images/foods/party_set/maki_set.png",
       price: "RM 49.90",
       rating: 4.6,
       reviews: [
@@ -27,7 +27,7 @@ const menuItems = {
     },
     party_set_a: {
       name: "PARTY SET A (81 PCS)",
-      image: "../assets/images/foods/party_set/party_set_a.png",
+      image: "assets/images/foods/party_set/party_set_a.png",
       price: "RM 109.90",
       rating: 4.9,
       reviews: [
@@ -38,7 +38,7 @@ const menuItems = {
     },
     gunkan_set: {
       name: "GUNKAN SET (20 PCS)",
-      image: "../assets/images/foods/party_set/gunkan_set.png",
+      image: "assets/images/foods/party_set/gunkan_set.png",
       price: "RM 45.90",
       rating: 4.5,
       reviews: [
@@ -104,7 +104,7 @@ const menuItems = {
     },
     chuka_wakame: {
       name: "CHUKA WAKAME",
-      image: "../assets/images/foods/appetizers/chuka_wakame.png",
+      image: "assets/images/foods/appetizers/chuka_wakame.png",
       price: "RM 8.90",
       rating: 4.5,
       reviews: [
@@ -115,7 +115,7 @@ const menuItems = {
     },
     mochi: {
       name: "MOCHI",
-      image: "../assets/images/foods/appetizers/mochi.png",
+      image: "assets/images/foods/appetizers/mochi.png",
       price: "RM 6.90",
       rating: 4.1,
       reviews: [
@@ -126,7 +126,7 @@ const menuItems = {
     },
     salmon_moriawase: {
       name: "SALMON MORIAWASE",
-      image: "../assets/images/foods/moriawase_makimono_set/salmon_moriawase.png",
+      image: "assets/images/foods/moriawase_makimono_set/salmon_moriawase.png",
       price: "RM 39.90",
       rating: 4.7,
       reviews: [
@@ -137,7 +137,7 @@ const menuItems = {
     },
     moriawase_a: {
       name: "MORIAWASE SET A",
-      image: "../assets/images/foods/moriawase_makimono_set/moriawase_a.png",
+      image: "assets/images/foods/moriawase_makimono_set/moriawase_a.png",
       price: "RM 49.90",
       rating: 4.6,
       reviews: [
@@ -148,7 +148,7 @@ const menuItems = {
     },
     moriawase_b: {
       name: "MORIAWASE SET B",
-      image: "../assets/images/foods/moriawase_makimono_set/moriawase_b.png",
+      image: "assets/images/foods/moriawase_makimono_set/moriawase_b.png",
       price: "RM 59.90",
       rating: 4.8,
       reviews: [
@@ -159,7 +159,7 @@ const menuItems = {
     },
     kani_maki: {
       name: "KANI MAKI",
-      image: "../assets/images/foods/maki_rolls/kani_maki.png",
+      image: "assets/images/foods/maki_rolls/kani_maki.png",
       price: "RM 7.90",
       rating: 4.2,
       reviews: [
@@ -170,7 +170,7 @@ const menuItems = {
     },
     kappa_maki: {
       name: "KAPPA MAKI",
-      image: "../assets/images/foods/maki_rolls/kappa_maki.png",
+      image: "assets/images/foods/maki_rolls/kappa_maki.png",
       price: "RM 7.90",
       rating: 4.1,
       reviews: [
@@ -181,7 +181,7 @@ const menuItems = {
     },
     sake_maki: {
       name: "SAKE MAKI",
-      image: "../assets/images/foods/maki_rolls/sake_maki.png",
+      image: "assets/images/foods/maki_rolls/sake_maki.png",
       price: "RM 8.90",
       rating: 4.3,
       reviews: [
@@ -192,7 +192,7 @@ const menuItems = {
     },
     tamago_maki: {
       name: "TAMAGO MAKI",
-      image: "../assets/images/foods/maki_rolls/tamago_maki.png",
+      image: "assets/images/foods/maki_rolls/tamago_maki.png",
       price: "RM 7.90",
       rating: 4.0,
       reviews: [
@@ -203,7 +203,7 @@ const menuItems = {
     },
     ebi_nigiri: {
       name: "EBI NIGIRI",
-      image: "../assets/images/foods/nigiri/ebi_nigiri.png",
+      image: "assets/images/foods/nigiri/ebi_nigiri.png",
       price: "RM 9.90",
       rating: 4.4,
       reviews: [
@@ -214,7 +214,7 @@ const menuItems = {
     },
     ika_nigiri: {
       name: "IKA NIGIRI",
-      image: "../assets/images/foods/nigiri/ika_nigiri.png",
+      image: "assets/images/foods/nigiri/ika_nigiri.png",
       price: "RM 9.90",
       rating: 4.2,
       reviews: [
@@ -225,7 +225,7 @@ const menuItems = {
     },
     kani_mentai: {
       name: "KANI MENTAI",
-      image: "../assets/images/foods/nigiri/kani_mentai.png",
+      image: "assets/images/foods/nigiri/kani_mentai.png",
       price: "RM 10.90",
       rating: 4.3,
       reviews: [
@@ -236,7 +236,7 @@ const menuItems = {
     },
     sake_nigiri: {
       name: "SAKE NIGIRI",
-      image: "../assets/images/foods/nigiri/sake_nigiri.png",
+      image: "assets/images/foods/nigiri/sake_nigiri.png",
       price: "RM 10.90",
       rating: 4.5,
       reviews: [
@@ -247,7 +247,7 @@ const menuItems = {
     },
     tako_nigiri: {
       name: "TAKO NIGIRI",
-      image: "../assets/images/foods/nigiri/tako_nigiri.png",
+      image: "assets/images/foods/nigiri/tako_nigiri.png",
       price: "RM 10.90",
       rating: 4.1,
       reviews: [
@@ -258,7 +258,7 @@ const menuItems = {
     },
     tamago_mentai: {
       name: "TAMAGO MENTAI",
-      image: "../assets/images/foods/nigiri/tamago_mentai.png",
+      image: "assets/images/foods/nigiri/tamago_mentai.png",
       price: "RM 9.90",
       rating: 4.0,
       reviews: [
@@ -269,7 +269,7 @@ const menuItems = {
     },
     unagi_nigiri: {
       name: "UNAGI NIGIRI",
-      image: "../assets/images/foods/nigiri/unagi_nigiri.png",
+      image: "assets/images/foods/nigiri/unagi_nigiri.png",
       price: "RM 12.90",
       rating: 4.6,
       reviews: [
@@ -280,7 +280,7 @@ const menuItems = {
     },
     ebiko: {
       name: "EBIKO",
-      image: "../assets/images/foods/gunkan/ebiko.png",
+      image: "assets/images/foods/gunkan/ebiko.png",
       price: "RM 8.90",
       rating: 4.2,
       reviews: [
@@ -291,7 +291,7 @@ const menuItems = {
     },
     kani_mayo: {
       name: "KANI MAYO",
-      image: "../assets/images/foods/gunkan/kani_mayo.png",
+      image: "assets/images/foods/gunkan/kani_mayo.png",
       price: "RM 8.90",
       rating: 4.1,
       reviews: [
@@ -302,7 +302,7 @@ const menuItems = {
     },
     lobster_salad_gunkan: {
       name: "LOBSTER SALAD",
-      image: "../assets/images/foods/gunkan/lobster_salad_gunkan.png",
+      image: "assets/images/foods/gunkan/lobster_salad_gunkan.png",
       price: "RM 10.90",
       rating: 4.3,
       reviews: [
@@ -313,7 +313,7 @@ const menuItems = {
     },
     chicken_katsu_curry_don: {
       name: "CHICKEN KATSU CURRY DON",
-      image: "../assets/images/foods/curry_sets/chicken_katsu_curry_don.png",
+      image: "assets/images/foods/curry_sets/chicken_katsu_curry_don.png",
       price: "RM 18.90",
       rating: 4.4,
       reviews: [
@@ -379,7 +379,7 @@ const menuItems = {
     },
     smoke_duck_ramen: {
       name: "SMOKE DUCK RAMEN",
-      image: "../assets/images/foods/ramen/smoke_duck_ramen.png",
+      image: "assets/images/foods/ramen/smoke_duck_ramen.png",
       price: "RM 17.90",
       rating: 4.3,
       reviews: [
@@ -390,7 +390,7 @@ const menuItems = {
     },
     dori_fish_ramen: {
       name: "DORI FISH RAMEN",
-      image: "../assets/images/foods/ramen/dori_fish_ramen.png",
+      image: "assets/images/foods/ramen/dori_fish_ramen.png",
       price: "RM 17.90",
       rating: 4.3,
       reviews: [
@@ -401,7 +401,7 @@ const menuItems = {
     },
     _100plus: {
       name: "100 PLUS",
-      image: "../assets/images/foods/drinks/100plus.png",
+      image: "assets/images/foods/drinks/100plus.png",
       price: "RM 3.90",
       rating: 4.0,
       reviews: [
@@ -412,7 +412,7 @@ const menuItems = {
     },
     coke: {
       name: "COKE",
-      image: "../assets/images/foods/drinks/coke.png",
+      image: "assets/images/foods/drinks/coke.png",
       price: "RM 3.90",
       rating: 4.1,
       reviews: [
@@ -423,7 +423,7 @@ const menuItems = {
     },
     oyoshi_green_tea: {
       name: "OYOSHI GREEN TEA",
-      image: "../assets/images/foods/drinks/oyoshi_green_tea.png",
+      image: "assets/images/foods/drinks/oyoshi_green_tea.png",
       price: "RM 4.90",
       rating: 4.2,
       reviews: [
@@ -434,7 +434,7 @@ const menuItems = {
     },
     sprite: {
       name: "SPRITE",
-      image: "../assets/images/foods/drinks/sprite.png",
+      image: "assets/images/foods/drinks/sprite.png",
       price: "RM 3.90",
       rating: 4.0,
       reviews: [
@@ -445,7 +445,7 @@ const menuItems = {
     },
     ginger: {
       name: "GINGER",
-      image: "../assets/images/foods/condiments/ginger.png",
+      image: "assets/images/foods/condiments/ginger.png",
       price: "RM 1.90",
       rating: 4.1,
       reviews: [
@@ -456,7 +456,7 @@ const menuItems = {
     },
     soy_sauce: {
       name: "SOY SAUCE",
-      image: "../assets/images/foods/condiments/soy_sauce.png",
+      image: "assets/images/foods/condiments/soy_sauce.png",
       price: "RM 1.90",
       rating: 4.2,
       reviews: [
@@ -467,7 +467,7 @@ const menuItems = {
     },
     wasabi: {
       name: "WASABI",
-      image: "../assets/images/foods/condiments/wasabi.png",
+      image: "assets/images/foods/condiments/wasabi.png",
       price: "RM 1.90",
       rating: 4.0,
       reviews: [
