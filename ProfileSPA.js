@@ -156,15 +156,15 @@ document.addEventListener('DOMContentLoaded', () => {
   // Show/hide password toggle with image icons
   if (toggleModalPasswordBtn && modalEditPassword) {
     // Set initial icon
-    toggleModalPasswordBtn.innerHTML = '<img src="../assets/images/icons/CloseEye.png" alt="Show" style="width:22px;height:22px;vertical-align:middle;">';
+    toggleModalPasswordBtn.innerHTML = '<img src="/WebApp/assets/images/icons/CloseEye.png" alt="Show" style="width:22px;height:22px;vertical-align:middle;">';
     toggleModalPasswordBtn.addEventListener('click', function(e) {
       e.preventDefault();
       if (modalEditPassword.type === 'password') {
         modalEditPassword.type = 'text';
-        toggleModalPasswordBtn.innerHTML = '<img src="../assets/images/icons/OpenEye.png" alt="Hide" style="width:22px;height:22px;vertical-align:middle;">';
+        toggleModalPasswordBtn.innerHTML = '<img src="/WebApp/assets/images/icons/OpenEye.png" alt="Hide" style="width:22px;height:22px;vertical-align:middle;">';
       } else {
         modalEditPassword.type = 'password';
-        toggleModalPasswordBtn.innerHTML = '<img src="../assets/images/icons/CloseEye.png" alt="Show" style="width:22px;height:22px;vertical-align:middle;">';
+        toggleModalPasswordBtn.innerHTML = '<img src="/WebApp/assets/images/icons/CloseEye.png" alt="Show" style="width:22px;height:22px;vertical-align:middle;">';
       }
     });
   }
