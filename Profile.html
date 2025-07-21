@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <base href="/WebApp/">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>My Profile</title>
   <link rel="stylesheet" href="Profile.css">
@@ -92,12 +93,12 @@
   <!-- Reusable Navbar -->
   <div id="navbar-container"></div>
   <script>
-    fetch('/WebApp/Navbar.html')
+    fetch('Navbar.html')
       .then(response => response.text())
       .then(html => {
         document.getElementById('navbar-container').innerHTML = html;
         const script = document.createElement('script');
-        script.src = '/WebApp/navbar.js';
+        script.src = 'navbar.js';
         script.onload = function() {
           if (window.initHamburgerMenu) window.initHamburgerMenu();
           if (window.initNotificationSidebar) window.initNotificationSidebar();
