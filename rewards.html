@@ -51,13 +51,13 @@
     <div id="navbar-container"></div>
     <script>
         // Load the navbar component
-        fetch('navbar.html')
+        fetch('/WebApp/Navbar.html')
             .then(response => response.text())
             .then(html => {
                 document.getElementById('navbar-container').innerHTML = html;
                 // Dynamically load the JS file
                 const script = document.createElement('script');
-                script.src = 'navbar.js';
+                script.src = '/WebApp/navbar.js';
                 script.onload = function() {
                     if (window.initHamburgerMenu) window.initHamburgerMenu();
                     if (window.initNotificationSidebar) window.initNotificationSidebar();
