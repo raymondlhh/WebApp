@@ -17,6 +17,7 @@
 </head>
 <body>
     <div class="container">
+        <img src="assets/images/icons/welcome_screen/Logo.png" alt="Sushi Logo" class="main-logo">
         <img src="assets/images/icons/welcome_screen/subtitle.png" alt="Subtitle" class="subtitle">
         
         <div class="error-message" id="error-msg"></div>
@@ -41,17 +42,5 @@
         </div>
     </div>
     
-    <div id="footer-container"></div>
-    <script>
-        // Load the footer component
-        fetch('Footer.html')
-            .then(response => response.text())
-            .then(html => {
-                document.getElementById('footer-container').innerHTML = html;
-            })
-            .catch(error => {
-                console.error('Error loading footer:', error);
-            });
-    </script>
 </body>
 </html> 
