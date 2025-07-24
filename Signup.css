@@ -181,8 +181,17 @@ input[type="password"]::-webkit-input-password-reveal-button {
   background: none;
 }
 
+.main-logo {
+    width: 200px;
+    height: auto;
+    object-fit: contain;
+    margin-bottom: 16px;
+    display: block;
+}
+
 @media (max-width: 430px) {
     .logo { width: 140px; }
     .subtitle { width: 160px; }
     .error-message, .input-field, .password-container, .signup-button { width: 95vw; min-width: 0; }
+    .main-logo { width: 160px; }
 } 
